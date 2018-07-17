@@ -1,0 +1,17 @@
+- name: systemd service-unit installed
+  service:
+    name: easydb5
+    state: stopped
+    enabled: no
+  notify: systemd daemon-reload
+
+- name: systemd daemon-reload
+  systemd:
+    daemon_reload: yes
+  notify: start easydb service-unit
+
+- name: start easydb service-unit
+  service:
+    name: easydb
+    state: started
+    enabled: yes

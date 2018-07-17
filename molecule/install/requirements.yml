@@ -1,0 +1,8 @@
+- name: blunix.role-mailrelay
+  src: https://github.com/blunix/role-mailrelay
+  version: 1.0.3
+  scm: git
+- name: blunix.role-docker
+  src: https://github.com/blunix/role-docker.git
+  version: 1.0.0
+  scm: git

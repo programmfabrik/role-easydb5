@@ -1,0 +1,6 @@
+docker run -d -ti \
+    --name easydb-elasticsearch \
+    --net easy5net \
+    --volume=$BASEDIR/config:/config \
+    --volume=$BASEDIR/elasticsearch/var:/var/lib/elasticsearch \
+    docker.easydb.de:5000/pf/elasticsearch

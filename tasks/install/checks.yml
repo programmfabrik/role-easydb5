@@ -1,0 +1,19 @@
+- name: Check if customer ID has been defined
+  when: easydb_customer_id == ''
+  fail:
+    msg: Please define the variable easydb_customer_id in your play!
+
+- name: Check if solution has been defined
+  when: easydb_solution == ''
+  fail:
+    msg: Please define the variable easydb_solution in your play!
+
+- name: Check if docker username has been defined
+  when: easydb_docker_user == ''
+  fail:
+    msg: Please define the variable easydb_docker_user in your play!
+
+- name: Check if docker password has been defined
+  when: easydb_docker_pass == ''
+  fail:
+    msg: Please define the variable easydb_docker_pass in your play!
