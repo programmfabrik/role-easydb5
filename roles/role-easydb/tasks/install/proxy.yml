@@ -1,0 +1,15 @@
+- name: Configure http_proxy for APT
+  when: easydb_proxy_url
+  lineinfile:
+    file: /etc/apt/apt.conf
+    line: 'Acquire::http::Proxy "{{ easydb_proxy_url }}";'
+
+- name: Configure http_proxy for wget (http)
+  lineinfile:
+    file: /etc/wgetrc
+    line: "http_proxy = {{ easydb_proxy_url }}"
+
+- name: Configure http_proxy for wget (https)
+  lineinfile:
+    file: /etc/wgetrc
+    line: "https_proxy = {{ easydb_proxy_url }}"

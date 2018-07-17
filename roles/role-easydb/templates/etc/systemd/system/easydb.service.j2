@@ -1,0 +1,13 @@
+[Unit]
+Description=easydb5, digital asset management with web frontend
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/etc/init.d/easydb5 start
+ExecStop=/etc/init.d/easydb5 stop
+
+[Install]
+WantedBy=multi-user.target

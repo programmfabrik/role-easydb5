@@ -1,0 +1,10 @@
+- hosts: all
+  become: yes
+  vars:
+    docker_enabled: yes
+    docker_compose_version: 1.21.0
+    easydb_enabled: yes
+  
+  roles:
+    - role-easydb
+  

@@ -1,0 +1,55 @@
+---
+- name: Converge
+  hosts: all
+  become: yes
+  vars:
+    mailrelay_enabled: yes
+    mailrelay_default_sender_email: "server@example.com"
+    mailrelay_default_sender_user: "ServerExampleCom"
+    mailrelay_default_sender_password: "verylongpassword"
+    mailrelay_default_sender_server: "smtp.gmail.com"
+    mailrelay_default_sender_server_port: "587"
+    mailrelay_default_monitoring_recipient: "administratoren@programmfabrik.de"
+
+    # Sending address to sending server association
+    mailrelay_relayhost_maps:
+      - name: "{{ mailrelay_default_sender_email }}"
+        target: "[{{ mailrelay_default_sender_server }}]:{{ mailrelay_default_sender_server_port }}"
+      - name: "example@gmail.com"
+        target: "[smtp.gmail.com]:587"
+
+    # Sending address - user:password association
+    mailrelay_sasl_passwords:
+      - name: "{{ mailrelay_default_sender_email }}"
+        target: "{{ mailrelay_default_sender_user }}:{{ mailrelay_default_sender_password }}"
+      - name: "subscribe@example.com"
+        target: "SubscribeExampleCom:secretpass"
+    
+    # Sending Linux user - sender address rewriting, http://www.postfix.org/ADDRESS_REWRITING_README.html
+    mailrelay_sender_canonical_maps:
+      # Note that it "seems" possible to rewrite every account using a regex like:
+      # /etc/postfix/sender-canonical-maps.regex
+      # /.*/    masqueraded@example.com
+      # However this calls for some unexpected behavior and loops with mails to fo@bar.comcom and so on, so it's not recommend
+      - name: "root"
+        target: "{{ mailrelay_default_sender_email }}"
+      - name: "www_example_com"
+        target: "{{ mailrelay_default_sender_email }}"
+
+    # When those linux users receive
+    mailrelay_aliases:
+      # Relay mails to the root use to the default_monitoring_recipient
+      - name: root
+        target: "{{mailrelay_default_monitoring_recipient }}"
+
+    docker_enabled: yes
+    docker_compose_version: 1.21.0
+
+    easydb_url: http://localhost:8080
+    easydb_customer_id: be52ae33594eb794828ccd4837cf08ae
+    easydb_solution: base
+    easydb_docker_user: user1
+    easydb_docker_pass: HA-imUsE3Dj
+
+  roles:
+    - role: role-easydb

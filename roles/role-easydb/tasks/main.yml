@@ -1,0 +1,8 @@
+- name: include distro installer
+  include_tasks: "{{ install_item }}"
+  with_first_found:
+    - install/{{ ansible_distribution }}.{{ ansible_lsb.codename }}.yml
+    - install/{{ ansible_distribution }}.yml
+    - install/default.yml
+  loop_control:
+    loop_var: install_item

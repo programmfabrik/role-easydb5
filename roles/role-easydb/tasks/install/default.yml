@@ -1,0 +1,125 @@
+- include_tasks: checks.yml
+
+- name: Configuring APT proxy
+  when: easydb_proxy_url
+  include_tasks: proxy.yml
+
+- name: Obtaining APT GPG key
+  apt_key:
+    url: https://programmfabrik.de/files/pf-debian-2017.asc
+
+- name: Adding Programmfabrik APT repository
+  apt_repository:
+    repo: deb http://archive.programmfabrik.de/ {{ ansible_lsb.codename }} main non-free
+
+- name: Installing programmfabrik-keyring
+  apt:
+    pkg: programmfabrik-keyring
+    state: present
+
+- name: Adding customer APT repository
+  apt_repository:
+    repo: deb http://packages-instances.programmfabrik.de/2G_{{ easydb_customer_id }}/debian ./
+
+- name: Installing easydb-maintenance
+  apt:
+    pkg: easydb5-maintenance
+    state: present
+    install_recommends: yes
+
+- name: Deploy /etc/default/easydb5
+  template:
+    src: etc/default/easydb5.j2
+    dest: /etc/default/easydb5
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Install Python docker bindings
+  apt:
+    pkg: python-docker
+    state: present
+    update_cache: no
+    install_recommends: no
+
+- name: Logging in to docker registry
+  docker_login:
+    registry: "{{ easydb_docker_registry }}"
+    username: "{{ easydb_docker_user }}"
+    password: "{{ easydb_docker_pass }}"
+    reauthorize: yes
+
+- name: Pulling docker images
+  docker_image:
+    name: "{{ easydb_docker_registry }}/pf/{{ image_item }}"
+  with_items: "{{ easydb_docker_images }}"
+  loop_control:
+    loop_var: image_item
+
+- name: Creating docker network
+  docker_network:
+    name: "{{ easydb_docker_net }}"
+
+- name: Adjust sysctl max-map-count
+  sysctl:
+    name: vm.max_map_count
+    value: "{{ easydb_max_map_count }}"
+    reload: yes
+
+- name: Boilerplating directory sturcture
+  file:
+    path: "{{ file_item.path }}"
+    owner: "{{ file_item.owner | default('root') }}"
+    group: "{{ file_item.group | default('root') }}"
+    mode: "{{ file_item.mode | default (0755) }}"
+    state: directory
+  loop_control:
+    loop_var: file_item
+  with_items:
+    - path: "{{ easydb_basedir }}"
+    - path: "{{ easydb_basedir }}/config"
+    - path: "{{ easydb_basedir }}/webfrontend"
+    - path: "{{ easydb_basedir }}/eas/lib"
+    - path: "{{ easydb_basedir }}/eas/log"
+    - path: "{{ easydb_basedir }}/eas/tmp"
+      mode: u=rwx,g=rwx,o=rwx,o+t
+    - path: "{{ easydb_basedir }}/elasticsearch/var"
+      mode: 0777
+    - path: "{{ easydb_basedir }}/pgsql/etc"
+    - path: "{{ easydb_basedir }}/pgsql/var"
+    - path: "{{ easydb_basedir }}/pgsql/log"
+    - path: "{{ easydb_basedir }}/pgsql/backup"
+    - path: "{{ easydb_basedir }}/easydb-server/nginx-log"
+      mode: 0777
+    - path: "{{ easydb_basedir }}/easydb-server/var"
+
+- name: Creating initial configuration file
+  template:
+    src: srv/easydb/config/easydb5-master.yml.j2
+    dest: "{{ easydb_basedir }}/config/easydb5-master.yml"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Creating docker wrapper scripts
+  template:
+    src: srv/easydb/run-{{ script_item }}.sh.j2
+    dest: "{{ easydb_basedir }}/run-{{ script_item }}.sh"
+    owner: root
+    group: root
+    mode: 0750
+    force: no   # DO NOT OVERWRITE MANUAL CHANGES!!!
+  with_items: [ pgsql, elasticsearch, eas, server, webfrontend ]
+  loop_control:
+    loop_var: script_item
+
+- name: Creating systemd service-files
+  template:
+    src: etc/systemd/system/easydb.service.j2
+    dest: /etc/systemd/system/easydb.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - systemd service-unit installed
+    - systemd daemon-reload

@@ -1,0 +1,29 @@
+galaxy_info:
+  author: Brian Wiborg <brian@programmfabrik.de>
+  description: A role for installing the EasyDB stack.
+  company: Programmfabrik GmbH
+  license: Apache-2.0
+  min_ansible_version: 2.5
+
+  platforms:
+  - name: Debian
+    versions:
+    - stretch
+  - name: Ubuntu
+    versions:
+    - xenial
+
+  galaxy_tags:
+  - easydb
+  - DMS
+
+dependencies:
+- name: blunix.role-mailrelay
+  src: https://github.com/blunix/role-mailrelay
+  version: 1.0.3
+  scm: git
+- name: blunix.role-docker
+  src: https://github.com/blunix/role-docker
+  version: 1.0.0
+  scm: git
+
