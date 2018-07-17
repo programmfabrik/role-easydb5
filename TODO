@@ -1,0 +1,36 @@
+Required Roles:
+- [ ] role-prime-hetzner
+      - sanity-checks (Machine requirements)
+- [ ] role-pkg
+- [ ] role-ntp
+- [x] role-tinc
+- [ ] role-systemd-journald (remote logging)
+- [ ] role-logrotate
+- [ ] role-null-mailer (/etc/aliases)
+- [ ] role-ldap
+- [ ] role-ssh
+- [ ] role-ssh-users
+- [ ] role-sudo
+- [ ] role-shorewall
+- [ ] role-fail2ban
+- [ ] role-docker
+- [ ] role-docker-login
+- [ ] role-letsencrypt
+- [ ] role-certificates
+- [ ] role-apache2
+- [ ] role-apache2-vhost
+- [ ] role-apache-shibboleth
+- [ ] role-apache-kerberos
+- [ ] role-easydb5
+      - sanity checks! (capacity)
+- [ ] role-easydb5-ldap
+- [ ] role-easydb5-kundeXY
+- [ ] role-easydb5-nfs
+
+Quesions:
+- [ ] User- and Key-Management via LDAP
+- [ ] Backup
+- [ ] Monitoring
+
+Rolle die wir sonst noch brauchen:
+- [ ] role-openvpn
