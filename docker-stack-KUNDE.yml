@@ -1,0 +1,51 @@
+version: "2"
+services:
+  easydb-elasticsearch:
+    image: pf/elasticsearch
+    volumes:
+      - "/srv/docker/volumes/common/config:/config"
+      - "/srv/docker/volumes/elasticsearch/var:/var/lib/elasticsearch"
+  easydb-pgsql:
+    image: pf/postgresql
+    ports:
+      - "15432:5432"
+    volumes:
+      - "/srv/docker/volumes/common/backup:/backup"
+      - "/srv/docker/volumes/common/config:/config"
+      - "/srv/docker/volumes/postgres/etc:/etc/postgresql"
+      - "/srv/docker/volumes/postgres/log:/var/log/postgresql"
+      - "/srv/docker/volumes/postgres/var:/var/lib/postgresql"
+  easydb-eas:
+    image: pf/eas
+    depends_on:
+      - easydb-pgsql
+    ports:
+      - "10080:80"
+    volumes:
+      - "/srv/docker/volumes/common/config:/config"
+      - "/srv/docker/volumes/eas/lib:/var/opt/easydb/lib/eas"
+      - "/srv/docker/volumes/eas/log:/var/opt/easydb/log/eas"
+  easydb-server-$KUNDE:
+    image: pf/server-$KUNDE
+    cap_add:
+      - SYS_PTRACE
+    depends_on:
+      - easydb-pgsql
+      - easydb-elasticsearch
+      - easydb-eas
+    ports:
+      - "10480:80"
+    volumes:
+      - "/srv/docker/volumes/common/config-$KUNDE:/config"
+      - "/srv/docker/volumes/easydb-server-$KUNDE/var:/easydb-5/var"
+      - "/srv/docker/volumes/easydb-server-$KUNDE/nginx-log:/var/log/nginx"
+      - "/srv/docker/volumes/easydb-server-$KUNDE/hotfolder:/hotfolder"
+  easydb-webfrontend:
+    image: pf/webfrontend
+    depends_on:
+      - easydb-server-$KUNDE
+      - easydb-eas
+    ports:
+      - "127.0.0.1:10481:80"
+    volumes:
+      - "/srv/docker/volumes/common/config-$KUNDE:/config"
