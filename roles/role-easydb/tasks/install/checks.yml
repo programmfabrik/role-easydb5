@@ -34,6 +34,6 @@
     msg: Please define the variable envelope_from!
 
 - name: Check whether objectstore misses datamodel_uid
-  when: objectstore_url != '' && datamodel_uid == ''
+  when: objectstore_url != '' and datamodel_uid == ''
   fail:
     msg: Either set objectstore to empty string or set datamodel_uid!
