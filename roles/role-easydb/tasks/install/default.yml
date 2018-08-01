@@ -69,37 +69,37 @@
     loop_var: file_item
   with_items:
     - path: "{{ easydb_basedir }}"
-    - path: "{{ easydb_basedir }}/config"
-    - path: "{{ easydb_basedir }}/webfrontend"
-    - path: "{{ easydb_basedir }}/eas/lib"
-    - path: "{{ easydb_basedir }}/eas/log"
-    - path: "{{ easydb_basedir }}/eas/tmp"
+    - path: "{{ volume_config }}"
+    - path: "{{ volume_eas_lib }}"
+    - path: "{{ volume_eas_log }}"
+    - path: "{{ volume_eas_tmp }}"
       mode: u=rwx,g=rwx,o=rwx,o+t
-    - path: "{{ easydb_basedir }}/elasticsearch/var"
+    - path: "{{ volume_elasticsearch_var }}"
       mode: u=rwx,g=rwx,o=rwx
-    - path: "{{ easydb_basedir }}/pgsql/etc"
-    - path: "{{ easydb_basedir }}/pgsql/var"
-    - path: "{{ easydb_basedir }}/pgsql/log"
-    - path: "{{ easydb_basedir }}/pgsql/backup"
-    - path: "{{ easydb_basedir }}/easydb-server/nginx-log"
+    - path: "{{ volume_pgsql_etc }}"
+    - path: "{{ volume_pgsql_var }}"
+    - path: "{{ volume_pgsql_log }}"
+    - path: "{{ volume_pgsql_backup }}"
+    - path: "{{ volume_server_nginx_log }}"
       mode: u=rwx,g=rwx,o=rwx
-    - path: "{{ easydb_basedir }}/easydb-server/var"
+    - path: "{{ volume_server_var }}"
+    - path: "{{ volume_server_hotfolder }}"
 
 - name: Creating initial configuration file
   template:
     src: srv/easydb/config/easydb5-master.yml.j2
-    dest: "{{ easydb_basedir }}/config/easydb5-master.yml"
+    dest: "{{ volume_config }}/easydb5-master.yml"
     owner: root
     group: root
-    mode: 0644
+    mode: u=rw,g=r,o=r
 
 - name: Deploying docker-compose.yml
   template:
     src: srv/easydb/docker-compose.yml.j2
-    dest: /srv/easydb/docker-compose.yml
+    dest: "{{ easydb_basedir }}/docker-compose.yml"
     owner: root
     group: root
-    mode: 0640
+    mode: u=rw,g=r,o=r
 
 - name: Deloying application stack
   docker_service:
