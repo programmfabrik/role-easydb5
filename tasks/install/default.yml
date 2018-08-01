@@ -76,13 +76,13 @@
     - path: "{{ easydb_basedir }}/eas/tmp"
       mode: u=rwx,g=rwx,o=rwx,o+t
     - path: "{{ easydb_basedir }}/elasticsearch/var"
-      mode: 0777
+      mode: u=rwx,g=rwx,o=rwx
     - path: "{{ easydb_basedir }}/pgsql/etc"
     - path: "{{ easydb_basedir }}/pgsql/var"
     - path: "{{ easydb_basedir }}/pgsql/log"
     - path: "{{ easydb_basedir }}/pgsql/backup"
     - path: "{{ easydb_basedir }}/easydb-server/nginx-log"
-      mode: 0777
+      mode: u=rwx,g=rwx,o=rwx
     - path: "{{ easydb_basedir }}/easydb-server/var"
 
 - name: Creating initial configuration file
