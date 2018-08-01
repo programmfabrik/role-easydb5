@@ -2,8 +2,14 @@
   become: yes
   vars:
     docker_enabled: yes
-    docker_compose_version: 1.21.0
-    easydb_enabled: yes
+    docker_compose_enabled: yes
+    docker_compose_version: 1.22.0
+
+    easydb_url: http://localhost:8080
+    easydb_customer_id: be52ae33594eb794828ccd4837cf08ae
+    easydb_solution: base
+    easydb_docker_user: user1
+    easydb_docker_pass: HA-imUsE3Dj
   
   roles:
     - role-easydb

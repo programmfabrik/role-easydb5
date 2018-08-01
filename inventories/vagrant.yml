@@ -1,0 +1,9 @@
+[all:vars]
+ansible_user=vagrant
+easydb_project=vagrant
+
+[node0]
+10.42.0.2
+
+[webserver:children]
+node0

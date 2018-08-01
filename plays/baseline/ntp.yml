@@ -1,0 +1,6 @@
+- host: all
+  become: yes
+  vars:
+    ntp_timezone: foobar
+  roles:
+    - pf.role-ntp

@@ -444,3 +444,15 @@ ASALocalRun/
 # End of https://www.gitignore.io/api/linux,ansible,visualstudio,vim,intellij
 
 .imported_roles/
+
+# Created by https://www.gitignore.io/api/vagrant
+
+### Vagrant ###
+# General
+.vagrant/
+
+# Log files (if you are creating logs in debug mode, uncomment this)
+# *.logs
+
+
+# End of https://www.gitignore.io/api/vagrant

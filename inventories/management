@@ -1,0 +1,2 @@
+[vars:all]
+ansible_user=root

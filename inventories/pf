@@ -1,0 +1,8 @@
+[node0]
+1.1.1.1
+
+[node1]
+2.2.2.2
+
+[docker-server:children]
+node0

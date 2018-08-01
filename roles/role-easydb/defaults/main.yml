@@ -7,12 +7,6 @@ easydb_max_map_count: 262144
 easydb_customer_id: ''
 easydb_solution: base
 
+easydb_docker_host: docker.easydb.de:5000
 easydb_docker_user: ''
 easydb_docker_pass: ''
-easydb_docker_net: easy5net
-easydb_docker_images:
-  - server-{{ easydb_solution }}
-  - webfrontend
-  - elasticsearch
-  - eas
-  - postgresql
