@@ -23,7 +23,7 @@ services:
     image: "{{ easydb_docker_registry }}/pf/eas"
     container_name: easydb-eas
     depends_on:
-      - easydb-pgsql
+      - pgsql
     ports:
       - 10080:80
     volumes:
@@ -37,9 +37,9 @@ services:
     cap_add:
       - SYS_PTRACE
     depends_on:
-      - easydb-pgsql
-      - easydb-elasticsearch
-      - easydb-eas
+      - pgsql
+      - elasticsearch
+      - eas
     ports:
       - 10480:80
     volumes:
@@ -52,8 +52,8 @@ services:
     image: "{{ easydb_docker_registry }}/pf/webfrontend"
     container_name: easydb-webfrontend
     depends_on:
-      - easydb_server-{{ easydb_solution }}
-      - easydb_eas
+      - server-{{ easydb_solution }}
+      - eas
     ports:
       - 127.0.0.1:10481:80
     volumes:
