@@ -3,22 +3,22 @@ easydb-server:
   pgsql:
     database: easydb
   extension:
-    external-user-schema: "{{ external-user-schema }}"
+    external-user-schema: {{ external_user_schema }}
   server:
-    external_url: "{{ easydb_url }}"
-    enable_post_settings: "{{ enable_post_settings }}"
+    external_url: {{ easydb_url }}
+    enable_post_settings: {{ enable_post_settings }}
     api:
       settings:
-        restart: "{{ enable_restart }}"
-        purgdata: "{{ enable_purgdata }}"
-        purgeall: "{{ enable_purgeall }}"
+        restart: {{ enable_restart }}
+        purgdata: {{ enable_purgdata }}
+        purgeall: {{ enable_purgeall }}
     mailer:
-      enabled: "{{ enable_mailer }}"
+      enabled: {{ enable_mailer }}
   default_client:
      datamodel:
        uid: "{{ datamodel_uid }}"
        server: "{{ objectstore_url }}"
-       instance: "{{ objectstore_instance_id }}"
+       instance: {{ objectstore_instance_id }}
   plugins:
     enabled+:
 {% for plugin in enable_plugins %}
@@ -29,8 +29,8 @@ easydb-server:
 common:
   email:
     # ssmtp.conf:mailhub
-    server: "{{ mail_relay_for_ssmtp }}"
+    server: {{ mail_relay_for_ssmtp }}
     # ssmtp.conf:hostname
-    hostname: "{{ hostname_for_ssmtp }}"
+    hostname: {{ hostname_for_ssmtp }}
     # server.mailer.envelope_address
-    from-address: "{{ envelope_from }}"
+    from-address: {{ envelope_from }}

@@ -22,7 +22,7 @@ volume_server_hotfolder: "{{ easydb_basedir }}/easydb-server/hotfolder"
 
 # easydb server
 easydb_solution: base
-external-user-schema: true
+external_user_schema: true
 enable_post_settings: true
 enable_restart: true
 enable_purgdata: false
