@@ -1,14 +1,14 @@
 version: "2"
 services:
   elasticsearch:
-    image: "{{ easydb_docker_host }}/pf/elasticsearch"
+    image: "{{ easydb_docker_registry }}/pf/elasticsearch"
     container_name: easydb-elasticsearch
     volumes:
       - /srv/docker/volumes/common/config:/config
       - /srv/docker/volumes/elasticsearch/var:/var/lib/elasticsearch
 
   pgsql:
-    image: "{{ easydb_docker_host }}/pf/postgresql"
+    image: "{{ easydb_docker_registry }}/pf/postgresql"
     container_name: easydb-postgres
     ports:
       - 15432:5432
@@ -20,7 +20,7 @@ services:
       - /srv/docker/volumes/postgres/var:/var/lib/postgresql
 
   eas:
-    image: "{{ easydb_docker_host }}/pf/eas"
+    image: "{{ easydb_docker_registry }}/pf/eas"
     container_name: easydb-eas
     depends_on:
       - easydb-pgsql
@@ -32,7 +32,7 @@ services:
       - /srv/docker/volumes/eas/log:/var/opt/easydb/log/eas
 
   server-{{ easydb_solution }}:
-    image: "{{ easydb_docker_host }}/pf/server-{{ easydb_solution }}"
+    image: "{{ easydb_docker_registry }}/pf/server-{{ easydb_solution }}"
     container_name: easydb-server
     cap_add:
       - SYS_PTRACE
@@ -49,7 +49,7 @@ services:
       - /srv/docker/volumes/easydb-server-{{ easydb_solution }}/hotfolder:/hotfolder
 
   webfrontend:
-    image: "{{ easydb_docker_host }}/pf/webfrontend"
+    image: "{{ easydb_docker_registry }}/pf/webfrontend"
     container_name: easydb-webfrontend
     depends_on:
       - easydb_server-{{ easydb_solution }}

@@ -1,12 +1,11 @@
 easydb_version: 5
 easydb_proxy_url: ''
-easydb_url: http://hostname.as.seen.in.browser.example.com
 easydb_basedir: /srv/easydb
 easydb_max_map_count: 262144
 
 easydb_customer_id: ''
 easydb_solution: base
 
-easydb_docker_host: docker.easydb.de:5000
+easydb_docker_registry: docker.easydb.de:5000
 easydb_docker_user: ''
 easydb_docker_pass: ''
