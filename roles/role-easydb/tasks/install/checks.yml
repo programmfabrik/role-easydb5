@@ -1,3 +1,8 @@
+- name: Check if easydb_url has been defined
+  when: easydb_url == ''
+  fail:
+    msg: Please define the variable easydb_url!
+
 - name: Check if solution has been defined
   when: easydb_solution == ''
   fail:
