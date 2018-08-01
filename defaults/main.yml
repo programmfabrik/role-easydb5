@@ -4,6 +4,9 @@ easydb_docker_user: ''
 easydb_docker_pass: ''
 easydb_docker_registry: docker.easydb.de:5000
 socket_webfrontend: 127.0.0.1:81
+socket_server:      127.0.0.1:82
+socket_eas:         127.0.0.1:83
+socket_pgsql:       127.0.0.1:15432
 
 # paths
 easydb_basedir: /srv/easydb

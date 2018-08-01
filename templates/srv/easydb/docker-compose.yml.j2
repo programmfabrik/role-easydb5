@@ -11,7 +11,7 @@ services:
     image: "{{ easydb_docker_registry }}/pf/postgresql"
     container_name: easydb-pgsql
     ports:
-      - 15432:5432
+      - {{ socket_pgsql }}:5432
     volumes:
       - {{ volume_pgsql_backup }}:/backup
       - {{ volume_config }}:/config
@@ -25,7 +25,7 @@ services:
     depends_on:
       - pgsql
     ports:
-      - 10080:80
+      - {{ socket_eas }}:80
     volumes:
       - {{ volume_config }}:/config
       - {{ volume_eas_lib }}:/var/opt/easydb/lib/eas
@@ -42,7 +42,7 @@ services:
       - elasticsearch
       - eas
     ports:
-      - 10480:80
+      - {{ socket_server }}:80
     volumes:
       - {{ volume_config }}:/config
       - {{ volume_server_var }}:/easydb-5/var
@@ -56,6 +56,6 @@ services:
       - server-{{ easydb_solution }}
       - eas
     ports:
-      - 127.0.0.1:10481:80
+      - {{ socket_webfrontend }}:80
     volumes:
       - {{ volume_config }}:/config
