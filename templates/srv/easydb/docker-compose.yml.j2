@@ -4,8 +4,8 @@ services:
     image: "{{ easydb_docker_registry }}/pf/elasticsearch"
     container_name: easydb-elasticsearch
     volumes:
-      - /srv/docker/volumes/common/config:/config
-      - /srv/docker/volumes/elasticsearch/var:/var/lib/elasticsearch
+      - {{ volume_config }}:/config
+      - {{ volume_elasticsearch_var }}:/var/lib/elasticsearch
 
   pgsql:
     image: "{{ easydb_docker_registry }}/pf/postgresql"
@@ -13,11 +13,11 @@ services:
     ports:
       - 15432:5432
     volumes:
-      - /srv/docker/volumes/common/backup:/backup
-      - /srv/docker/volumes/common/config:/config
-      - /srv/docker/volumes/postgres/etc:/etc/postgresql
-      - /srv/docker/volumes/postgres/log:/var/log/postgresql
-      - /srv/docker/volumes/postgres/var:/var/lib/postgresql
+      - {{ volume_pgsql_backup }}:/backup
+      - {{ volume_config }}:/config
+      - {{ volume_pgsql_etc }}:/etc/postgresql
+      - {{ volume_pgsql_log }}:/var/log/postgresql
+      - {{ volume_pgsql_var }}:/var/lib/postgresql
 
   eas:
     image: "{{ easydb_docker_registry }}/pf/eas"
@@ -27,9 +27,10 @@ services:
     ports:
       - 10080:80
     volumes:
-      - /srv/docker/volumes/common/config:/config
-      - /srv/docker/volumes/eas/lib:/var/opt/easydb/lib/eas
-      - /srv/docker/volumes/eas/log:/var/opt/easydb/log/eas
+      - {{ volume_config }}:/config
+      - {{ volume_eas_lib }}:/var/opt/easydb/lib/eas
+      - {{ volume_eas_log }}:/var/opt/easydb/log/eas
+      - {{ volume_eas_tmp }}:/tmp
 
   server-{{ easydb_solution }}:
     image: "{{ easydb_docker_registry }}/pf/server-{{ easydb_solution }}"
@@ -43,10 +44,10 @@ services:
     ports:
       - 10480:80
     volumes:
-      - /srv/docker/volumes/common/config-{{ easydb_solution }}:/config
-      - /srv/docker/volumes/easydb-server-{{ easydb_solution }}/var:/easydb-5/var
-      - /srv/docker/volumes/easydb-server-{{ easydb_solution }}/nginx-log:/var/log/nginx
-      - /srv/docker/volumes/easydb-server-{{ easydb_solution }}/hotfolder:/hotfolder
+      - {{ volume_config }}:/config
+      - {{ volume_server_var }}:/easydb-5/var
+      - {{ volume_server_nginx_log }}:/var/log/nginx
+      - {{ volume_server_hotfolder }}:/hotfolder
 
   webfrontend:
     image: "{{ easydb_docker_registry }}/pf/webfrontend"
@@ -57,4 +58,4 @@ services:
     ports:
       - 127.0.0.1:10481:80
     volumes:
-      - /srv/docker/volumes/common/config-{{ easydb_solution }}:/config
+      - {{ volume_config }}:/config

@@ -9,3 +9,16 @@ easydb_solution: base
 easydb_docker_registry: docker.easydb.de:5000
 easydb_docker_user: ''
 easydb_docker_pass: ''
+
+volume_config: "{{ easydb_basedir }}/config"
+volume_elasticsearch_var: "{{ easydb_basedir }}/elasticsearch/var"
+volume_pgsql_backup: "{{ easydb_basedir }}/pgsql/backup"
+volume_pgsql_etc: "{{ easydb_basedir }}/pgsql/etc"
+volume_pgsql_log: "{{ easydb_basedir }}/pgsql/log"
+volume_pgsql_var: "{{ easydb_basedir }}/pgsql/var"
+volume_eas_lib: "{{ easydb_basedir }}/eas/lib"
+volume_eas_log: "{{ easydb_basedir }}/eas/log"
+volume_eas_tmp: "{{ easydb_basedir }}/eas/tmp"
+volume_server_var: "{{ easydb_basedir }}/easydb-server/var"
+volume_server_nginx_log: "{{ easydb_basedir }}/easydb-server/nginx-log"
+volume_server_hotfolder: "{{ easydb_basedir }}/easydb-server/hotfolder"
