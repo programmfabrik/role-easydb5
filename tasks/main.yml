@@ -6,3 +6,6 @@
     - install/default.yml
   loop_control:
     loop_var: install_item
+  tags:
+    - easydb
+    - easydb5

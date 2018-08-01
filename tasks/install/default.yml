@@ -19,7 +19,7 @@
 
 - name: Adding customer APT repository
   apt_repository:
-    repo: deb http://packages-instances.programmfabrik.de/2G_{{ easydb_customer_id }}/debian ./
+    repo: deb http://archive.programmfabrik.de {{ ansible_lsb.codename }} main internal non-free
 
 - name: Installing easydb-maintenance
   apt:
@@ -49,16 +49,12 @@
     password: "{{ easydb_docker_pass }}"
     reauthorize: yes
 
-- name: Pulling docker images
-  docker_image:
-    name: "{{ easydb_docker_registry }}/pf/{{ image_item }}"
-  with_items: "{{ easydb_docker_images }}"
-  loop_control:
-    loop_var: image_item
-
-- name: Creating docker network
-  docker_network:
-    name: "{{ easydb_docker_net }}"
+# - name: Pulling docker images
+#   docker_image:
+#     name: "{{ easydb_docker_registry }}/pf/{{ image_item }}"
+#   with_items: "{{ easydb_docker_images }}"
+#   loop_control:
+#     loop_var: image_item
 
 - name: Adjust sysctl max-map-count
   sysctl:
@@ -101,25 +97,15 @@
     group: root
     mode: 0644
 
-- name: Creating docker wrapper scripts
+- name: Deploying docker-compose.yml
   template:
-    src: srv/easydb/run-{{ script_item }}.sh.j2
-    dest: "{{ easydb_basedir }}/run-{{ script_item }}.sh"
+    src: srv/easydb/docker-compose.yml.j2
+    dest: /srv/easydb/docker-compose.yml
     owner: root
     group: root
-    mode: 0750
-    force: no   # DO NOT OVERWRITE MANUAL CHANGES!!!
-  with_items: [ pgsql, elasticsearch, eas, server, webfrontend ]
-  loop_control:
-    loop_var: script_item
+    mode: 0640
 
-- name: Creating systemd service-files
-  template:
-    src: etc/systemd/system/easydb.service.j2
-    dest: /etc/systemd/system/easydb.service
-    owner: root
-    group: root
-    mode: 0644
-  notify:
-    - systemd service-unit installed
-    - systemd daemon-reload
+- name: Deloying application stack
+  docker_service:
+    project_src: "{{ easydb_basedir }}"
+    debug: yes
