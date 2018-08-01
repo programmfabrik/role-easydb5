@@ -17,10 +17,6 @@
     pkg: programmfabrik-keyring
     state: present
 
-- name: Adding customer APT repository
-  apt_repository:
-    repo: deb http://archive.programmfabrik.de {{ ansible_lsb.codename }} main internal non-free
-
 - name: Installing easydb-maintenance
   apt:
     pkg: easydb5-maintenance
