@@ -1,15 +1,12 @@
-easydb_version: 5
+# docker
 easydb_proxy_url: ''
-easydb_basedir: /srv/easydb
-easydb_max_map_count: 262144
-
-easydb_customer_id: ''
-easydb_solution: base
-
-easydb_docker_registry: docker.easydb.de:5000
 easydb_docker_user: ''
 easydb_docker_pass: ''
+easydb_docker_registry: docker.easydb.de:5000
+socket_webfrontend: 127.0.0.1:81
 
+# paths
+easydb_basedir: /srv/easydb
 volume_config: "{{ easydb_basedir }}/config"
 volume_elasticsearch_var: "{{ easydb_basedir }}/elasticsearch/var"
 volume_pgsql_backup: "{{ easydb_basedir }}/pgsql/backup"
@@ -22,3 +19,28 @@ volume_eas_tmp: "{{ easydb_basedir }}/eas/tmp"
 volume_server_var: "{{ easydb_basedir }}/easydb-server/var"
 volume_server_nginx_log: "{{ easydb_basedir }}/easydb-server/nginx-log"
 volume_server_hotfolder: "{{ easydb_basedir }}/easydb-server/hotfolder"
+
+# easydb server
+easydb_solution: base
+external-user-schema: true
+enable_post_settings: true
+enable_restart: true
+enable_purgdata: false
+enable_purgeall: false
+enable_plugins:
+  - base.easydb4migration
+
+# elasticsearch
+easydb_max_map_count: 262144
+
+# E-Mail
+enable_mailer: true
+mail_relay_for_ssmtp: ''
+hostname_for_ssmtp: ''
+envelope_from: ''
+
+# frontend
+datamodel_uid: ''
+objectstore_url: https://schema.easydb.de/objectstore
+objectstore_instance_id: prod
+

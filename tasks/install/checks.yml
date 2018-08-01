@@ -1,19 +1,39 @@
-- name: Check if easydb_url has been defined
+- name: Check whether easydb_url has been defined
   when: easydb_url == ''
   fail:
     msg: Please define the variable easydb_url!
 
-- name: Check if solution has been defined
+- name: Check whether solution has been defined
   when: easydb_solution == ''
   fail:
-    msg: Please define the variable easydb_solution in your play!
+    msg: Please define the variable easydb_solution!
 
-- name: Check if docker username has been defined
+- name: Check whether docker username has been defined
   when: easydb_docker_user == ''
   fail:
-    msg: Please define the variable easydb_docker_user in your play!
+    msg: Please define the variable easydb_docker_user!
 
-- name: Check if docker password has been defined
+- name: Check whether docker password has been defined
   when: easydb_docker_pass == ''
   fail:
-    msg: Please define the variable easydb_docker_pass in your play!
+    msg: Please define the variable easydb_docker_pass!
+
+- name: Check whether mail_relay_for_ssmtp has been defined
+  when: mail_relay_for_ssmtp == ''
+  fail:
+    msg: Please define the variable mail_relay_for_ssmtp!
+
+- name: Check whether hostname_for_ssmtp has been defined
+  when: hostname_for_ssmtp == ''
+  fail:
+    msg: Please define the variable hostname_for_ssmtp!
+
+- name: Check whether envelope_from has been defined
+  when: envelope_from == ''
+  fail:
+    msg: Please define the variable envelope_from!
+
+- name: Check whether objectstore misses datamodel_uid
+  when: objectstore_url != '' && datamodel_uid == ''
+  fail:
+    msg: Either set objectstore to empty string or set datamodel_uid!
