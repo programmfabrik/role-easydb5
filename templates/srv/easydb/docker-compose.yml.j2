@@ -9,7 +9,7 @@ services:
 
   pgsql:
     image: "{{ easydb_docker_registry }}/pf/postgresql"
-    container_name: easydb-postgres
+    container_name: easydb-pgsql
     ports:
       - 15432:5432
     volumes:
