@@ -1,3 +1,6 @@
+# FIXME: we need a naming scheme, proposing  "easydb_<component>_<something>"
+#        e.g. "easydb_es_memory_size" or "easydb_srv_external_user_schema"
+
 # docker
 easydb_proxy_url: ''
 easydb_docker_user: ''
@@ -35,6 +38,7 @@ enable_plugins:
 
 # elasticsearch
 easydb_max_map_count: 262144
+easydb_es_memory_size: 2g
 
 # E-Mail
 enable_mailer: true
