@@ -58,7 +58,7 @@
     value: "{{ easydb_max_map_count }}"
     reload: yes
 
-- name: Boilerplating directory sturcture
+- name: Boilerplating directory structure
   file:
     path: "{{ file_item.path }}"
     owner: "{{ file_item.owner | default('root') }}"
