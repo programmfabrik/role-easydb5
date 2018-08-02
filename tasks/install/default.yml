@@ -93,6 +93,12 @@
     group: root
     mode: u=rw,g=r,o=r
 
+# XXX: it's actually fatal to restart docker just after deploying easydb
+#      containers. Their startup scripts are not fully atomic and when
+#      killed at the wrong moment some inconsistent state is left
+#      => restart docker now, which is triggered by installation of docker
+- meta: flush_handlers
+
 - name: Deploying docker-compose.yml
   template:
     src: srv/easydb/docker-compose.yml.j2
@@ -105,3 +111,7 @@
   docker_service:
     project_src: "{{ easydb_basedir }}"
     debug: yes
+  #register: output
+
+#- debug:
+#    var: output
