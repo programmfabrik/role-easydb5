@@ -25,6 +25,8 @@ easydb-server:
       - {{ plugin }}
 {% endfor %}
 
+elasticsearch:
+  memory-size: {{ easydb_es_memory_size }}
 
 common:
   email:
