@@ -24,6 +24,5 @@ dependencies:
   scm: git
 - name: blunix.role-docker
   src: https://github.com/blunix/role-docker
-  version: 1.0.0
+  version: fix/docker-compose
   scm: git
-
