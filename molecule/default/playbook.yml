@@ -7,10 +7,14 @@
     docker_compose_version: 1.22.0
 
     easydb_url: http://localhost:8080
-    easydb_customer_id: be52ae33594eb794828ccd4837cf08ae
     easydb_solution: base
     easydb_docker_user: user1
     easydb_docker_pass: HA-imUsE3Dj
+    mail_relay_for_ssmtp: 127.0.0.1
+    hostname_for_ssmtp: 127.0.0.1
+    envelope_from: noreply@127.0.0.1
+    objectstore_url: ''
+
 
   roles:
-    - role: role-easydb
+    - role: role-easydb5
