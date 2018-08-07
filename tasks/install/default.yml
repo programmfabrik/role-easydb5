@@ -107,7 +107,7 @@
     group: root
     mode: u=rw,g=r,o=r
 
-- name: Deloying application stack
+- name: Starting easydb5 via docker compose
   docker_service:
     project_src: "{{ easydb_basedir }}"
     debug: yes
