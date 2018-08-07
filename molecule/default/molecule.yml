@@ -10,8 +10,8 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: instance
-    box: ubuntu/xenial64
+  - name: stretch
+    box: bento/debian-9
 provisioner:
   name: ansible
   lint:
