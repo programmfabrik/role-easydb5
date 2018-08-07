@@ -23,6 +23,11 @@
     state: present
     install_recommends: yes
 
+- name: Disabling boot actions of init script in favor of docker-compose
+  systemd:
+    enabled: no
+    name: easydb5
+
 - name: Deploy /etc/default/easydb5
   template:
     src: etc/default/easydb5.j2
