@@ -51,3 +51,12 @@ datamodel_uid: ''
 objectstore_url: https://schema.easydb.de/objectstore
 objectstore_instance_id: prod
 
+# cron
+cron_update_minute: 23
+cron_update_hour: 23
+cron_update_weekday: 5
+cron_update_script: /etc/init.d/easydb5 update-auto
+cron_backup_minute: 23
+cron_backup_hour: 23
+cron_backup_weekday: 1,2,3,4,6,7
+cron_backup_script: /etc/init.d/easydb5 backup

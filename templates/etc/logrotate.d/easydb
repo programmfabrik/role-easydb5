@@ -1,0 +1,8 @@
+{{ easydb_basedir }}/easydb-server/var/imexporter.log {
+        weekly
+        missingok
+        rotate 4
+        notifempty
+        copytruncate
+        su root root
+}

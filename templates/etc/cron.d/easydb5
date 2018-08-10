@@ -1,0 +1,2 @@
+{{ cron_update_minute }} {{ cron_update_hour }} * * {{ cron_update_weekday }} root {{ cron_update_script }}
+{{ cron_backup_minute }} {{ cron_backup_hour }} * * {{ cron_backup_weekday }} root {{ cron_backup_script }}

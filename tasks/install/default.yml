@@ -50,6 +50,7 @@
     password: "{{ easydb_docker_pass }}"
     reauthorize: yes
 
+# now done with docker-compose it seems
 # - name: Pulling docker images
 #   docker_image:
 #     name: "{{ easydb_docker_registry }}/pf/{{ image_item }}"
@@ -117,6 +118,22 @@
     project_src: "{{ easydb_basedir }}"
     debug: yes
   #register: output
+
+- name: Configure logrotation for main easydb5 server log file
+  template:
+    src: etc/logrotate.d/easydb
+    dest: /etc/logrotate.d/easydb
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: Configure cron to regularly dump sql und update the easydb docker images
+  template:
+    src: etc/cron.d/easydb5
+    dest: /etc/cron.d/easydb5
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
 
 #- debug:
 #    var: output
