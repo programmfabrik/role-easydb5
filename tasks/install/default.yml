@@ -76,7 +76,7 @@
   with_items:
     - path: "{{ easydb_basedir }}"
     - path: "{{ volume_config }}"
-    - path: "{{ volume_eas_lib }}"
+    - path: "{{ volume_eas_assets }}"
     - path: "{{ volume_eas_log }}"
     - path: "{{ volume_eas_tmp }}"
       mode: u=rwx,g=rwx,o=rwx,o+t
