@@ -31,7 +31,7 @@ services:
       - {{ socket_eas }}:80
     volumes:
       - {{ volume_config }}:/config
-      - {{ volume_eas_lib }}:/var/opt/easydb/lib/eas
+      - {{ volume_eas_assets }}:/var/opt/easydb/lib/eas/assets
       - {{ volume_eas_log }}:/var/opt/easydb/log/eas
       - {{ volume_eas_tmp }}:/tmp
 
