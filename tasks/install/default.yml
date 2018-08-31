@@ -77,6 +77,8 @@
     - path: "{{ easydb_basedir }}"
     - path: "{{ volume_config }}"
     - path: "{{ volume_eas_assets }}"
+      owner: www-data
+      group: www-data
     - path: "{{ volume_eas_log }}"
     - path: "{{ volume_eas_tmp }}"
       mode: u=rwx,g=rwx,o=rwx,o+t
