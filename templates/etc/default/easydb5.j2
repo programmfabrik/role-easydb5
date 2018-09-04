@@ -15,13 +15,10 @@ DBS="eas easydb"
 #KEEPDBS=7            # default
 KEEPDBS=7
 
-# Wait this long between starting two containers
-#WAITSEC=10           # default
-WAITSEC=0
-
 # Put output of the command update-auto into this file (stdout, not stderr)
 #UPDATELOG=/var/log/easydb-update.log   # default
 UPDATELOG=/var/log/easydb-update.log
 
 # docker-compose executable
+# default is to use the result of: which docker-compose
 #COMPOSE="echo COMPOSE" # dummy for debugging
