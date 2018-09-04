@@ -1,6 +1,8 @@
 # FIXME: we need a naming scheme, proposing  "easydb_<component>_<something>"
 #        e.g. "easydb_es_memory_size" or "easydb_srv_external_user_schema"
 
+skip_customer: false
+
 # docker
 easydb_proxy_url: ''
 easydb_docker_user: ''
