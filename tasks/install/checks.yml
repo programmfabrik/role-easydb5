@@ -1,3 +1,8 @@
+- name: Check whether this customer shall be skipped
+  when: skip_customer == yes
+  fail:
+    msg: This customer must be skipped.
+
 - name: Check whether easydb_url has been defined
   when: easydb_url == ''
   fail:
