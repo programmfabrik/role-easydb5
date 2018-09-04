@@ -1,5 +1,5 @@
 - name: Check whether this customer shall be skipped
-  when: skip_customer == yes
+  when: skip_customer == true
   fail:
     msg: This customer must be skipped.
 
