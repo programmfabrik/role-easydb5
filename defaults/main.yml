@@ -12,6 +12,10 @@ socket_webfrontend: 127.0.0.1:81
 socket_server:      127.0.0.1:82
 socket_eas:         127.0.0.1:83
 socket_pgsql:       127.0.0.1:15432
+# Where to write log messages to while doing update-auto in the script:
+easydb_cron_update_log: /var/log/easydb-update.log
+# Path to docker-compose executable:
+easydb_script_compose: '`which docker-compose 2>/dev/null`'
 
 # paths
 easydb_basedir: /srv/easydb
@@ -53,12 +57,18 @@ datamodel_uid: ''
 objectstore_url: https://schema.easydb.de/objectstore
 objectstore_instance_id: prod
 
+# PostgrSQL
+# Space-separated list of db-names to dump with the script:
+easydb_dump_dbs: "eas easydb"
+# Of eas DB in $DBS keep this many newest dumps:
+easydb_dump_keep: 7
+
 # cron
 cron_update_minute: 23
 cron_update_hour: 23
 cron_update_weekday: 5
-cron_update_script: /etc/init.d/easydb5 update-auto
+cron_update_script: "{{ easydb_basedir }}/maintain update-auto"
 cron_backup_minute: 23
 cron_backup_hour: 23
 cron_backup_weekday: 1,2,3,4,6,7
-cron_backup_script: /etc/init.d/easydb5 backup
+cron_backup_script: "{{ easydb_basedir }}/maintain backup"

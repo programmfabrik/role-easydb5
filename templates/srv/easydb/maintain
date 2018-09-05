@@ -1,0 +1,182 @@
+#!/bin/bash
+
+# {{ ansible_managed }}
+
+# purpose of this script: execute maintenance tasks around easydb:
+#
+# - backup sql
+# - update via docker and preserve previous state
+# - cleanup superfluous docker files
+# - start/stop/restart easydb using docker-compose
+
+# usage:
+#
+# {{ easydb_basedir }}/maintain status      # shows running docker containers
+# {{ easydb_basedir }}/maintain update      # downloads newest easydb version
+# {{ easydb_basedir }}/maintain update-auto # dito plus restart and log into $UPDATELOG
+# {{ easydb_basedir }}/maintain backup      # dumps sql into {{ easydb_basedir }}/pgsql/backup
+#                                  # is also part of update and update-auto
+# {{ easydb_basedir }}/maintain cleanup     # is also part of update and update-auto
+# {{ easydb_basedir }}/maintain stop        # stops easydb via docker-compose
+#                                  # Danger: stop will be in effect even after reboot.
+#                                  # Do not forget to start again.
+# {{ easydb_basedir }}/maintain start       # starts easydb via docker-compose
+# {{ easydb_basedir }}/maintain restart     # both of the above
+
+# Data directory with the subdirectories "config", "easydb-server", etc.:
+BASEDIR={{ easydb_basedir }}
+# Which variant of the docker image easydb-server shall be used:
+SOLUTION={{ easydb_solution }}
+# Space-separated list of names of dbs in postgres in container "easydb-pgsql" to dump:
+DBS="{{ easydb_dump_dbs }}"
+# Of eas DB in $DBS keep this many newest dumps:
+KEEPDBS={{ easydb_dump_keep }}
+# Where to write log messages to while doing update-auto:
+UPDATELOG={{ easydb_cron_update_log }}
+COMPOSE_FILE="$BASEDIR"/docker-compose.yml
+# Path to docker-compose executable
+COMPOSE={{ easydb_script_compose }}
+
+# read local values:
+[ -e /etc/default/easydb5 ] && . /etc/default/easydb5
+
+case "$1" in
+start)
+    cd "$BASEDIR"
+    $COMPOSE up -d
+;;
+stop)
+    cd "$BASEDIR"
+    $COMPOSE down
+;;
+restart)
+    $0 stop 2>&1 | sed '/Network easydb_default not found/d'
+
+    $0 start
+;;
+status)
+        $COMPOSE ps
+;;
+update)
+        if   $0 backup
+        then $0 tag
+             $0 cleanup
+             $0 pull
+        else
+            echo "ERROR: backup failed - not updating!">&2
+        fi
+;;
+update-auto)
+        echo             >> $UPDATELOG
+        date             >> $UPDATELOG
+        if   $0 backup   >> $UPDATELOG
+        then $0 tag      >> $UPDATELOG
+             $0 cleanup  >> $UPDATELOG
+             $0 pull     >> $UPDATELOG
+             date        >> $UPDATELOG
+             $0 restart  2>&1 >>$UPDATELOG |tee -a $UPDATELOG |grep -v '^Creating'
+                                                              #^^^^^^^^^^^^^^^^^^
+                                                              # prevent lines starting with "Creating"
+                                                              # from reaching cron mails, because
+                                                              # they're neither warnings nor errors
+                                           #^^^^^^^^^^^^^^^^^ put stderr into LOG
+                             #^^^^^^^^^^^^ put stdout into LOG(does NOT affect stderr)
+                        #^^^^ put stderr where stdout currently points to. (make it reach cron mails)
+        else
+            echo "ERROR: backup failed - not updating!">> $UPDATELOG
+            echo "ERROR: backup failed - not updating!">&2
+        fi
+;;
+backup)
+        # do sql backup of all sql dbs $DBS (one per instance and one for eas)
+        # Note: there are only $KEEPDBS kept - repeating this quickly removes all old backups (on this host) !
+        cd $BASEDIR/pgsql/backup          || exit 2
+        /usr/bin/docker ps|grep -q 'easydb-pgsql$' || exit 3
+        for DB in $DBS; do
+                $0 sqldump $DB            || exit 4
+        done
+        exit 0
+;;
+sqldump)
+        # do sql backup of one given sql db name (inside docker container "easydb-pgsql")
+        DB="$2"
+        TIME=`date +%Y-%m-%d_%Hh%Mm%Ss`
+        FILE=$DB."$TIME".pgdump
+        /usr/bin/docker exec easydb-pgsql pg_dump -U postgres -v -Fc -f /backup/$FILE $DB > $FILE.log 2>&1
+        EXCODE=$?
+        if [ $EXCODE -gt 0 ] ; then
+                rm $FILE &>/dev/null
+                mv $FILE.log  $FILE.log.FAIL &>/dev/null
+                echo "pg_dump $DB exited with $EXCODE. Logfile is $BASEDIR/pgsql/backup/$FILE.log.FAIL"
+                echo "pg_dump $DB exited with $EXCODE. Logfile is $BASEDIR/pgsql/backup/$FILE.log.FAIL" >&2
+                exit 4
+        else
+                # rotate so that only the last $KEEPDBS valid dumps remain. Also for logs.
+                ls -1 --color=no $DB.*s.pgdump    |sort -r|tail -n +$((KEEPDBS+1))|while read i; do rm $i; done
+                ls -1 --color=no $DB.*s.pgdump.log|sort -r|tail -n +$((KEEPDBS+1))|while read i; do rm $i; done
+        fi
+        exit 0
+;;
+tag)
+        # tag the current docker version as "previous" - good before an update if you want to go back.
+        # Danger: this will overwrite the "previous"ly preserved docker version!
+        /usr/bin/docker tag docker.easydb.de:5000/pf/server-$SOLUTION:latest docker.easydb.de:5000/pf/server-$SOLUTION:previous
+        /usr/bin/docker tag docker.easydb.de:5000/pf/webfrontend:latest      docker.easydb.de:5000/pf/webfrontend:previous
+        /usr/bin/docker tag docker.easydb.de:5000/pf/eas:latest              docker.easydb.de:5000/pf/eas:previous
+        /usr/bin/docker tag docker.easydb.de:5000/pf/elasticsearch:latest    docker.easydb.de:5000/pf/elasticsearch:previous
+	    if /usr/bin/docker images | grep -q fylr; then
+		    /usr/bin/docker tag docker.easydb.de:5000/pf/fylr:latest            docker.easydb.de:5000/pf/fylr:previous
+	    fi
+        /usr/bin/docker tag docker.easydb.de:5000/pf/postgresql:latest       docker.easydb.de:5000/pf/postgresql:previous
+;;
+pull)
+        /usr/bin/docker pull docker.easydb.de:5000/pf/server-$SOLUTION
+        /usr/bin/docker pull docker.easydb.de:5000/pf/webfrontend
+        /usr/bin/docker pull docker.easydb.de:5000/pf/elasticsearch
+        /usr/bin/docker pull docker.easydb.de:5000/pf/eas
+	    if /usr/bin/docker images | grep -q fylr; then
+            /usr/bin/docker pull docker.easydb.de:5000/pf/fylr
+        fi
+        /usr/bin/docker pull docker.easydb.de:5000/pf/postgresql
+;;
+cleanup)
+       #  free disk space
+       #
+       #  In our experience, used containers are not damaged by these commands
+       #  and used images are not damaged even if they have no running container.
+       #  Some error messages may be generated, however ("could not remove").
+
+       echo "removing left over temporary files..."
+       LIST=$(/usr/bin/docker ps -qa --no-trunc --filter "status=exited")
+       if [ "$LIST" ] ; then
+               /usr/bin/docker rm -v $LIST #>/dev/null
+               echo "... done."
+       else
+               echo "... none found."
+       fi
+
+       echo "removing unused images..."
+       LIST=$(/usr/bin/docker images --filter "dangling=true" -q --no-trunc)
+       if [ "$LIST" ] ; then
+               /usr/bin/docker rmi $LIST #>/dev/null
+               echo "... done."
+       else
+               echo "... none found."
+       fi
+
+       # next step:
+       # docker images | grep '<none>' | awk '{print }' | xargs -r docker rmi -f
+
+       echo "removing dangling volumes..."
+       LIST=$(/usr/bin/docker volume ls -qf dangling=true)
+       if [ "$LIST" ] ; then
+               /usr/bin/docker volume rm $LIST #>/dev/null
+               echo "... done."
+       else
+               echo "... none found."
+       fi
+       echo All done cleaning up.
+;;
+*)
+        echo "ERROR: argument '$1' not implemented."
+esac

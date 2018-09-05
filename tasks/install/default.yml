@@ -8,34 +8,6 @@
   apt_key:
     url: https://programmfabrik.de/files/pf-debian-2017.asc
 
-- name: Adding Programmfabrik APT repository
-  apt_repository:
-    repo: deb http://archive.programmfabrik.de/ {{ ansible_lsb.codename }} main non-free
-
-- name: Installing programmfabrik-keyring
-  apt:
-    pkg: programmfabrik-keyring
-    state: present
-
-- name: Installing easydb-maintenance
-  apt:
-    pkg: easydb5-maintenance
-    state: present
-    install_recommends: yes
-
-- name: Disabling boot actions of init script in favor of docker-compose
-  systemd:
-    enabled: no
-    name: easydb5
-
-- name: Deploy /etc/default/easydb5
-  template:
-    src: etc/default/easydb5.j2
-    dest: /etc/default/easydb5
-    owner: root
-    group: root
-    mode: 0644
-
 - name: Install Python docker bindings
   apt:
     pkg: python-docker
@@ -49,14 +21,6 @@
     username: "{{ easydb_docker_user }}"
     password: "{{ easydb_docker_pass }}"
     reauthorize: yes
-
-# now done with docker-compose it seems
-# - name: Pulling docker images
-#   docker_image:
-#     name: "{{ easydb_docker_registry }}/pf/{{ image_item }}"
-#   with_items: "{{ easydb_docker_images }}"
-#   loop_control:
-#     loop_var: image_item
 
 - name: Adjust sysctl max-map-count
   sysctl:
@@ -93,6 +57,14 @@
     - path: "{{ volume_server_var }}"
     - path: "{{ volume_server_hotfolder }}"
 
+- name: Installing maintain script
+  template:
+    src: srv/easydb/maintain
+    dest: "{{ easydb_basedir }}/maintain"
+    owner: root
+    group: root
+    mode: 0755
+
 - name: Creating initial configuration file
   template:
     src: srv/easydb/config/easydb5-master.yml.j2
@@ -100,6 +72,9 @@
     owner: root
     group: root
     mode: u=rw,g=r,o=r
+# replacement for task above: copy static easydb5-master.yml
+# playbook/plays/kunde_A/files/easydb5-master.yml -> target host /srv/easydb/config/
+
 
 # XXX: it's actually fatal to restart docker just after deploying easydb
 #      containers. Their startup scripts are not fully atomic and when
@@ -114,6 +89,11 @@
     owner: root
     group: root
     mode: u=rw,g=r,o=r
+# replacement for task above:
+# copy: # first found of ...
+#  node01.docker-compose.yml  # searches in files/ of playbook and role
+#  docker-compose.yml         # searches in files/ of playbook and role
+#  srv/easydb/docker-compose.yml
 
 - name: Downloading and starting easydb5 via docker compose
   docker_service:
