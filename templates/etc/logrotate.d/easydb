@@ -1,3 +1,5 @@
+# {{ ansible_managed }}
+
 {{ easydb_basedir }}/easydb-server/var/imexporter.log {
         weekly
         missingok
