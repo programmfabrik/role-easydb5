@@ -37,7 +37,7 @@ easydb_solution: base
 external_user_schema: true
 enable_post_settings: true
 enable_restart: true
-enable_purgdata: false
+enable_purgedata: false
 enable_purgeall: false
 enable_plugins:
   - base.easydb4migration
