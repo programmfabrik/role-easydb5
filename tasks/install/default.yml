@@ -4,10 +4,6 @@
   when: easydb_proxy_url
   include_tasks: proxy.yml
 
-- name: Obtaining APT GPG key
-  apt_key:
-    url: https://programmfabrik.de/files/pf-debian-2017.asc
-
 - name: Install Python docker bindings
   apt:
     pkg: python-docker
