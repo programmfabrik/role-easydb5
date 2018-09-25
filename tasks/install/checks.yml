@@ -23,22 +23,22 @@
   fail:
     msg: Please define the variable easydb_docker_pass!
 
-- name: Check whether mail_relay_for_ssmtp has been defined
-  when: mail_relay_for_ssmtp == ''
-  fail:
-    msg: Please define the variable mail_relay_for_ssmtp!
+  #- name: Check whether mail_relay_for_ssmtp has been defined
+  #  when: mail_relay_for_ssmtp == ''
+  #  fail:
+  #    msg: Please define the variable mail_relay_for_ssmtp!
+  #
+  #- name: Check whether hostname_for_ssmtp has been defined
+  #  when: hostname_for_ssmtp == ''
+  #  fail:
+  #    msg: Please define the variable hostname_for_ssmtp!
 
-- name: Check whether hostname_for_ssmtp has been defined
-  when: hostname_for_ssmtp == ''
-  fail:
-    msg: Please define the variable hostname_for_ssmtp!
+  #- name: Check whether envelope_from has been defined
+  #  when: envelope_from == ''
+  #  fail:
+  #    msg: Please define the variable envelope_from!
 
-- name: Check whether envelope_from has been defined
-  when: envelope_from == ''
-  fail:
-    msg: Please define the variable envelope_from!
-
-- name: Check whether objectstore misses datamodel_uid
-  when: objectstore_url != '' and datamodel_uid == ''
-  fail:
-    msg: Either set objectstore_url to empty string or set datamodel_uid!
+  #- name: Check whether objectstore misses datamodel_uid
+  #  when: objectstore_url != '' and datamodel_uid == ''
+  #  fail:
+  #    msg: Either set objectstore_url to empty string or set datamodel_uid!

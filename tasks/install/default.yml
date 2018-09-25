@@ -1,59 +1,43 @@
 - include_tasks: checks.yml
 
-- name: Configuring APT proxy
+- name: configuring APT proxy
   when: easydb_proxy_url
   include_tasks: proxy.yml
 
-- name: Install Python docker bindings
+- name: installing Python docker bindings
   apt:
     pkg: python-docker
     state: present
     update_cache: no
     install_recommends: no
 
-- name: Logging in to docker registry
+- name: logging in to docker registry
   docker_login:
     registry: "{{ easydb_docker_registry }}"
     username: "{{ easydb_docker_user }}"
     password: "{{ easydb_docker_pass }}"
     reauthorize: yes
 
-- name: Adjust sysctl max-map-count
+- name: adjusting sysctl max-map-count
   sysctl:
     name: vm.max_map_count
     value: "{{ easydb_max_map_count }}"
     reload: yes
 
-- name: Boilerplating directory structure
+- name: creating easydb_basedir => {{ easydb_basedir }}
   file:
+    state: directory
     path: "{{ file_item.path }}"
     owner: "{{ file_item.owner | default('root') }}"
     group: "{{ file_item.group | default('root') }}"
-    mode: "{{ file_item.mode | default (0755) }}"
-    state: directory
+    mode: "{{ file_item.mode | default(0755) }}"
   loop_control:
     loop_var: file_item
   with_items:
     - path: "{{ easydb_basedir }}"
-    - path: "{{ volume_config }}"
-    - path: "{{ volume_eas_assets }}"
-      owner: www-data
-      group: www-data
-    - path: "{{ volume_eas_log }}"
-    - path: "{{ volume_eas_tmp }}"
-      mode: u=rwx,g=rwx,o=rwx,o+t
-    - path: "{{ volume_elasticsearch_var }}"
-      mode: u=rwx,g=rwx,o=rwx
-    - path: "{{ volume_pgsql_etc }}"
-    - path: "{{ volume_pgsql_var }}"
-    - path: "{{ volume_pgsql_log }}"
-    - path: "{{ volume_pgsql_backup }}"
-    - path: "{{ volume_server_nginx_log }}"
-      mode: u=rwx,g=rwx,o=rwx
-    - path: "{{ volume_server_var }}"
-    - path: "{{ volume_server_hotfolder }}"
+    - path: "{{ easydb_basedir }}/config"
 
-- name: Installing maintain script
+- name: installing maintain script
   template:
     src: srv/easydb/maintain
     dest: "{{ easydb_basedir }}/maintain"
@@ -61,43 +45,18 @@
     group: root
     mode: 0755
 
-- name: Creating initial configuration file
+- name: creating initial configuration file
   template:
     src: srv/easydb/config/easydb5-master.yml.j2
-    dest: "{{ volume_config }}/easydb5-master.yml"
+    dest: "{{ easydb_basedir }}/config/easydb5-master.yml"
     owner: root
     group: root
     mode: u=rw,g=r,o=r
-# replacement for task above: copy static easydb5-master.yml
-# playbook/plays/kunde_A/files/easydb5-master.yml -> target host /srv/easydb/config/
 
-
-# XXX: it's actually fatal to restart docker just after deploying easydb
-#      containers. Their startup scripts are not fully atomic and when
-#      killed at the wrong moment some inconsistent state is left
-#      => restart docker now, which is triggered by installation of docker
+# Flush handlers now so the docker daemon doesn't restart immediatly after the instances have started.
 - meta: flush_handlers
 
-- name: Deploying docker-compose.yml
-  template:
-    src: srv/easydb/docker-compose.yml.j2
-    dest: "{{ easydb_basedir }}/docker-compose.yml"
-    owner: root
-    group: root
-    mode: u=rw,g=r,o=r
-# replacement for task above:
-# copy: # first found of ...
-#  node01.docker-compose.yml  # searches in files/ of playbook and role
-#  docker-compose.yml         # searches in files/ of playbook and role
-#  srv/easydb/docker-compose.yml
-
-- name: Downloading and starting easydb5 via docker compose
-  docker_service:
-    project_src: "{{ easydb_basedir }}"
-    debug: yes
-  #register: output
-
-- name: Configure logrotation for main easydb5 server log file
+- name: configuring logrotation for main easydb5 server log file
   template:
     src: etc/logrotate.d/easydb
     dest: /etc/logrotate.d/easydb
@@ -105,7 +64,36 @@
     group: root
     mode: u=rw,g=r,o=r
 
-- name: Configure cron to regularly dump sql und update the easydb docker images
+- name: creating easydb5 docker network
+  docker_network:
+    name: "{{ easydb_container_network }}"
+
+- name: spinning up docker-containers
+  docker_container:
+    name: "{{ easydb_container_item.key }}"
+    image: "{{ easydb_container_item.value.image }}"
+    networks:
+      - name: "{{ easydb_container_network }}"
+    restart_policy: "{{ easydb_container_item.value.restart_policy | default('always') }}"
+    ports: "{{ easydb_container_item.value.ports | default([]) }}"
+    volumes: "{{ easydb_container_item.value.volumes | default([]) }}"
+    capabilities: "{{ easydb_container_item.value.capabilities | default([]) }}"
+  loop_control:
+    loop_var: easydb_container_item
+  with_dict: "{{ easydb_containers }}"
+
+- name: deploying run-scripts
+  template:
+    src: srv/easydb/run-script.j2
+    dest: "{{ easydb_basedir }}/run-{{ easydb_container_item.key }}.sh"
+    owner: root
+    group: root
+    mode: 0640
+  loop_control:
+    loop_var: easydb_container_item
+  with_dict: "{{ easydb_containers }}"
+
+- name: configuring easydb cron-jobs
   template:
     src: etc/cron.d/easydb5
     dest: /etc/cron.d/easydb5

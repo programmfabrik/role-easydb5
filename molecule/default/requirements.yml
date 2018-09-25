@@ -4,5 +4,5 @@
   scm: git
 - name: blunix.role-docker
   src: https://github.com/blunix/role-docker.git
-  version: fix/docker-compose
+  version: 1.0.0
   scm: git
