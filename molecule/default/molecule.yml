@@ -12,6 +12,9 @@ lint:
 platforms:
   - name: stretch
     box: bento/debian-9
+    memory: 2048
+    # memory is given in MB
+    #cpus: 2
 provisioner:
   name: ansible
   lint:
