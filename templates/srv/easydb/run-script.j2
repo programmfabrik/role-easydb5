@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# {{ ansible_managed }}
+
 docker run -d -ti \
     --name easydb-{{ easydb_container_item.key }} \
     --restart=always \
