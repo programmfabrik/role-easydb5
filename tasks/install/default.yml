@@ -70,7 +70,7 @@
 
 - name: spinning up docker-containers
   docker_container:
-    name: "{{ easydb_container_item.key }}"
+    name: "easydb-{{ easydb_container_item.key }}"
     image: "{{ easydb_container_item.value.image }}"
     networks:
       - name: "{{ easydb_container_network }}"
@@ -88,7 +88,7 @@
     dest: "{{ easydb_basedir }}/run-{{ easydb_container_item.key }}.sh"
     owner: root
     group: root
-    mode: 0640
+    mode: 0755
   loop_control:
     loop_var: easydb_container_item
   with_dict: "{{ easydb_containers }}"

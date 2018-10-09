@@ -7,7 +7,7 @@
 # - backup sql
 # - update via docker and preserve previous state
 # - cleanup superfluous docker files
-# - start/stop/restart easydb using docker-compose
+# - start/stop/restart easydb using docker and the run-*.sh scripts
 
 # usage:
 #
@@ -17,10 +17,10 @@
 # {{ easydb_basedir }}/maintain backup      # dumps sql into {{ easydb_basedir }}/pgsql/backup
 #                                  # is also part of update and update-auto
 # {{ easydb_basedir }}/maintain cleanup     # is also part of update and update-auto
-# {{ easydb_basedir }}/maintain stop        # stops easydb via docker-compose
+# {{ easydb_basedir }}/maintain stop        # stops easydb via docker
 #                                  # Danger: stop will be in effect even after reboot.
 #                                  # Do not forget to start again.
-# {{ easydb_basedir }}/maintain start       # starts easydb via docker-compose
+# {{ easydb_basedir }}/maintain start       # starts easydb via docker
 # {{ easydb_basedir }}/maintain restart     # both of the above
 
 # Data directory with the subdirectories "config", "easydb-server", etc.:
@@ -33,29 +33,50 @@ DBS="{{ easydb_dump_dbs }}"
 KEEPDBS={{ easydb_dump_keep }}
 # Where to write log messages to while doing update-auto:
 UPDATELOG={{ easydb_cron_update_log }}
-COMPOSE_FILE="$BASEDIR"/docker-compose.yml
-# Path to docker-compose executable
-COMPOSE={{ easydb_script_compose }}
 
 # read local values:
 [ -e /etc/default/easydb5 ] && . /etc/default/easydb5
 
 case "$1" in
 start)
-    cd "$BASEDIR"
-    $COMPOSE up -d
+    set -e
+    $BASEDIR/run-elasticsearch.sh
+    $BASEDIR/run-pgsql.sh
+    if [ -x $BASEDIR/run-fylr.sh ] && /usr/bin/docker images | grep -q fylr; then
+        $BASEDIR/run-fylr.sh
+    fi
+    $BASEDIR/run-eas.sh
+    $BASEDIR/run-server.sh
+    $BASEDIR/run-webfrontend.sh
 ;;
 stop)
-    cd "$BASEDIR"
-    $COMPOSE down
+    /usr/bin/docker stop  easydb-webfrontend
+    /usr/bin/docker rm -v easydb-webfrontend
+
+    /usr/bin/docker stop  easydb-server
+    /usr/bin/docker rm -v easydb-server
+
+    /usr/bin/docker stop  easydb-eas
+    /usr/bin/docker rm -v easydb-eas
+
+    /usr/bin/docker stop  easydb-elasticsearch
+    /usr/bin/docker rm -v easydb-elasticsearch
+
+    if /usr/bin/docker ps -a | grep -q fylr; then
+        /usr/bin/docker stop  easydb-fylr >/dev/null 2>&1
+        /usr/bin/docker rm -v easydb-fylr >/dev/null 2>&1
+    fi
+
+    /usr/bin/docker stop  easydb-pgsql
+    /usr/bin/docker rm -v easydb-pgsql
 ;;
 restart)
-    $0 stop 2>&1 | sed '/Network easydb_default not found/d'
+    $0 stop 2>&1 | sed '/Network easydb.* not found/d'
 
     $0 start
 ;;
 status)
-        $COMPOSE ps
+        docker ps
 ;;
 update)
         if   $0 backup
