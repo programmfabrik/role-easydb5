@@ -29,75 +29,62 @@ easydb_script_compose: '`which docker-compose 2>/dev/null`'
 
 # paths
 easydb_basedir: /srv/easydb
+easydb_volume_config: "{{ easydb_basedir }}/config"
 
-easydb_dir_config: "{{ easydb_basedir }}/config"
-easydb_volume_config: "{{ easydb_dir_config }}:/config"
+easydb_eas_volume_assets: "{{ easydb_basedir }}/eas/var/opt/easydb/lib/eas/assets"
+easydb_eas_volume_log: "{{ easydb_basedir }}/eas/var/opt/easydb/log/eas"
+easydb_eas_volume_tmp: "{{ easydb_basedir }}/eas/tmp"
 
-easydb_eas_dir_assets: "{{ easydb_basedir }}/eas/var/opt/easydb/lib/eas/assets"
-easydb_eas_volume_assets: "{{ easydb_eas_dir_assets }}:/var/opt/easydb/lib/eas/assets"
-easydb_eas_dir_log: "{{ easydb_basedir }}/eas/var/opt/easydb/log/eas"
-easydb_eas_volume_log: "{{ easydb_eas_dir_log }}:/var/opt/easydb/log/eas"
-easydb_eas_dir_tmp: "{{ easydb_basedir }}/eas/tmp"
-easydb_eas_volume_tmp: "{{ easydb_eas_dir_tmp }}:/tmp"
+easydb_elasticsearch_volume_var: "{{ easydb_basedir }}/elasticsearch/var/lib/elasticsearch"
 
-easydb_elasticsearch_dir_var: "{{ easydb_basedir }}/elasticsearch/var/lib/elasticsearch"
-easydb_elasticsearch_volume_var: "{{ easydb_elasticsearch_dir_var }}:/var/lib/elasticsearch"
+easydb_pgsql_volume_backup: "{{ easydb_basedir }}/pgsql/backup"
+easydb_pgsql_volume_etc: "{{ easydb_basedir }}/pgsql/etc/postgresql"
+easydb_pgsql_volume_lib: "{{ easydb_basedir }}/pgsql/var/lib/postgresql"
+easydb_pgsql_volume_log: "{{ easydb_basedir }}/pgsql/var/log/postgresql"
 
-easydb_pgsql_dir_backup: "{{ easydb_basedir }}/pgsql/backup"
-easydb_pgsql_volume_backup: "{{ easydb_pgsql_dir_backup }}:/backup"
-easydb_pgsql_dir_etc: "{{ easydb_basedir }}/pgsql/etc/postgresql"
-easydb_pgsql_volume_etc: "{{ easydb_pgsql_dir_etc }}:/etc/postgresql"
-easydb_pgsql_dir_lib: "{{ easydb_basedir }}/pgsql/var/lib/postgresql"
-easydb_pgsql_volume_lib: "{{ easydb_pgsql_dir_lib }}:/var/lib/postgresql"
-easydb_pgsql_dir_log: "{{ easydb_basedir }}/pgsql/var/log/postgresql"
-easydb_pgsql_volume_log: "{{ easydb_pgsql_dir_log }}:/var/log/postgresql"
-
-easydb_server_dir_nginx_log: "{{ easydb_basedir }}/easydb-server/var/log/nginx"
-easydb_server_volume_nginx_log: "{{ easydb_server_dir_nginx_log }}:/var/log/nginx"
-easydb_server_dir_var: "{{ easydb_basedir }}/easydb-server/var"
-easydb_server_volume_var: "{{ easydb_server_dir_var }}:/easydb-5/var"
-easydb_server_dir_hotfolder: "{{ easydb_basedir }}/easydb-server/hotfolder"
-easydb_server_volume_hotfolder: "{{ easydb_server_dir_hotfolder }}:/hotfolder"
+easydb_server_volume_nginx_log: "{{ easydb_basedir }}/easydb-server/var/log/nginx"
+easydb_server_volume_var: "{{ easydb_basedir }}/easydb-server/var"
+easydb_server_volume_hotfolder: "{{ easydb_basedir }}/easydb-server/hotfolder"
 
 # container configuration
 easydb_containers:
   elasticsearch:
     image: "{{ easydb_docker_registry }}/pf/elasticsearch"
     volumes:
-      - "{{ easydb_volume_config }}"
-      - "{{ easydb_elasticsearch_volume_var }}"
+      - "{{ easydb_volume_config }}:/config"
+      - "{{ easydb_elasticsearch_volume_var }}:/var/lib/elasticsearch"
   pgsql:
     image: "{{ easydb_docker_registry }}/pf/postgresql"
     volumes:
-      - "{{ easydb_volume_config }}"
-      - "{{ easydb_pgsql_volume_backup }}"
-      - "{{ easydb_pgsql_volume_etc }}"
-      - "{{ easydb_pgsql_volume_log }}"
-      - "{{ easydb_pgsql_volume_lib }}"
+      - "{{ easydb_volume_config }}:/config"
+      - "{{ easydb_pgsql_volume_backup }}:/backup"
+      - "{{ easydb_pgsql_volume_etc }}:/etc/postgresql"
+      - "{{ easydb_pgsql_volume_log }}:/var/log/postgresql"
+      - "{{ easydb_pgsql_volume_lib }}:/var/lib/postgresql"
     ports:
       - "{{ easydb_socket.pgsql }}:5432"
   eas:
     image: "{{ easydb_docker_registry }}/pf/eas"
     volumes:
-      - "{{ easydb_volume_config }}"
-      - "{{ easydb_eas_volume_assets }}"
-      - "{{ easydb_eas_volume_log }}"
-      - "{{ easydb_eas_volume_tmp }}"
+      - "{{ easydb_volume_config }}:/config"
+      - "{{ easydb_eas_volume_assets }}:/var/opt/easydb/lib/eas/assets"
+      - "{{ easydb_eas_volume_log }}:/var/opt/easydb/log/eas"
+      - "{{ easydb_eas_volume_tmp }}:/tmp"
     ports:
       - "{{ easydb_socket.eas }}:80"
   server:
     image: "{{ easydb_docker_registry }}/pf/server-{{ easydb_solution }}"
     volumes:
-      - "{{ easydb_volume_config }}"
-      - "{{ easydb_server_volume_var }}"
-      - "{{ easydb_server_volume_nginx_log }}"
-      - "{{ easydb_server_volume_hotfolder }}"
+      - "{{ easydb_volume_config }}:/config"
+      - "{{ easydb_server_volume_var }}:/easydb-5/var"
+      - "{{ easydb_server_volume_nginx_log }}:/var/log/nginx"
+      - "{{ easydb_server_volume_hotfolder }}:/hotfolder"
     ports:
       - "{{ easydb_socket.server }}:80"
   webfrontend:
     image: "{{ easydb_docker_registry }}/pf/webfrontend"
     volumes:
-      - "{{ easydb_volume_config }}"
+      - "{{ easydb_volume_config }}:/config"
     ports:
       - "{{ easydb_socket.webfrontend }}:80"
 

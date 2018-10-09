@@ -35,23 +35,23 @@
     loop_var: file_item
   with_items:
     - path: "{{ easydb_basedir }}"
-    - path: "{{ easydb_dir_config }}"
-    - path: "{{ easydb_eas_dir_assets }}"
+    - path: "{{ easydb_volume_config }}"
+    - path: "{{ easydb_eas_volume_assets }}"
       owner: www-data
       group: www-data
-    - path: "{{ easydb_eas_dir_log }}"
-    - path: "{{ easydb_eas_dir_tmp }}"
+    - path: "{{ easydb_eas_volume_log }}"
+    - path: "{{ easydb_eas_volume_tmp }}"
       mode: u=rwx,g=rwx,o=rwx,o+t
-    - path: "{{ easydb_elasticsearch_dir_var }}"
+    - path: "{{ easydb_elasticsearch_volume_var }}"
       mode: u=rwx,g=rwx,o=rwx
-    - path: "{{ easydb_pgsql_dir_backup }}"
-    - path: "{{ easydb_pgsql_dir_etc }}"
-    - path: "{{ easydb_pgsql_dir_lib }}"
-    - path: "{{ easydb_pgsql_dir_log }}"
-    - path: "{{ easydb_server_dir_nginx_log }}"
+    - path: "{{ easydb_pgsql_volume_backup }}"
+    - path: "{{ easydb_pgsql_volume_etc }}"
+    - path: "{{ easydb_pgsql_volume_lib }}"
+    - path: "{{ easydb_pgsql_volume_log }}"
+    - path: "{{ easydb_server_volume_nginx_log }}"
       mode: u=rwx,g=rwx,o=rwx
-    - path: "{{ easydb_server_dir_var }}"
-    - path: "{{ easydb_server_dir_hotfolder }}"
+    - path: "{{ easydb_server_volume_var }}"
+    - path: "{{ easydb_server_volume_hotfolder }}"
 
 - name: installing maintain script
   template:
