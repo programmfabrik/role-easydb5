@@ -2,6 +2,7 @@
 
 docker run -d -ti \
     --name easydb-{{ easydb_container_item.key }} \
+    --restart=always \
     --net {{ easydb_container_network }} \
 {% if 'volumes' in easydb_container_item.value %}
 {% for volume in easydb_container_item.value.volumes %}
