@@ -24,7 +24,7 @@
     value: "{{ easydb_max_map_count }}"
     reload: yes
 
-- name: creating easydb_basedir => {{ easydb_basedir }}
+- name: easydb directories under {{ easydb_basedir }}
   file:
     state: directory
     path: "{{ file_item.path }}"
@@ -35,7 +35,23 @@
     loop_var: file_item
   with_items:
     - path: "{{ easydb_basedir }}"
-    - path: "{{ easydb_basedir }}/config"
+    - path: "{{ easydb_dir_config }}"
+    - path: "{{ easydb_eas_dir_assets }}"
+      owner: www-data
+      group: www-data
+    - path: "{{ easydb_eas_dir_log }}"
+    - path: "{{ easydb_eas_dir_tmp }}"
+      mode: u=rwx,g=rwx,o=rwx,o+t
+    - path: "{{ easydb_elasticsearch_dir_var }}"
+      mode: u=rwx,g=rwx,o=rwx
+    - path: "{{ easydb_pgsql_dir_backup }}"
+    - path: "{{ easydb_pgsql_dir_etc }}"
+    - path: "{{ easydb_pgsql_dir_lib }}"
+    - path: "{{ easydb_pgsql_dir_log }}"
+    - path: "{{ easydb_server_dir_nginx_log }}"
+      mode: u=rwx,g=rwx,o=rwx
+    - path: "{{ easydb_server_dir_var }}"
+    - path: "{{ easydb_server_dir_hotfolder }}"
 
 - name: installing maintain script
   template:
