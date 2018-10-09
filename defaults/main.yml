@@ -54,7 +54,7 @@ easydb_pgsql_volume_log: "{{ easydb_pgsql_dir_log }}:/var/log/postgresql"
 
 easydb_server_dir_nginx_log: "{{ easydb_basedir }}/easydb-server/var/log/nginx"
 easydb_server_volume_nginx_log: "{{ easydb_server_dir_nginx_log }}:/var/log/nginx"
-easydb_server_dir_var: "{{ easydb_basedir }}/easydb-server/easydb-5/var"
+easydb_server_dir_var: "{{ easydb_basedir }}/easydb-server/var"
 easydb_server_volume_var: "{{ easydb_server_dir_var }}:/easydb-5/var"
 easydb_server_dir_hotfolder: "{{ easydb_basedir }}/easydb-server/hotfolder"
 easydb_server_volume_hotfolder: "{{ easydb_server_dir_hotfolder }}:/hotfolder"
