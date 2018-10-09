@@ -48,7 +48,7 @@ easydb_pgsql_volume_backup: "{{ easydb_pgsql_dir_backup }}:/backup"
 easydb_pgsql_dir_etc: "{{ easydb_basedir }}/pgsql/etc/postgresql"
 easydb_pgsql_volume_etc: "{{ easydb_pgsql_dir_etc }}:/etc/postgresql"
 easydb_pgsql_dir_lib: "{{ easydb_basedir }}/pgsql/var/lib/postgresql"
-easydb_pgsql_volume_lib: "{{ easydb_pgsql_dir_var }}:/var/lib/postgresql"
+easydb_pgsql_volume_lib: "{{ easydb_pgsql_dir_lib }}:/var/lib/postgresql"
 easydb_pgsql_dir_log: "{{ easydb_basedir }}/pgsql/var/log/postgresql"
 easydb_pgsql_volume_log: "{{ easydb_pgsql_dir_log }}:/var/log/postgresql"
 
