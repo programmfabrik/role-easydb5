@@ -31,18 +31,18 @@ easydb_script_compose: '`which docker-compose 2>/dev/null`'
 easydb_basedir: /srv/easydb
 easydb_volume_config: "{{ easydb_basedir }}/config"
 
-easydb_eas_volume_assets: "{{ easydb_basedir }}/eas/var/opt/easydb/lib/eas/assets"
-easydb_eas_volume_log: "{{ easydb_basedir }}/eas/var/opt/easydb/log/eas"
+easydb_eas_volume_assets: "{{ easydb_basedir }}/eas/lib/assets"
+easydb_eas_volume_log: "{{ easydb_basedir }}/eas/log"
 easydb_eas_volume_tmp: "{{ easydb_basedir }}/eas/tmp"
 
-easydb_elasticsearch_volume_var: "{{ easydb_basedir }}/elasticsearch/var/lib/elasticsearch"
+easydb_elasticsearch_volume_var: "{{ easydb_basedir }}/elasticsearch/var"
 
 easydb_pgsql_volume_backup: "{{ easydb_basedir }}/pgsql/backup"
-easydb_pgsql_volume_etc: "{{ easydb_basedir }}/pgsql/etc/postgresql"
-easydb_pgsql_volume_lib: "{{ easydb_basedir }}/pgsql/var/lib/postgresql"
-easydb_pgsql_volume_log: "{{ easydb_basedir }}/pgsql/var/log/postgresql"
+easydb_pgsql_volume_etc: "{{ easydb_basedir }}/pgsql/etc"
+easydb_pgsql_volume_lib: "{{ easydb_basedir }}/pgsql/var"
+easydb_pgsql_volume_log: "{{ easydb_basedir }}/pgsql/log"
 
-easydb_server_volume_nginx_log: "{{ easydb_basedir }}/easydb-server/var/log/nginx"
+easydb_server_volume_nginx_log: "{{ easydb_basedir }}/easydb-server/nginx-log"
 easydb_server_volume_var: "{{ easydb_basedir }}/easydb-server/var"
 easydb_server_volume_hotfolder: "{{ easydb_basedir }}/easydb-server/hotfolder"
 
