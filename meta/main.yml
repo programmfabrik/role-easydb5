@@ -18,10 +18,6 @@ galaxy_info:
   - DMS
 
 dependencies:
-- name: blunix.role-mailrelay
-  src: https://github.com/blunix/role-mailrelay
-  version: 1.0.3
-  scm: git
 - name: blunix.role-docker
   src: https://github.com/blunix/role-docker
   version: fix/docker-compose
