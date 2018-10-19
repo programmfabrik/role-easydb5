@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# {{ ansible_managed }}
+
+docker run -d -ti \
+    --name easydb-{{ easydb_container_item.key }} \
+    --restart=always \
+    --net {{ easydb_container_network }} \
+{% if 'volumes' in easydb_container_item.value %}
+{% for volume in easydb_container_item.value.volumes %}
+    --volume {{ volume }} \
+{% endfor %}
+{% endif %}
+{% if 'ports' in easydb_container_item.value %}
+{% for port in easydb_container_item.value.ports %}
+    -p {{ port }} \
+{% endfor %}
+{% endif %}
+    {{ easydb_container_item.value.image }}
