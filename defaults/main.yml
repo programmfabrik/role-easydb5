@@ -97,6 +97,8 @@ enable_purgedata: false
 enable_purgeall: false
 enable_plugins:
   - base.easydb4migration
+easydb_hotfolder_enabled: false
+easydb_hofolder_base_url: ''
 
 # elasticsearch
 easydb_max_map_count: 262144

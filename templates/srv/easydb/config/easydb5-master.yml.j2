@@ -25,6 +25,19 @@ easydb-server:
 {% for plugin in enable_plugins %}
       - {{ plugin }}
 {% endfor %}
+{% if easydb_hotfolder_enabled %}
+  hotfolder:
+    directory: /hotfolder
+    number_of_workers: 1
+    urls:
+      - type: windows_webdav
+        url: \\{{ easydb_hofolder_base_url }}\upload\collection
+        separator: \
+      - type: webdav_http
+        url: https://{{ easydb_hofolder_base_url }}/upload/collection
+        separator: /
+{% endif %}
+
 
 elasticsearch:
   memory-size: {{ easydb_es_memory_size }}

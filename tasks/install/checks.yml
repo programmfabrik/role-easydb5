@@ -23,6 +23,11 @@
   fail:
     msg: Please define the variable easydb_docker_pass!
 
+- name: Check whether hotfolder is enabled but easydb_hotfolder_base_url has not been defined
+  when: easydb_hotfolder_base_url == '' and easydb_hotfolder_enabled
+  fail:
+    msg: Please define the variable easydb_hotfolder_base_url!
+
   #- name: Check whether mail_relay_for_ssmtp has been defined
   #  when: mail_relay_for_ssmtp == ''
   #  fail:
