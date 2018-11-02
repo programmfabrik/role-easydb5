@@ -34,7 +34,7 @@ easydb-server:
         url: \\{{ easydb_hofolder_base_url }}\upload\collection
         separator: \
       - type: webdav_http
-        url: https://{{ easydb_hofolder_base_url }}/upload/collection
+        url: {{ easydb_hofolder_http_or_https }}://{{ easydb_hofolder_base_url }}/upload/collection
         separator: /
 {% endif %}
 

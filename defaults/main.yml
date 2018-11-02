@@ -99,6 +99,7 @@ enable_plugins:
   - base.easydb4migration
 easydb_hotfolder_enabled: false
 easydb_hofolder_base_url: ''
+easydb_hofolder_http_or_https: https
 
 # elasticsearch
 easydb_max_map_count: 262144
