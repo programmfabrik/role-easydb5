@@ -141,24 +141,24 @@ sqldump)
 tag)
         # tag the current docker version as "previous" - good before an update if you want to go back.
         # Danger: this will overwrite the "previous"ly preserved docker version!
-        /usr/bin/docker tag docker.easydb.de:5000/pf/server-$SOLUTION:latest docker.easydb.de:5000/pf/server-$SOLUTION:previous
-        /usr/bin/docker tag docker.easydb.de:5000/pf/webfrontend:latest      docker.easydb.de:5000/pf/webfrontend:previous
-        /usr/bin/docker tag docker.easydb.de:5000/pf/eas:latest              docker.easydb.de:5000/pf/eas:previous
-        /usr/bin/docker tag docker.easydb.de:5000/pf/elasticsearch:latest    docker.easydb.de:5000/pf/elasticsearch:previous
+        /usr/bin/docker tag {{ easydb_docker_registry }}/pf/server-$SOLUTION:latest {{ easydb_docker_registry }}/pf/server-$SOLUTION:previous
+        /usr/bin/docker tag {{ easydb_docker_registry }}/pf/webfrontend:latest      {{ easydb_docker_registry }}/pf/webfrontend:previous
+        /usr/bin/docker tag {{ easydb_docker_registry }}/pf/eas:latest              {{ easydb_docker_registry }}/pf/eas:previous
+        /usr/bin/docker tag {{ easydb_docker_registry }}/pf/elasticsearch:latest    {{ easydb_docker_registry }}/pf/elasticsearch:previous
 	    if /usr/bin/docker images | grep -q fylr; then
-		    /usr/bin/docker tag docker.easydb.de:5000/pf/fylr:latest            docker.easydb.de:5000/pf/fylr:previous
+		    /usr/bin/docker tag {{ easydb_docker_registry }}/pf/fylr:latest            {{ easydb_docker_registry }}/pf/fylr:previous
 	    fi
-        /usr/bin/docker tag docker.easydb.de:5000/pf/postgresql:latest       docker.easydb.de:5000/pf/postgresql:previous
+        /usr/bin/docker tag {{ easydb_docker_registry }}/pf/postgresql:latest       {{ easydb_docker_registry }}/pf/postgresql:previous
 ;;
 pull)
-        /usr/bin/docker pull docker.easydb.de:5000/pf/server-$SOLUTION
-        /usr/bin/docker pull docker.easydb.de:5000/pf/webfrontend
-        /usr/bin/docker pull docker.easydb.de:5000/pf/elasticsearch
-        /usr/bin/docker pull docker.easydb.de:5000/pf/eas
+        /usr/bin/docker pull {{ easydb_docker_registry }}/pf/server-$SOLUTION
+        /usr/bin/docker pull {{ easydb_docker_registry }}/pf/webfrontend
+        /usr/bin/docker pull {{ easydb_docker_registry }}/pf/elasticsearch
+        /usr/bin/docker pull {{ easydb_docker_registry }}/pf/eas
 	    if /usr/bin/docker images | grep -q fylr; then
-            /usr/bin/docker pull docker.easydb.de:5000/pf/fylr
+            /usr/bin/docker pull {{ easydb_docker_registry }}/pf/fylr
         fi
-        /usr/bin/docker pull docker.easydb.de:5000/pf/postgresql
+        /usr/bin/docker pull {{ easydb_docker_registry }}/pf/postgresql
 ;;
 cleanup)
        #  free disk space
