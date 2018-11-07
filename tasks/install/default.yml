@@ -61,13 +61,15 @@
     group: root
     mode: 0755
 
-- name: creating initial configuration file
+- name: central configuration file
   template:
     src: srv/easydb/config/easydb5-master.yml.j2
     dest: "{{ easydb_basedir }}/config/easydb5-master.yml"
     owner: root
     group: root
     mode: u=rw,g=r,o=r
+  notify:
+    - stop easydb5-server
 
 # Flush handlers now so the docker daemon doesn't restart immediatly after the instances have started.
 - meta: flush_handlers

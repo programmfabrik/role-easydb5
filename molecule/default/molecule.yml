@@ -10,7 +10,8 @@ lint:
 platforms:
   - name: stretch
     box: bento/debian-9
-    memory: 2048  # memory is given in MB
+    memory: 3072  # memory is given in MB
+    #memory: 2048  # memory is given in MB
 provisioner:
   name: ansible
   connection_options:

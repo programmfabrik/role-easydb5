@@ -1,17 +1,10 @@
-- name: systemd service-unit installed
-  service:
-    name: easydb5
-    state: stopped
-    enabled: no
-  notify: systemd daemon-reload
+- name: stop easydb5-server
+  command: docker stop easydb-server
+  failed_when: no
+  #ignore_errors: yes
 
-- name: systemd daemon-reload
-  systemd:
-    daemon_reload: yes
-  notify: start easydb service-unit
-
-- name: start easydb service-unit
-  service:
-    name: easydb
-    state: started
-    enabled: yes
+  #docker_container:
+  #  name: "easydb-server"
+  #  state: started
+  #  restart: yes
+  #  ignore_image: yes

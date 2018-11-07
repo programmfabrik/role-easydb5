@@ -4,11 +4,19 @@
   become: yes
   vars:
     docker_enabled: yes
-    easydb_url: http://localhost:8080
-    easydb_customer_id: be52ae33594eb794828ccd4837cf08ae
+    docker_compose_enabled: no
+    #docker_compose_version: 1.21.0
+
+    easydb_url: http://localhost:8081
+    socket_webfrontend: 80
     easydb_solution: base
     easydb_docker_user: ci
     easydb_docker_pass: '82VK#nUQ7='
+
+    # mail
+    mail_relay_for_ssmtp: 127.0.0.1
+    hostname_for_ssmtp: localhost
+    envelope_from: noreply@localhost
 
   roles:
     - role: role-easydb5

@@ -20,5 +20,5 @@ galaxy_info:
 dependencies:
 - name: blunix.role-docker
   src: https://github.com/blunix/role-docker
-  version: fix/docker-compose
+  version: 7be1e7c46da08080ed3fdcfbbd9002508c8357bc
   scm: git
