@@ -131,3 +131,7 @@ cron_backup_minute: 23
 cron_backup_hour: 23
 cron_backup_weekday: 1,2,3,4,6,7
 cron_backup_script: "{{ easydb_basedir }}/maintain backup"
+
+# EAS
+easydb_eas_num_workers: 1
+easydb_eas_num_soffice: 2

@@ -1,10 +1,8 @@
+- name: stop eas
+  command: docker stop easydb-eas
+  failed_when: no
+
 - name: stop easydb5-server
   command: docker stop easydb-server
   failed_when: no
   #ignore_errors: yes
-
-  #docker_container:
-  #  name: "easydb-server"
-  #  state: started
-  #  restart: yes
-  #  ignore_image: yes

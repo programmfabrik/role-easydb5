@@ -18,5 +18,9 @@
     hostname_for_ssmtp: localhost
     envelope_from: noreply@localhost
 
+    # EAS
+    easydb_eas_num_workers: 1
+    easydb_eas_num_soffice: 2
+
   roles:
     - role: role-easydb5

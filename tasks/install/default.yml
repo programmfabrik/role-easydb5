@@ -71,6 +71,16 @@
   notify:
     - stop easydb5-server
 
+- name: EAS configuration file
+  template:
+    src: srv/easydb/config/easydb_asset_server.conf.j2
+    dest: "{{ easydb_basedir }}/config/easydb_asset_server.conf"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  notify:
+    - stop eas
+
 # Flush handlers now so the docker daemon doesn't restart immediatly after the instances have started.
 - meta: flush_handlers
 
