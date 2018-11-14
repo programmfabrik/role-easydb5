@@ -12,6 +12,13 @@
     easydb_solution: base
     easydb_docker_user: ci
     easydb_docker_pass: '82VK#nUQ7='
+    datamodel_uid: 3e80b83c-c70e-437b-9bc0-469fb256bf0e
+
+    # hotfolder
+    easydb_hotfolder_enabled: yes
+    easydb_hotfolder_http_or_https: https
+    easydb_hotfolder_hostname: localhost
+    easydb_hotfolder_unc_port: SSL
 
     # mail
     mail_relay_for_ssmtp: 127.0.0.1

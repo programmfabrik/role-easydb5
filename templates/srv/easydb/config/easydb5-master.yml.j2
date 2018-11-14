@@ -31,10 +31,10 @@ easydb-server:
     number_of_workers: 1
     urls:
       - type: windows_webdav
-        url: \\{{ easydb_hotfolder_base_url }}\upload\collection
+        url: \\{{ easydb_hotfolder_hostname }}@{{ easydb_hotfolder_unc_port }}\upload\collection
         separator: \
       - type: webdav_http
-        url: {{ easydb_hotfolder_http_or_https }}://{{ easydb_hotfolder_base_url }}/upload/collection
+        url: {{ easydb_hotfolder_http_or_https }}://{{ easydb_hotfolder_hostname }}/upload/collection
         separator: /
 {% endif %}
 

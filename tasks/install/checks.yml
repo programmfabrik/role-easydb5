@@ -3,47 +3,47 @@
   fail:
     msg: This customer must be skipped.
 
-- name: Check whether easydb_url has been defined
+- name: Check whether easydb_url is missing
   when: easydb_url == ''
   fail:
-    msg: Please define the variable easydb_url!
+    msg: Please fill the variable easydb_url!
 
-- name: Check whether solution has been defined
+- name: Check whether easydb_solution is missing
   when: easydb_solution == ''
   fail:
-    msg: Please define the variable easydb_solution!
+    msg: Please fill the variable easydb_solution!
 
-- name: Check whether docker username has been defined
+- name: Check whether docker username is missing
   when: easydb_docker_user == ''
   fail:
-    msg: Please define the variable easydb_docker_user!
+    msg: Please fill the variable easydb_docker_user!
 
-- name: Check whether docker password has been defined
+- name: Check whether docker password is missing
   when: easydb_docker_pass == ''
   fail:
-    msg: Please define the variable easydb_docker_pass!
+    msg: Please fill the variable easydb_docker_pass!
 
-- name: Check whether hotfolder is enabled but easydb_hotfolder_base_url has not been defined
-  when: easydb_hotfolder_base_url == '' and easydb_hotfolder_enabled
+- name: Check whether hotfolder is enabled but easydb_hotfolder_hostname is missing
+  when: easydb_hotfolder_hostname == '' and easydb_hotfolder_enabled
   fail:
-    msg: Please define the variable easydb_hotfolder_base_url!
+    msg: Please fill the variable easydb_hotfolder_hostname!
 
-  #- name: Check whether mail_relay_for_ssmtp has been defined
-  #  when: mail_relay_for_ssmtp == ''
-  #  fail:
-  #    msg: Please define the variable mail_relay_for_ssmtp!
-  #
-  #- name: Check whether hostname_for_ssmtp has been defined
-  #  when: hostname_for_ssmtp == ''
-  #  fail:
-  #    msg: Please define the variable hostname_for_ssmtp!
+- name: Check whether mail_relay_for_ssmtp is missing
+  when: mail_relay_for_ssmtp == ''
+  fail:
+    msg: Please define the variable mail_relay_for_ssmtp!
 
-  #- name: Check whether envelope_from has been defined
-  #  when: envelope_from == ''
-  #  fail:
-  #    msg: Please define the variable envelope_from!
+- name: Check whether hostname_for_ssmtp is missing
+  when: hostname_for_ssmtp == ''
+  fail:
+    msg: Please define the variable hostname_for_ssmtp!
 
-  #- name: Check whether objectstore misses datamodel_uid
-  #  when: objectstore_url != '' and datamodel_uid == ''
-  #  fail:
-  #    msg: Either set objectstore_url to empty string or set datamodel_uid!
+- name: Check whether envelope_from is missing
+  when: envelope_from == ''
+  fail:
+    msg: Please define the variable envelope_from!
+
+- name: Check whether objectstore misses datamodel_uid
+  when: objectstore_url != '' and datamodel_uid == ''
+  fail:
+    msg: Either set objectstore_url to empty string or set datamodel_uid!
