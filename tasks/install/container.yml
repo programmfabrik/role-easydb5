@@ -1,0 +1,18 @@
+- name: deploying run-scripts
+  template:
+    src: srv/easydb/run-script.j2
+    dest: "{{ easydb_basedir }}/run-{{ easydb_container_name }}.sh"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: spinning up container
+  docker_container:
+    name: "easydb-{{ easydb_container_name }}"
+    image: "{{ easydb_containers[easydb_container_name].image }}"
+    networks:
+      - name: "{{ easydb_containers[easydb_container_name].network | default(easydb_container_network) }}"
+    restart_policy: "{{ easydb_containers[easydb_container_name].restart_policy | default('always') }}"
+    ports: "{{ easydb_containers[easydb_container_name].ports | default([]) }}"
+    volumes: "{{ easydb_containers[easydb_container_name].volumes | default([]) }}"
+    capabilities: "{{ easydb_containers[easydb_container_name].capabilities | default([]) }}"

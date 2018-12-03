@@ -1,11 +1,26 @@
+- name: include distro prep'er
+  with_first_found:
+    - prepare/{{ ansible_distribution }}.{{ ansible_lsb.codename }}.yml
+    - prepare/{{ ansible_distribution }}.yml
+    - prepare/default.yml
+  loop_control:
+    loop_var: prepare_item
+  include_tasks: "{{ prepare_item }}"
+
 - name: include distro installer
-  include_tasks: "{{ install_item }}"
   with_first_found:
     - install/{{ ansible_distribution }}.{{ ansible_lsb.codename }}.yml
     - install/{{ ansible_distribution }}.yml
     - install/default.yml
   loop_control:
     loop_var: install_item
-  tags:
-    - easydb
-    - easydb5
+  include_tasks: "{{ install_item }}"
+
+- name: include distro configurator
+  with_first_found:
+    - configure/{{ ansible_distribution }}.{{ ansible_lsb.codename }}.yml
+    - configure/{{ ansible_distribution }}.yml
+    - configure/default.yml
+  loop_control:
+    loop_var: install_item
+  include_tasks: "{{ install_item }}"

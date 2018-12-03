@@ -1,0 +1,17 @@
+- name: configuring easydb cron-jobs
+  template:
+    src: etc/cron.d/easydb5
+    dest: /etc/cron.d/easydb5
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: configuring logrotation for main easydb5 server log file
+  template:
+    src: etc/logrotate.d/easydb
+    dest: /etc/logrotate.d/easydb
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+
