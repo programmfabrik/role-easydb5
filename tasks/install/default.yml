@@ -36,21 +36,22 @@
     group: root
     mode: 0755
 
-#- name: central configuration file
-#  template:
-#    src: srv/easydb/config/easydb5-master.yml.j2
-#    dest: "{{ easydb_basedir }}/config/easydb5-master.yml"
-#    owner: root
-#    group: root
-#    mode: u=rw,g=r,o=r
+- name: central configuration file
+  template:
+    src: srv/easydb/config/easydb5-master.yml.j2
+    dest: "{{ easydb_basedir }}/config/easydb5-master.yml"
+    owner: root
+    group: root
+    mode: 0644
+  register: has_config_changed
 
-#- name: EAS configuration file
-#  template:
-#    src: srv/easydb/config/easydb_asset_server.conf.j2
-#    dest: "{{ easydb_basedir }}/config/easydb_asset_server.conf"
-#    owner: root
-#    group: root
-#    mode: u=rw,g=r,o=r
+- name: EAS configuration file
+  template:
+    src: srv/easydb/config/easydb_asset_server.conf.j2
+    dest: "{{ easydb_basedir }}/config/easydb_asset_server.conf"
+    owner: root
+    group: root
+    mode: 0644
 
 - name: logging in to docker registry
   docker_login:

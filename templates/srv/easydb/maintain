@@ -106,9 +106,11 @@ update)
 {% endif %}
          $0 cleanup
          $0 pull
+{% if 'pgsql' in easydb_containers_deploy_these %}
     else
         echo "ERROR: backup failed - not updating!">&2
     fi
+{% endif %}
     ;;
 update-auto)
     echo             >> $UPDATELOG

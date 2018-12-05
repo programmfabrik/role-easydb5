@@ -1,10 +1,13 @@
 {{ ansible_managed | comment }}
 
 hostname:
-  server: easydb-server
+  server: {{ easydb_server_hostname }}
+  pgsql: {{ easydb_pgsql_hostname }}
+  eas: {{ easydb_eas_hostname }}
+  elasticsearch: {{ easydb_elasticsearch_hostname }}
 
 pgsql:
-  database: easydb
+  database: {{ easydb_pgsql_hostname }}
 
 extension:
   external-user-schema: {{ easydb_external_user_schema }}

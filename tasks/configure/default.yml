@@ -4,7 +4,7 @@
     dest: /etc/cron.d/easydb5
     owner: root
     group: root
-    mode: u=rw,g=r,o=r
+    mode: 0644
 
 - name: configuring logrotation for main easydb5 server log file
   template:
@@ -12,6 +12,6 @@
     dest: /etc/logrotate.d/easydb
     owner: root
     group: root
-    mode: u=rw,g=r,o=r
+    mode: 0644
 
 

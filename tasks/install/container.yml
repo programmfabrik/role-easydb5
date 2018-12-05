@@ -4,15 +4,21 @@
     dest: "{{ easydb_basedir }}/run-{{ easydb_container_name }}.sh"
     owner: root
     group: root
-    mode: 0755
+    mode: 0750
 
 - name: deploying configuration
   template:
-    src: srv/easydb/config/easydb-{{ easydb_container_name }}.yml.j2
-    dest: /srv/easydb/config/{{ easydb_container_name }}.yml
+    src: srv/easydb/config/easydb-{{ 'server' if easydb_container_name == 'webfrontend' else easydb_container_name }}.yml.j2
+    dest: /srv/easydb/config/easydb-{{ 'server' if easydb_container_name == 'webfrontend' else easydb_container_name }}.yml
     owner: root
     group: root
     mode: 0644
+  register: has_new_config_changed
+
+- name: stopping container (if running)
+  when: has_config_changed.changed or has_new_config_changed.changed
+  shell: docker stop easydb-{{ easydb_container_name }}
+  failed_when: no
 
 - name: spinning up container
   docker_container:

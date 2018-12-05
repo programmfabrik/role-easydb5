@@ -1,13 +1,12 @@
-docker-hostname: easydb-eas
-canonical-name: easydb-eas
+canonical-name: {{ easydb_eas_hostname }}
 log-level: info
 pgsql:
-  host: easydb-pgsql
-  port: 5432
+  host: {{ easydb_pgsql_hostname }}
+  port: {{ easydb_pgsql_port }}
   username: docker
   password: docker
   database: eas
-num-workers: 1
+num-workers: {{ easydb_eas_num_workers }}
+num-soffice: {{ easydb_eas_num_soffice }}
 num-services: 5
-num-soffice: 2
-trusted-net: 172.0.0.0/8
+trusted-net: {{ easydb_eas_trusted_net }}

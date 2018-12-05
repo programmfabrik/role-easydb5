@@ -10,12 +10,16 @@ easydb_docker_pass: ''
 easydb_docker_registry: docker.easydb.de
 easydb_container_network: easydb5
 
-# as a dictionary, for loops
-easydb_socket:
-  pgsql: "127.0.0.1:15432"
-  eas: "127.0.0.1:83"
-  server: "127.0.0.1:82"
-  webfrontend: "127.0.0.1:81"
+easydb_pgsql_hostname: '127.0.0.1'
+easydb_pgsql_port: 15432
+easydb_eas_hostname: '127.0.0.1'
+easydb_eas_port: 83
+easydb_server_hostname: '127.0.0.1'
+easydb_server_port: 82
+easydb_webfrontend_hostname: '127.0.0.1'
+easydb_webfrontend_port: 81
+easydb_elasticsearch_hostname: '127.0.0.1'
+easydb_elasticsearch_port: 9200
 
 # Where to write log messages to while doing update-auto in the script:
 easydb_cron_update_log: /var/log/easydb-update.log
@@ -60,7 +64,7 @@ easydb_containers:
       - "{{ easydb_pgsql_volume_log }}:/var/log/postgresql"
       - "{{ easydb_pgsql_volume_lib }}:/var/lib/postgresql"
     ports:
-      - "{{ easydb_socket.pgsql }}:5432"
+      - "{{ easydb_pgsql_hostname }}:{{ easydb_pgsql_port }}:5432"
   server:
     image: "{{ easydb_docker_registry }}/pf/server-{{ easydb_solution }}"
     volumes:
@@ -69,7 +73,7 @@ easydb_containers:
       - "{{ easydb_server_volume_nginx_log }}:/var/log/nginx"
       - "{{ easydb_server_volume_hotfolder }}:/hotfolder"
     ports:
-      - "{{ easydb_socket.server }}:80"
+      - "{{ easydb_server_hostname }}:{{ easydb_server_port }}:80"
   eas:
     image: "{{ easydb_docker_registry }}/pf/eas"
     volumes:
@@ -78,7 +82,7 @@ easydb_containers:
       - "{{ easydb_eas_volume_log }}:/var/opt/easydb/log/eas"
       - "{{ easydb_eas_volume_tmp }}:/tmp"
     ports:
-      - "{{ easydb_socket.eas }}:80"
+      - "{{ easydb_eas_hostname }}:{{ easydb_eas_port }}:80"
   elasticsearch:
     image: "{{ easydb_docker_registry }}/pf/elasticsearch"
     volumes:
@@ -89,7 +93,7 @@ easydb_containers:
     volumes:
       - "{{ easydb_volume_config }}:/config"
     ports:
-      - "{{ easydb_socket.webfrontend }}:80"
+      - "{{ easydb_webfrontend_hostname }}:{{ easydb_webfrontend_port }}:80"
 
 # easydb server
 easydb_solution: base
@@ -139,3 +143,4 @@ easydb_cron_backup_script: "{{ easydb_basedir }}/maintain backup"
 # EAS
 easydb_eas_num_workers: 1
 easydb_eas_num_soffice: 2
+easydb_eas_trusted_net: "172.16.0.0/12"   # Source IP from connects from EasyDB server must be included.
