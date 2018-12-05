@@ -1,0 +1,47 @@
+{{ ansible_managed | comment }}
+
+hostname:
+  server: easydb-server
+
+pgsql:
+  database: easydb
+
+extension:
+  external-user-schema: {{ easydb_external_user_schema }}
+
+server:
+  external_url: {{ easydb_url }}
+  enable_post_settings: {{ easydb_enable_post_settings }}
+  api:
+    settings:
+      restart: {{ easydb_enable_restart }}
+      purgedata: {{ easydb_enable_purgedata }}
+      purgeall: {{ easydb_enable_purgeall }}
+  mailer:
+    enabled: {{ easydb_enable_mailer }}
+
+default_client:
+   datamodel:
+     uid: "{{ easydb_datamodel_uid }}"
+     server: "{{ easydb_objectstore_url }}"
+     instance: {{ easydb_objectstore_instance_id }}
+
+plugins:
+  enabled+:
+{% for plugin in easydb_plugins_enabled %}
+    - {{ plugin }}
+{% endfor %}
+
+{% if easydb_hotfolder_enabled %}
+hotfolder:
+  directory: /hotfolder
+  number_of_workers: 1
+  urls:
+    - type: windows_webdav
+      url: \\{{ easydb_hotfolder_hostname }}@{{ easydb_hotfolder_unc_port }}\upload\collection
+      separator: \
+    - type: webdav_http
+      url: {{ easydb_hotfolder_http_or_https }}://{{ easydb_hotfolder_hostname }}/upload/collection
+      separator: /
+{% endif %}
+

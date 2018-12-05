@@ -2,5 +2,5 @@
 
 # m h dom m dow user command
 
-{{ cron_update_minute }} {{ cron_update_hour }} * * {{ cron_update_weekday }} root {{ cron_update_script }}
-{{ cron_backup_minute }} {{ cron_backup_hour }} * * {{ cron_backup_weekday }} root {{ cron_backup_script }}
+{{ easydb_cron_update_minute }} {{ easydb_cron_update_hour }} * * {{ easydb_cron_update_weekday }} root {{ easydb_cron_update_script }}
+{{ easydb_cron_backup_minute }} {{ easydb_cron_backup_hour }} * * {{ easydb_cron_backup_weekday }} root {{ easydb_cron_backup_script }}

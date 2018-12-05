@@ -6,6 +6,14 @@
     group: root
     mode: 0755
 
+- name: deploying configuration
+  template:
+    src: srv/easydb/config/easydb-{{ easydb_container_name }}.yml.j2
+    dest: /srv/easydb/config/{{ easydb_container_name }}.yml
+    owner: root
+    group: root
+    mode: 0644
+
 - name: spinning up container
   docker_container:
     name: "easydb-{{ easydb_container_name }}"

@@ -1,19 +1,15 @@
 #!/bin/bash
 
-# {{ ansible_managed }}
+{{ ansible_managed | comment }}
 
 docker run -d -ti \
     --name easydb-{{ easydb_container_name }} \
     --restart=always \
     --net {{ easydb_container_network }} \
-{% if 'volumes' in easydb_containers[easydb_container_name] %}
-{% for volume in easydb_containers[easydb_container_name].volumes %}
+{% for volume in easydb_containers[easydb_container_name].volumes | default([]) %}
     --volume {{ volume }} \
 {% endfor %}
-{% endif %}
-{% if 'ports' in easydb_containers[easydb_container_name] %}
-{% for port in easydb_containers[easydb_container_name].ports %}
+{% for port in easydb_containers[easydb_container_name].ports | default([]) %}
     -p {{ port }} \
 {% endfor %}
-{% endif %}
-    {{ easydb_containers[easydb_container_name].image }}
+    {{ easydb_containers[easydb_container_name].image | default([]) }}

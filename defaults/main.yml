@@ -20,37 +20,34 @@ easydb_socket:
 # Where to write log messages to while doing update-auto in the script:
 easydb_cron_update_log: /var/log/easydb-update.log
 # Path to docker-compose executable:
-easydb_script_compose: '`which docker-compose 2>/dev/null`'
+# easydb_script_compose: '`which docker-compose 2>/dev/null`'
 
 # paths
 easydb_basedir: /srv/easydb
 easydb_volume_config: "{{ easydb_basedir }}/config"
-
 easydb_eas_volume_assets: "{{ easydb_basedir }}/eas/lib/assets"
 easydb_eas_volume_log: "{{ easydb_basedir }}/eas/log"
 easydb_eas_volume_tmp: "{{ easydb_basedir }}/eas/tmp"
-
 easydb_elasticsearch_volume_var: "{{ easydb_basedir }}/elasticsearch/var"
-
 easydb_pgsql_volume_backup: "{{ easydb_basedir }}/pgsql/backup"
 easydb_pgsql_volume_etc: "{{ easydb_basedir }}/pgsql/etc"
 easydb_pgsql_volume_lib: "{{ easydb_basedir }}/pgsql/var"
 easydb_pgsql_volume_log: "{{ easydb_basedir }}/pgsql/log"
-
 easydb_server_volume_nginx_log: "{{ easydb_basedir }}/easydb-server/nginx-log"
 easydb_server_volume_var: "{{ easydb_basedir }}/easydb-server/var"
 easydb_server_volume_hotfolder: "{{ easydb_basedir }}/easydb-server/hotfolder"
 
-# easydb_host defines which containers to be started.
-# By default all containers are started, but perhaps you only want to start
-# individual containers across several hosts.
-easydb_host:
+# `deploy_these` defines which containers should be deployed in this run.
+# By default all containers are deployed, but perhaps you only want to start
+# containers across multiple hosts.
+easydb_containers_deploy_these:
   - pgsql
   - server
   - eas
   - easydb
   - elasticsearch
   - webfrontend
+
 
 # container configuration
 easydb_containers:
@@ -96,12 +93,12 @@ easydb_containers:
 
 # easydb server
 easydb_solution: base
-external_user_schema: true
-enable_post_settings: true
-enable_restart: true
-enable_purgedata: false
-enable_purgeall: false
-enable_plugins:
+easydb_external_user_schema: true
+easydb_enable_post_settings: true
+easydb_enable_restart: true
+easydb_enable_purgedata: false
+easydb_enable_purgeall: false
+easydb_plugins_enabled:
   - base.easydb4migration
 easydb_hotfolder_enabled: false
 easydb_hotfolder_hostname: ''
@@ -113,15 +110,15 @@ easydb_max_map_count: 262144
 easydb_es_memory_size: 2g
 
 # E-Mail
-enable_mailer: true
-mail_relay_for_ssmtp: ''
-hostname_for_ssmtp: ''
-envelope_from: ''
+easydb_enable_mailer: true
+easydb_mail_relay_for_ssmtp: ''
+easydb_hostname_for_ssmtp: ''
+easydb_envelope_from: ''
 
 # webfrontend
-datamodel_uid: ''
-objectstore_url: https://schema.easydb.de/objectstore
-objectstore_instance_id: prod
+easydb_datamodel_uid: ''
+easydb_objectstore_url: https://schema.easydb.de/objectstore
+easydb_objectstore_instance_id: prod
 
 # PostgrSQL
 # Space-separated list of db-names to dump with the script:
@@ -130,14 +127,14 @@ easydb_dump_dbs: "eas easydb"
 easydb_dump_keep: 7
 
 # cron
-cron_update_minute: 23
-cron_update_hour: 23
-cron_update_weekday: 5
-cron_update_script: "{{ easydb_basedir }}/maintain update-auto"
-cron_backup_minute: 23
-cron_backup_hour: 23
-cron_backup_weekday: 1,2,3,4,6,7
-cron_backup_script: "{{ easydb_basedir }}/maintain backup"
+easydb_cron_update_minute: 23
+easydb_cron_update_hour: 23
+easydb_cron_update_weekday: 5
+easydb_cron_update_script: "{{ easydb_basedir }}/maintain update-auto"
+easydb_cron_backup_minute: 23
+easydb_cron_backup_hour: 23
+easydb_cron_backup_weekday: 1,2,3,4,6,7
+easydb_cron_backup_script: "{{ easydb_basedir }}/maintain backup"
 
 # EAS
 easydb_eas_num_workers: 1
