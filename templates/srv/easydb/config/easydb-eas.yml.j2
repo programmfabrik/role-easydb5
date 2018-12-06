@@ -10,3 +10,8 @@ num-workers: {{ easydb_eas_num_workers }}
 num-soffice: {{ easydb_eas_num_soffice }}
 num-services: 5
 trusted-net: {{ easydb_eas_trusted_net }}
+
+email:
+  server: {{ easydb_mail_relay_for_ssmtp }}
+  hostname: {{ easydb_hostname_for_ssmtp }}
+  from-address: {{ easydb_envelope_from }}
