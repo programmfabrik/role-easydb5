@@ -1,0 +1,10 @@
+elasticsearch:
+  memory-size: 2g
+
+  # configuration to be copied to elasticsearch.yml
+  config: {}
+
+email:
+  server: {{ easydb_mail_relay_for_ssmtp }}
+  hostname: {{ easydb_hostname_for_ssmtp }}
+  from-address: {{ easydb_envelope_from }}
