@@ -14,6 +14,8 @@ easydb_pgsql_hostname: '127.0.0.1'
 easydb_pgsql_port: 15432
 easydb_eas_hostname: '127.0.0.1'
 easydb_eas_port: 83
+easydb_fylr_hostname: '127.0.0.1'
+easydb_fylr_port: 83
 easydb_server_hostname: '127.0.0.1'
 easydb_server_port: 82
 easydb_webfrontend_hostname: '127.0.0.1'

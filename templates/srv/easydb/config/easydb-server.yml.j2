@@ -1,10 +1,10 @@
 {{ ansible_managed | comment }}
 
 hostname:
-  server: {{ easydb_server_hostname }}
-  pgsql: {{ easydb_pgsql_hostname }}
-  eas: {{ easydb_eas_hostname }}
-  elasticsearch: {{ easydb_elasticsearch_hostname }}
+  server: {{ easydb_server_hostname }}:{{ easydb_server_port }}
+  pgsql: {{ easydb_pgsql_hostname }}:{{ easydb_pgsql_port }}
+  eas: {{ easydb_eas_hostname }}:{{ easydb_eas_port }}
+  elasticsearch: {{ easydb_elasticsearch_hostname }}:{{ easydb_elasticsearch_port }}
 
 pgsql:
   database: {{ easydb_pgsql_hostname }}
