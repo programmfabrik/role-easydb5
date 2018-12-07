@@ -10,7 +10,7 @@ elasticsearch:
     "node.data": "true",
     "network.host": "{{ ansible_default_ipv4.address }}",
     "http.port": 9200,
-    "discovery.zen.ping.unicast.hosts": "{{ easydb_elasticsearch_cluster_nodes }}"
+    "discovery.zen.ping.unicast.hosts": {{ easydb_elasticsearch_cluster_nodes | to_json }}
   }
 {% else %}
   config: {}
