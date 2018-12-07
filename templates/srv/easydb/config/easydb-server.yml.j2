@@ -13,16 +13,21 @@ pgsql:
 extension:
   external-user-schema: {{ easydb_external_user_schema }}
 
-server:
-  external_url: {{ easydb_url }}
-  enable_post_settings: {{ easydb_enable_post_settings }}
-  api:
-    settings:
-      restart: {{ easydb_enable_restart }}
-      purgedata: {{ easydb_enable_purgedata }}
-      purgeall: {{ easydb_enable_purgeall }}
-  mailer:
-    enabled: {{ easydb_enable_mailer }}
+eas:
+  url: http://{{ easydb_eas_hostname }}:{{ easydb_eas_port }}/eas
+  instance: easydb5
+
+external_url: {{ easydb_url }}
+enable_post_settings: {{ easydb_enable_post_settings }}
+
+api:
+  settings:
+    restart: {{ easydb_enable_restart }}
+    purgedata: {{ easydb_enable_purgedata }}
+    purgeall: {{ easydb_enable_purgeall }}
+
+mailer:
+  enabled: {{ easydb_enable_mailer }}
 
 default_client:
    datamodel:
