@@ -92,6 +92,7 @@ easydb_containers:
       - "{{ easydb_elasticsearch_volume_var }}:/var/lib/elasticsearch"
     ports:
       - "{{ easydb_elasticsearch_hostname }}:{{ easydb_elasticsearch_port }}:9200"
+      - "{{ easydb_elasticsearch_hostname }}:{{ easydb_elasticsearch_port }}:9300"
   webfrontend:
     image: "{{ easydb_docker_registry }}/pf/webfrontend"
     volumes:
@@ -116,6 +117,9 @@ easydb_hotfolder_http_or_https: https
 # elasticsearch
 easydb_max_map_count: 262144
 easydb_es_memory_size: 2g
+easydb_elasticsearch_cluster_enabled: no
+easydb_elasticsearch_cluster_master: 127.0.0.1
+easydb_elasticsearch_cluster_nodes: []
 
 # E-Mail
 easydb_enable_mailer: true
