@@ -20,6 +20,9 @@ eas:
 external_url: {{ easydb_url }}
 enable_post_settings: {{ easydb_enable_post_settings }}
 
+elasticsearch:
+  url: http://{{ easydb_elasticsearch_hostname }}:{{ easydb_elasticsearch_port }}
+
 api:
   settings:
     restart: {{ easydb_enable_restart }}
