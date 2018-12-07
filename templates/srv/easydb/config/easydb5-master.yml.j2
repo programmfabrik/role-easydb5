@@ -2,7 +2,8 @@
 easydb-server:
   docker-hostname: {{ easydb_server_hostname }}
   pgsql:
-    hostname: {{ easydb_pgsql_hostname }}:{{ easydb_pgsql_port }}
+    host: {{ easydb_pgsql_hostname }}
+    port: {{ easydb_pgsql_port }}
   extension:
     external-user-schema: {{ easydb_external_user_schema }}
   server:

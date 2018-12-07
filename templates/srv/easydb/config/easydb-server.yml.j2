@@ -7,7 +7,8 @@ hostname:
   elasticsearch: {{ easydb_elasticsearch_hostname }}:{{ easydb_elasticsearch_port }}
 
 pgsql:
-  hostname: {{ easydb_pgsql_hostname }}
+  host: {{ easydb_pgsql_hostname }}
+  port: {{ easydb_pgsql_port }}
 
 extension:
   external-user-schema: {{ easydb_external_user_schema }}
