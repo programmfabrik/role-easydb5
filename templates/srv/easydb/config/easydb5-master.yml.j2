@@ -44,9 +44,6 @@ elasticsearch:
 
 common:
   email:
-    # ssmtp.conf:mailhub
     server: {{ easydb_mail_relay_for_ssmtp }}
-    # ssmtp.conf:hostname
     hostname: {{ easydb_hostname_for_ssmtp }}
-    # server.mailer.envelope_address
     from-address: {{ easydb_envelope_from }}
