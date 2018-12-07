@@ -8,7 +8,7 @@ elasticsearch:
     "node.name": "{{ ansible_default_ipv4.address }}",
     "node.master": "{% if ansible_default_ipv4.address == easydb_elasticsearch_cluster_master %}true{% else %}false{% endif %}",
     "node.data": "true",
-    "network.host": "{{ ansible_default_ipv4.address }}",
+    "network.host": "0.0.0.0",
     "http.port": 9200,
     "discovery.zen.ping.unicast.hosts": {{ easydb_elasticsearch_cluster_nodes | to_json }}
   }
