@@ -91,8 +91,8 @@ easydb_containers:
       - "{{ easydb_volume_config }}:/config"
       - "{{ easydb_elasticsearch_volume_var }}:/var/lib/elasticsearch"
     ports:
-      - "{{ easydb_elasticsearch_hostname }}:{{ easydb_elasticsearch_port }}:9200"
-      - "{{ easydb_elasticsearch_hostname }}:{{ easydb_elasticsearch_port }}:9300"
+      - "0.0.0.0:{{ easydb_elasticsearch_port }}:9200"
+      - "0.0.0.0:{{ easydb_elasticsearch_port }}:9300"
   webfrontend:
     image: "{{ easydb_docker_registry }}/pf/webfrontend"
     volumes:
