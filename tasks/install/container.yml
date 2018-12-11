@@ -8,8 +8,8 @@
 
 - name: deploying configuration
   template:
-    src: srv/easydb/config/easydb-{{ 'server' if easydb_container_name == 'webfrontend' else easydb_container_name }}.yml.j2
-    dest: /srv/easydb/config/easydb-{% if easydb_container_name == 'webfrontend' %}server{% elif easydb_container_name == 'eas' %}asset-server{% else %}{{ easydb_container_name }}{% endif %}.yml
+    src: srv/easydb/config/{{ easydb_containers[easydb_container_name]['configs']['src'] }}.yml.j2
+    dest: /srv/easydb/config/{{ easydb_containers[easydb_container_name]['configs']['dest'] }}.yml
     owner: root
     group: root
     mode: 0644
