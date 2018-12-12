@@ -167,3 +167,8 @@ easydb_cron_backup_script: "{{ easydb_basedir }}/maintain backup"
 easydb_eas_num_workers: 1
 easydb_eas_num_soffice: 2
 easydb_eas_trusted_net: "172.16.0.0/12"   # Source IP from connects from EasyDB server must be included.
+
+# SSO
+easydb_ldap_config: ''
+easydb_kerberos_config: ''
+easydb_shibboleth_config: ''

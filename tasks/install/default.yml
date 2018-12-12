@@ -71,4 +71,4 @@
   with_items: "{{ easydb_containers_deploy_these }}"
   loop_control:
     loop_var: easydb_container_name
-  include_tasks: container.yml
+  include_tasks: containers/{{ easydb_container_name }}.yml

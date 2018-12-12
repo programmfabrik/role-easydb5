@@ -1,0 +1,50 @@
+- name: deploying run-scripts
+  template:
+    src: srv/easydb/run-script.j2
+    dest: "{{ easydb_basedir }}/run-{{ easydb_container_name }}.sh"
+    owner: root
+    group: root
+    mode: 0750
+
+- name: deploying configuration
+  template:
+    src: srv/easydb/config/{{ easydb_containers[easydb_container_name]['configs']['src'] }}.yml.j2
+    dest: /srv/easydb/config/{{ easydb_containers[easydb_container_name]['configs']['dest'] }}.yml
+    owner: root
+    group: root
+    mode: 0644
+  register: has_new_config_changed
+
+- name: deploying LDAP configuration
+  when: easydb_ldap_config
+  template:
+    src: "{{ easydb_ldap_config }}"
+    dest: /srv/easydb/config/server.d/ldap.yml
+
+- name: deploying Kerberos configuration
+  when: easydb_kerberos_config
+  template:
+    src: "{{ easydb_kerberos_config }}"
+    dest: /src/easydb/config/server.d/kerberos.yml
+
+- name: deploying Shibboleth configuration
+  when: easydb_shibboleth_config
+  template:
+    src: "{{ easydb_shibboleth_config }}"
+    dest: /src/easydb/config/server.d/shibboleth.yml
+
+- name: stopping container (if running)
+  when: has_config_changed.changed or has_new_config_changed.changed
+  shell: docker stop easydb-{{ easydb_container_name }}
+  failed_when: no
+
+- name: spinning up container
+  docker_container:
+    name: "easydb-{{ easydb_container_name }}"
+    image: "{{ easydb_containers[easydb_container_name].image }}"
+    networks:
+      - name: "{{ easydb_containers[easydb_container_name].network | default(easydb_container_network) }}"
+    restart_policy: "{{ easydb_containers[easydb_container_name].restart_policy | default('always') }}"
+    ports: "{{ easydb_containers[easydb_container_name].ports | default([]) }}"
+    volumes: "{{ easydb_containers[easydb_container_name].volumes | default([]) }}"
+    capabilities: "{{ easydb_containers[easydb_container_name].capabilities | default([]) }}"

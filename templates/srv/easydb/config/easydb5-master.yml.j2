@@ -40,6 +40,17 @@ easydb-server:
         separator: /
 {% endif %}
 
+{% if easydb_ldap_config %}
+  {{ lookup('file', easydb_ldap_config) }}
+{% endif %}
+
+{% if easydb_kerberos_config %}
+  {{ lookup('file', easydb_kerberos_config) }}
+{% endif %}
+
+{% if easydb_shibboleth_config %}
+  {{ lookup('file', easydb_shibboleth_config) }}
+{% endif %}
 
 elasticsearch:
   memory-size: {{ easydb_es_memory_size }}
