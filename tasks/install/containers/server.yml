@@ -15,6 +15,17 @@
     mode: 0644
   register: has_new_config_changed
 
+- name: obtaining version information
+  when: easydb_config_cleanup_version
+  command: docker exec easydb-{{ easydb_container_name }} cat /EASYDB_VERSION
+  register: easydb_version_cmd
+
+- name: removing old configuration files
+  when: (easydb_config_cleanup_version) and ('stdout' in easydb_version_cmd) and (easydb_version_cmd.stdout is version_compare(easydb_config_cleanup_version, ">="))
+  file:
+    path: /srv/easydb/config/easydb5-master.yml
+    state: absent
+
 - name: deploying LDAP configuration
   when: easydb_ldap_config
   template:

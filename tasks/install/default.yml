@@ -37,6 +37,7 @@
     mode: 0755
 
 - name: central configuration file
+  # TODO: only when EasyDB version -lt easydb_config_cleanup_version
   template:
     src: srv/easydb/config/easydb5-master.yml.j2
     dest: "{{ easydb_basedir }}/config/easydb5-master.yml"
