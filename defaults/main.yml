@@ -101,8 +101,8 @@ easydb_containers:
       - "{{ easydb_volume_config }}:/config"
       - "{{ easydb_elasticsearch_volume_var }}:/var/lib/elasticsearch"
     ports:
-      - "0.0.0.0:{{ easydb_elasticsearch_port }}:9200"
-      - "0.0.0.0:9300:9300"
+      - "{{ easydb_elasticsearch_port }}:9200"
+      - "9300:9300"
     configs:
       src: elasticsearch
       dest: elasticsearch
