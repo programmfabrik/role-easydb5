@@ -79,7 +79,7 @@ easydb_containers:
       - "{{ easydb_server_volume_nginx_log }}:/var/log/nginx"
       - "{{ easydb_server_volume_hotfolder }}:/hotfolder"
     ports:
-      - "{{ easydb_server_hostname }}:{{ easydb_server_port }}:80"
+      - "{{ easydb_server_port }}:80"
     configs:
       src: server
       dest: easydb-server
