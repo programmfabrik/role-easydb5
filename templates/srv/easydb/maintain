@@ -40,22 +40,22 @@ UPDATELOG={{ easydb_cron_update_log }}
 case "$1" in
 start)
     set -e
-{% if 'elasticsearch' in easydb_containers_deploy_these %}
+{% if 'elasticsearch' in easydb_containers_on_host[inventory_hostname] %}
     $BASEDIR/run-elasticsearch.sh
 {% endif %}
-{% if 'pgsql' in easydb_containers_deploy_these %}
+{% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
     $BASEDIR/run-pgsql.sh
 {% endif %}
-{% if 'fylr' in easydb_containers_deploy_these %}
+{% if 'fylr' in easydb_containers_on_host[inventory_hostname] %}
     $BASEDIR/run-fylr.sh
 {% endif %}
-{% if 'eas' in easydb_containers_deploy_these %}
+{% if 'eas' in easydb_containers_on_host[inventory_hostname] %}
     $BASEDIR/run-eas.sh
 {% endif %}
-{% if 'server' in easydb_containers_deploy_these %}
+{% if 'server' in easydb_containers_on_host[inventory_hostname] %}
     $BASEDIR/run-server.sh
 {% endif %}
-{% if 'webfrontend' in easydb_containers_deploy_these %}
+{% if 'webfrontend' in easydb_containers_on_host[inventory_hostname] %}
     $BASEDIR/run-webfrontend.sh
 {% endif %}
     ;;
@@ -98,7 +98,7 @@ status)
     docker ps
 ;;
 update)
-{% if 'pgsql' in easydb_containers_deploy_these %}
+{% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
     if   $0 backup
     then $0 tag
 {% else %}
@@ -106,7 +106,7 @@ update)
 {% endif %}
          $0 cleanup
          $0 pull
-{% if 'pgsql' in easydb_containers_deploy_these %}
+{% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
     else
         echo "ERROR: backup failed - not updating!">&2
     fi
@@ -115,7 +115,7 @@ update)
 update-auto)
     echo             >> $UPDATELOG
     date             >> $UPDATELOG
-{% if 'pgsql' in easydb_containers_deploy_these %}
+{% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
     if   $0 backup   >> $UPDATELOG
     then $0 tag      >> $UPDATELOG
 {% else %}
@@ -132,14 +132,14 @@ update-auto)
                                        #^^^^^^^^^^^^^^^^^ put stderr into LOG
                          #^^^^^^^^^^^^ put stdout into LOG(does NOT affect stderr)
                     #^^^^ put stderr where stdout currently points to. (make it reach cron mails)
-{% if 'pgsql' in easydb_containers_deploy_these %}
+{% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
     else
         echo "ERROR: backup failed - not updating!">> $UPDATELOG
         echo "ERROR: backup failed - not updating!">&2
     fi
 {% endif %}
     ;;
-{% if 'pgsql' in easydb_containers_deploy_these %}
+{% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
 backup)
     # do sql backup of all sql dbs $DBS (one per instance and one for eas)
     # Note: there are only $KEEPDBS kept - repeating this quickly removes all old backups (on this host) !
@@ -174,42 +174,42 @@ sqldump)
 tag)
     # tag the current docker version as "previous" - good before an update if you want to go back.
     # Danger: this will overwrite the "previous"ly preserved docker version!
-{% if 'server' in easydb_containers_deploy_these %}
+{% if 'server' in easydb_containers_on_host[inventory_hostname] %}
     /usr/bin/docker tag {{ easydb_docker_registry }}/pf/server-$SOLUTION:latest {{ easydb_docker_registry }}/pf/server-$SOLUTION:previous
 {% endif %}
-{% if 'webfrontend' in easydb_containers_deploy_these %}
+{% if 'webfrontend' in easydb_containers_on_host[inventory_hostname] %}
     /usr/bin/docker tag {{ easydb_docker_registry }}/pf/webfrontend:latest      {{ easydb_docker_registry }}/pf/webfrontend:previous
 {% endif %}
-{% if 'eas' in easydb_containers_deploy_these %}
+{% if 'eas' in easydb_containers_on_host[inventory_hostname] %}
     /usr/bin/docker tag {{ easydb_docker_registry }}/pf/eas:latest              {{ easydb_docker_registry }}/pf/eas:previous
 {% endif %}
-{% if 'elasticsearch' in easydb_containers_deploy_these %}
+{% if 'elasticsearch' in easydb_containers_on_host[inventory_hostname] %}
     /usr/bin/docker tag {{ easydb_docker_registry }}/pf/elasticsearch:latest    {{ easydb_docker_registry }}/pf/elasticsearch:previous
 {% endif %}
-{% if 'fylr' in easydb_containers_deploy_these %}
+{% if 'fylr' in easydb_containers_on_host[inventory_hostname] %}
     /usr/bin/docker tag {{ easydb_docker_registry }}/pf/fylr:latest         {{ easydb_docker_registry }}/pf/fylr:previous
 {% endif %}
-{% if 'pgsql' in easydb_containers_deploy_these %}
+{% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
     /usr/bin/docker tag {{ easydb_docker_registry }}/pf/postgresql:latest   {{ easydb_docker_registry }}/pf/postgresql:previous
 {% endif %}
     ;;
 pull)
-{% if 'server' in easydb_containers_deploy_these %}
+{% if 'server' in easydb_containers_on_host[inventory_hostname] %}
     /usr/bin/docker pull {{ easydb_docker_registry }}/pf/server-$SOLUTION
 {% endif %}
-{% if 'webfrontend' in easydb_containers_deploy_these %}
+{% if 'webfrontend' in easydb_containers_on_host[inventory_hostname] %}
     /usr/bin/docker pull {{ easydb_docker_registry }}/pf/webfrontend
 {% endif %}
-{% if 'elasticsearch' in easydb_containers_deploy_these %}
+{% if 'elasticsearch' in easydb_containers_on_host[inventory_hostname] %}
     /usr/bin/docker pull {{ easydb_docker_registry }}/pf/elasticsearch
 {% endif %}
-{% if 'eas' in easydb_containers_deploy_these %}
+{% if 'eas' in easydb_containers_on_host[inventory_hostname] %}
     /usr/bin/docker pull {{ easydb_docker_registry }}/pf/eas
 {% endif %}
-{% if 'fylr' in easydb_containers_deploy_these %}
+{% if 'fylr' in easydb_containers_on_host[inventory_hostname] %}
     /usr/bin/docker pull {{ easydb_docker_registry }}/pf/fylr
 {% endif %}
-{% if 'pgsql' in easydb_containers_deploy_these %}
+{% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
     /usr/bin/docker pull {{ easydb_docker_registry }}/pf/postgresql
 {% endif %}
     ;;

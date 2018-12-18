@@ -55,7 +55,6 @@ easydb_containers_deploy_these:
   - elasticsearch
   - webfrontend
 
-
 # container configuration
 easydb_containers:
   pgsql:
@@ -79,7 +78,7 @@ easydb_containers:
       - "{{ easydb_server_volume_nginx_log }}:/var/log/nginx"
       - "{{ easydb_server_volume_hotfolder }}:/hotfolder"
     ports:
-      - "{{ (easydb_server_hostname == 'easydb-server' | ternary(['127.0.0.1', easydb_server_port, 80] | join(':'), [easydb_server_hostname, easydb_server_port, 80] | join(':') ) )}}"
+      - "{{ (easydb_server_hostname == 'easydb-server') | ternary(['127.0.0.1', easydb_server_port, 80] | join(':'), [easydb_server_hostname, easydb_server_port, 80] | join(':')) }}"
     configs:
       src: server
       dest: easydb-server
@@ -101,8 +100,8 @@ easydb_containers:
       - "{{ easydb_volume_config }}:/config"
       - "{{ easydb_elasticsearch_volume_var }}:/var/lib/elasticsearch"
     ports:
-      - "{{ (easydb_elasticsearch_hostname == 'easydb-elasticsearch') | ternary(['127.0.0.1', easydb_elasticsearch_hostname, 9200] | join(':'), [easydb_elasticsearch_hostname, easydb_elasticsearch_port, 9200] | join(':')) }}"
-      - "{{ (easydb_elasticsearch_hostname == 'easydb-elasticsearch') | ternary(['127.0.0.1', easydb_elasticsearch_hostname, 9300] | join(':'), [easydb_elasticsearch_hostname, easydb_elasticsearch_port, 9300] | join(':')) }}"
+      - "{{ (easydb_elasticsearch_hostname == 'easydb-elasticsearch') | ternary(['127.0.0.1', easydb_elasticsearch_port, 9200] | join(':'), [easydb_elasticsearch_hostname, easydb_elasticsearch_port, 9200] | join(':')) }}"
+      - "{{ (easydb_elasticsearch_hostname == 'easydb-elasticsearch') | ternary(['127.0.0.1', easydb_elasticsearch_port, 9300] | join(':'), [easydb_elasticsearch_hostname, easydb_elasticsearch_port, 9300] | join(':')) }}"
     configs:
       src: elasticsearch
       dest: elasticsearch

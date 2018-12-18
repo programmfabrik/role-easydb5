@@ -51,7 +51,7 @@
 
 - name: spinning up container
   docker_container:
-    name: "easydb-{{ easydb_container_name }}"
+    name: "easydb-{{ easydb_container_name }}-{{ easydb_solution }}"
     image: "{{ easydb_containers[easydb_container_name].image }}"
     networks:
       - name: "{{ easydb_containers[easydb_container_name].network | default(easydb_container_network) }}"
