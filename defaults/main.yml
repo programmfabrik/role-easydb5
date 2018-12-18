@@ -23,6 +23,7 @@ easydb_webfrontend_hostname: 'easydb-webfrontend'
 easydb_webfrontend_port: 81
 easydb_elasticsearch_hostname: 'easydb-elasticsearch'
 easydb_elasticsearch_port: 9200
+easydb_elasticsearch_cluster_port: 9300
 
 # Where to write log messages to while doing update-auto in the script:
 easydb_cron_update_log: /var/log/easydb-update.log
@@ -101,7 +102,7 @@ easydb_containers:
       - "{{ easydb_elasticsearch_volume_var }}:/var/lib/elasticsearch"
     ports:
       - "{{ (easydb_elasticsearch_hostname == 'easydb-elasticsearch') | ternary(['127.0.0.1', easydb_elasticsearch_port, 9200] | join(':'), [easydb_elasticsearch_hostname, easydb_elasticsearch_port, 9200] | join(':')) }}"
-      - "{{ (easydb_elasticsearch_hostname == 'easydb-elasticsearch') | ternary(['127.0.0.1', easydb_elasticsearch_port, 9300] | join(':'), [easydb_elasticsearch_hostname, easydb_elasticsearch_port, 9300] | join(':')) }}"
+      - "{{ (easydb_elasticsearch_hostname == 'easydb-elasticsearch') | ternary(['127.0.0.1', easydb_elasticsearch_cluster_port, 9300] | join(':'), [easydb_elasticsearch_hostname, easydb_elasticsearch_cluster_port, 9300] | join(':')) }}"
     configs:
       src: elasticsearch
       dest: elasticsearch
