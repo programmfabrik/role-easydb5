@@ -70,7 +70,7 @@ easydb_containers:
       - "{{ (easydb_pgsql_hostname == 'easydb-pgsql') | ternary(['127.0.0.1', easydb_pgsql_port, 5432] | join(':'), [easydb_pgsql_hostname, easydb_pgsql_port, 5432] | join(':')) }}"
     configs:
       src: pgsql
-      dest: easydb-pgsql
+      dest: pgsql
   server:
     image: "{{ easydb_docker_registry }}/pf/server-{{ easydb_solution }}"
     volumes:
@@ -82,7 +82,7 @@ easydb_containers:
       - "{{ (easydb_server_hostname == 'easydb-server') | ternary(['127.0.0.1', easydb_server_port, 80] | join(':'), [easydb_server_hostname, easydb_server_port, 80] | join(':')) }}"
     configs:
       src: server
-      dest: easydb-server
+      dest: server
   eas:
     image: "{{ easydb_docker_registry }}/pf/eas"
     volumes:
@@ -94,7 +94,7 @@ easydb_containers:
       - "{{ (easydb_eas_hostname == 'easydb-eas') | ternary(['127.0.0.1', easydb_eas_port, 80] | join(':'), [easydb_eas_hostname, easydb_eas_port, 80] | join(':')) }}"
     configs:
       src: eas
-      dest: easydb-eas
+      dest: eas
   elasticsearch:
     image: "{{ easydb_docker_registry }}/pf/elasticsearch"
     volumes:
@@ -114,7 +114,7 @@ easydb_containers:
       - "{{ (easydb_webfrontend_hostname == 'easydb-webfrontend') | ternary(['127.0.0.1', easydb_webfrontend_port, 80] | join(':'), [easydb_webfrontend_hostname, easydb_webfrontend_port, 80] | join(':')) }}"
     configs:
       src: server
-      dest: easydb-server
+      dest: server
 
 # easydb server
 easydb_solution: base
