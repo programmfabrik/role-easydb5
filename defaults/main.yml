@@ -17,7 +17,7 @@ easydb_eas_hostname: 'easydb-eas'
 easydb_eas_port: 83
 easydb_fylr_hostname: 'easydb-fylr'
 easydb_fylr_port: 83
-easydb_server_hostname: 'easydb-server'
+easydb_server_hostname: "easydb-server-{{ easydb_solution }}"
 easydb_server_port: 82
 easydb_webfrontend_hostname: 'easydb-webfrontend'
 easydb_webfrontend_port: 81
