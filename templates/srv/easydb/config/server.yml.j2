@@ -1,27 +1,27 @@
 {{ ansible_managed | comment }}
 
 hostnames:
-  server: {{ easydb_server_hostname }}:{{ easydb_server_port }}
-  pgsql: {{ easydb_pgsql_hostname }}:{{ easydb_pgsql_port }}
-  eas: {{ easydb_eas_hostname }}:{{ easydb_eas_port }}
-  elasticsearch: {{ easydb_elasticsearch_hostname }}:{{ easydb_elasticsearch_port }}
+  server: {{ (easydb_server_hostname.startswith('easydb-server')) | ternary([easydb_server_hostname, easydb_server_port_int] | join(':'), [easydb_server_hostname, easydb_server_port_ext] | join(':')) }}
+  pgsql: {{ (easydb_pgsql_hostname == 'easydb-pgsql') | ternary([easydb_pgsql_hostname, easydb_pgsql_port_int] | join(':'), [easydb_pgsql_hostname, easydb_pgsql_port_ext] | join(':')) }}
+  eas: {{ (easydb_eas_hostname == 'easydb-eas') | ternary([easydb_eas_hostname, easydb_eas_port_int] | join(':'), [easydb_eas_hostname, easydb_eas_port_ext] | join(':')) }}
+  elasticsearch: {{ (easydb_elasticsearch_hostname == 'easydb-elasticsearch') | ternary([easydb_elasticsearch_hostname, easydb_elasticsearch_port_int] | join(':'), [easydb_elasticsearch_hostname, easydb_elasticsearch_port_ext] | join(':')) }}
 
 pgsql:
   host: {{ easydb_pgsql_hostname }}
-  port: {{ easydb_pgsql_port }}
+  port: {{ (easydb_pgsql_hostname == 'easydb-pgsql') | ternary(easydb_pgsql_port_int, easydb_pgsql_port_ext) }}
 
 extension:
   external-user-schema: {{ easydb_external_user_schema }}
 
 eas:
-  url: http://{{ easydb_eas_hostname }}:{{ easydb_eas_port }}/eas
+  url: http://{{ easydb_eas_hostname }}:{{ (easydb_eas_hostname == 'easydb-eas') | ternary(easydb_eas_port_int, easydb_eas_port_ext) }}/eas
   instance: easydb5
 
 external_url: {{ easydb_url }}
 enable_post_settings: {{ easydb_enable_post_settings }}
 
 elasticsearch:
-  url: http://{{ easydb_elasticsearch_hostname }}:{{ easydb_elasticsearch_port }}
+  url: http://{{ easydb_elasticsearch_hostname }}:{{ (easydb_elasticsearch_hostname == 'easydb-elasticsearch') | ternary(easydb_elasticsearch_port_int, easydb_elasticsearch_port_ext) }}
 
 api:
   settings:

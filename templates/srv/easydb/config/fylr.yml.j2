@@ -1,2 +1,2 @@
 hostname:
-  fylr: {{ easydb_fylr_hostname }}:{{ easydb_fylr_port }}
+  fylr: {{ easydb_fylr_hostname }}:{{ (easydb_fylr_hostname == 'easydb-fylr') |ternary(easydb_fylr_port_int, easydb_fylr_port_ext) }}

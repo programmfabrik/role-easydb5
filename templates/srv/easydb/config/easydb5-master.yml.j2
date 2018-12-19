@@ -1,10 +1,10 @@
 # {{ ansible_managed }}
 
 easydb-server:
-  docker-hostname: {{ easydb_server_hostname }}
+  docker-hostname: {{ (easydb_server_hostname.startswith('easydb-server')) | ternary([easydb_server_hostname, easydb_server_port_int] | join(':'), [easydb_server_hostname, easydb_server_port_ext] | join(':')) }}
   pgsql:
     host: {{ easydb_pgsql_hostname }}
-    port: {{ easydb_pgsql_port }}
+    port: {{ (easydb_pgsql_hostname == 'easydb-pgsql') | ternary(easydb_pgsql_port_int, easydb_pgsql_port_ext) }}
   extension:
     external-user-schema: {{ easydb_external_user_schema }}
   server:

@@ -2,7 +2,7 @@ canonical-name: {{ easydb_eas_hostname }}
 log-level: info
 pgsql:
   host: {{ easydb_pgsql_hostname }}
-  port: {{ easydb_pgsql_port }}
+  port: {{ (easydb_pgsql_hostname == 'easydb-pgsql') | ternary(easydb_pgsql_port_int, easydb_pgsql_port_ext) }}
   username: docker
   password: docker
   database: eas
