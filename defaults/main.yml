@@ -91,7 +91,7 @@ easydb_containers:
       - "{{ (easydb_server_hostname.startswith('easydb-server')) | ternary(['127.0.0.1', easydb_server_port_ext, easydb_server_port_int] | join(':'), [easydb_server_hostname, easydb_server_port_ext, easydb_server_port_int] | join(':')) }}"
     configs:
       src: server
-      dest: server
+      dest: easydb-server
   eas:
     image: "{{ easydb_docker_registry }}/pf/eas"
     volumes:
@@ -123,7 +123,7 @@ easydb_containers:
       - "{{ (easydb_webfrontend_hostname == 'easydb-webfrontend') | ternary(['127.0.0.1', easydb_webfrontend_port_ext, easydb_webfrontend_port_int] | join(':'), [easydb_webfrontend_hostname, easydb_webfrontend_port_ext, easydb_webfrontend_port_int] | join(':')) }}"
     configs:
       src: server
-      dest: server
+      dest: easydb-server
 
 # easydb server
 easydb_solution: base
