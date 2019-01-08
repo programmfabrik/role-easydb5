@@ -9,6 +9,7 @@ hostnames:
 pgsql:
   host: {{ easydb_pgsql_hostname }}
   port: {{ (easydb_pgsql_hostname == 'easydb-pgsql') | ternary(easydb_pgsql_port_int, easydb_pgsql_port_ext) }}
+  database: {{ easydb_server_database }}
 
 extension:
   external-user-schema: {{ easydb_external_user_schema }}

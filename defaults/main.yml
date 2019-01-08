@@ -128,6 +128,7 @@ easydb_containers:
 # easydb server
 easydb_solution: base
 easydb_external_user_schema: true
+easydb_server_database: easydb
 easydb_enable_post_settings: true
 easydb_enable_restart: true
 easydb_enable_purgedata: false
@@ -174,7 +175,6 @@ easydb_cron_backup_minute: 23
 easydb_cron_backup_hour: 23
 easydb_cron_backup_weekday: 1,2,3,4,6,7
 easydb_cron_backup_script: "{{ easydb_basedir }}/maintain backup"
-
 
 # EAS
 easydb_eas_num_workers: 1
