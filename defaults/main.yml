@@ -143,8 +143,6 @@ easydb_hotfolder_http_or_https: https
 easydb_max_map_count: 262144
 easydb_es_memory_size: 2g
 easydb_elasticsearch_cluster_enabled: no
-easydb_elasticsearch_cluster_master: 127.0.0.1
-easydb_elasticsearch_cluster_nodes: []
 
 # E-Mail
 easydb_enable_mailer: true
