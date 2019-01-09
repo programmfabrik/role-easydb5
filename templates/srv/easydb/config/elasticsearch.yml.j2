@@ -4,7 +4,7 @@ memory-size: 2g
 {% if easydb_elasticsearch_cluster_enabled %}
 config: {
   "node.name": "{{ inventory_hostname }}",
-  "node.master": "{% if 'easydb5-elasticsearch-master' in group_names %}true{% else %}false{% endif %}",
+  "node.master": "{% if 'easydb5-elasticsearch-masters' in group_names %}true{% else %}false{% endif %}",
   "node.data": "{% if 'easydb5-elasticsearch-slaves' in group_names %}true{% else %}false{% endif %}",
   "http.port": {{ easydb_elasticsearch_port_int }},
   "network.publish_host": "{{ easydb_elasticsearch_network_publish_host }}"
