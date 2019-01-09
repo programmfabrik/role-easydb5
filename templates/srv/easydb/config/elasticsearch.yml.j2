@@ -6,7 +6,7 @@ config: {
   "node.name": "{{ inventory_hostname }}",
   "node.master": "{% if 'easydb5-elasticsearch-masters' in group_names %}true{% else %}false{% endif %}",
   "node.data": "{% if 'easydb5-elasticsearch-slaves' in group_names %}true{% else %}false{% endif %}",
-  "http.port": {{ easydb_elasticsearch_port_int }},
+  "http.port": "{{ easydb_elasticsearch_port_int }}",
   "network.publish_host": "{{ easydb_elasticsearch_network_publish_host }}"
   "discovery.zen.ping.unicast.hosts": {{ easydb_elasticsearch_cluster_nodes | to_json }}
   "discovery.zen.minimum_master_nodes": {{ easydb_elasticsearch_cluster_minimum_master_nodes | default(1) }}
