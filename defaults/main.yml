@@ -16,14 +16,14 @@ easydb_container_network: easydb5
 easydb_pgsql_hostname: 'easydb-pgsql'
 easydb_pgsql_port_int: 5432
 easydb_pgsql_port_ext: 15432
+# FYLR
+easydb_fylr_hostname: 'easydb-fylr'
+easydb_fylr_port_int: 80
+easydb_fylr_port_ext: 84
 # EAS
 easydb_eas_hostname: 'easydb-eas'
 easydb_eas_port_int: 80
 easydb_eas_port_ext: 83
-# FYLR
-easydb_fylr_hostname: 'easydb-fylr'
-easydb_fylr_port_int: 80
-easydb_fylr_port_ext: 83
 # SERVER
 easydb_server_hostname: "easydb-server-{{ easydb_solution }}"
 easydb_server_port_int: 80
@@ -104,6 +104,15 @@ easydb_containers:
     configs:
       src: eas
       dest: eas
+  fylr:
+    image: "{{ easydb_docker_registry }}/pf/fylr"
+    volumes:
+      - "{{ easydb_volume_config }}:/config"
+    ports:
+      - "{{ (easydb_fylr_hostname == 'easydb-fylr') | ternary(['127.0.0.1', easydb_fylr_port_ext, easydb_fylr_port_int] | join(':'), ['0.0.0.0', easydb_fylr_port_ext, easydb_fylr_port_int] | join(':')) }}"
+    configs:
+      src: fylr
+      dest: fylr
   elasticsearch:
     image: "{{ easydb_docker_registry }}/pf/elasticsearch"
     volumes:
