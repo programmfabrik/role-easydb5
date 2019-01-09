@@ -1,17 +1,38 @@
+node-name: {{ easydb_elasticsearch_node_name | default(inventory_hostname_short) }}
+cluster-name: {{ easydb_elasticsearch_cluster_name | default('easydb5') }}
 memory-size: 2g
 
 # configuration to be copied to elasticsearch.yml
 {% if easydb_elasticsearch_cluster_enabled %}
 config:
+{% if easydb_elasticsearch_path_data is defined %}
+  "path.data": {{ easydb_elasticsearch_path_data }}
+{% endif %}
+{% if easydb_elasticsearch_path_logs is defined %}
+  "path.logs": {{ easydb_elasticsearch_path_logs }}
+{% endif %}
+
   "node.name": "{{ inventory_hostname }}"
   "node.master": "{% if 'easydb5-elasticsearch-masters' in group_names %}true{% else %}false{% endif %}"
   "node.data": "{% if 'easydb5-elasticsearch-slaves' in group_names %}true{% else %}false{% endif %}"
-  "http.port": "{{ easydb_elasticsearch_port_int }}"
-  "network.publish_host": "{{ easydb_elasticsearch_network_publish_host }}"
-  "discovery.zen.ping.unicast.hosts": {{ easydb_elasticsearch_cluster_nodes | to_json }}
-  "discovery.zen.minimum_master_nodes": {{ easydb_elasticsearch_cluster_minimum_master_nodes | default(1) }}
+  "http.port": "{{ easydb_elasticsearch_cluster_port | default(easydb_elasticsearch_port_int) }}"
+  "network.publish_host": "{{ easydb_elasticsearch_network_publish_host | default("") }}"
+  "discovery.zen.ping.multicast.enabled": false
+  "discovery.zen.ping.unicast.hosts": {{ easydb_elasticsearch_cluster_nodes | default([]) | to_json }}
+  "gateway.recover_after_data_nodes": {{ easydb_elasticsearch_cluster_recover_after_data_nodes | default(2) }}
+  "gateway.expected_data_nodes": {{ easydb_elasticsearch_cluster_expected_data_nodes | default(2) }}
+  "discovery.zen.minimum_master_nodes": {{ easydb_elasticsearch_cluster_minimum_master_nodes | default(2) }}
+  "indices.fielddata.cache.size": {{ easydb_elasticsearch_cluster_fielddata_cache_size | default("10%") }}
+  "indices.queries.cache.size": {{ easydb_elasticsearch_cluster_queries_cache_size | default("10%") }}
 {% else %}
-config: {}
+config:
+{% if easydb_elasticsearch_path_data is defined %}
+  "path.data": {{ easydb_elasticsearch_path_data }}
+{% endif %}
+{% if easydb_elasticsearch_path_logs is defined %}
+  "path.logs": {{ easydb_elasticsearch_path_logs }}
+{% endif %}
+  "discovery.zen.ping.multicast.enabled": false
 {% endif %}
 
 email:
