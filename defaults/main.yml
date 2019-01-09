@@ -76,7 +76,7 @@ easydb_containers:
       - "{{ easydb_pgsql_volume_log }}:/var/log/postgresql"
       - "{{ easydb_pgsql_volume_lib }}:/var/lib/postgresql"
     ports:
-      - "{{ (easydb_pgsql_hostname == 'easydb-pgsql') | ternary(['127.0.0.1', easydb_pgsql_port_ext, easydb_pgsql_port_int] | join(':'), [easydb_pgsql_hostname, easydb_pgsql_port_ext, easydb_pgsql_port_int] | join(':')) }}"
+      - "{{ (easydb_pgsql_hostname == 'easydb-pgsql') | ternary(['127.0.0.1', easydb_pgsql_port_ext, easydb_pgsql_port_int] | join(':'), ['0.0.0.0', easydb_pgsql_port_ext, easydb_pgsql_port_int] | join(':')) }}"
     configs:
       src: pgsql
       dest: pgsql
@@ -88,7 +88,7 @@ easydb_containers:
       - "{{ easydb_server_volume_nginx_log }}:/var/log/nginx"
       - "{{ easydb_server_volume_hotfolder }}:/hotfolder"
     ports:
-      - "{{ (easydb_server_hostname.startswith('easydb-server')) | ternary(['127.0.0.1', easydb_server_port_ext, easydb_server_port_int] | join(':'), [easydb_server_hostname, easydb_server_port_ext, easydb_server_port_int] | join(':')) }}"
+      - "{{ (easydb_server_hostname.startswith('easydb-server')) | ternary(['127.0.0.1', easydb_server_port_ext, easydb_server_port_int] | join(':'), ['0.0.0.0', easydb_server_port_ext, easydb_server_port_int] | join(':')) }}"
     configs:
       src: server
       dest: easydb-server
@@ -100,7 +100,7 @@ easydb_containers:
       - "{{ easydb_eas_volume_log }}:/var/opt/easydb/log/eas"
       - "{{ easydb_eas_volume_tmp }}:/tmp"
     ports:
-      - "{{ (easydb_eas_hostname == 'easydb-eas') | ternary(['127.0.0.1', easydb_eas_port_ext, easydb_eas_port_int] | join(':'), [easydb_eas_hostname, easydb_eas_port_ext, easydb_eas_port_int] | join(':')) }}"
+      - "{{ (easydb_eas_hostname == 'easydb-eas') | ternary(['127.0.0.1', easydb_eas_port_ext, easydb_eas_port_int] | join(':'), ['0.0.0.0', easydb_eas_port_ext, easydb_eas_port_int] | join(':')) }}"
     configs:
       src: eas
       dest: eas
@@ -110,8 +110,8 @@ easydb_containers:
       - "{{ easydb_volume_config }}:/config"
       - "{{ easydb_elasticsearch_volume_var }}:/var/lib/elasticsearch"
     ports:
-      - "{{ (easydb_elasticsearch_hostname == 'easydb-elasticsearch') | ternary(['127.0.0.1', easydb_elasticsearch_port_ext, easydb_elasticsearch_port_int] | join(':'), [easydb_elasticsearch_hostname, easydb_elasticsearch_port_ext, easydb_elasticsearch_port_int] | join(':')) }}"
-      - "{{ (easydb_elasticsearch_hostname == 'easydb-elasticsearch') | ternary(['127.0.0.1', easydb_elasticsearch_cluster_port_ext, easydb_elasticsearch_cluster_port_int] | join(':'), [easydb_elasticsearch_hostname, easydb_elasticsearch_cluster_port_ext, easydb_elasticsearch_cluster_port_int] | join(':')) }}"
+      - "{{ (easydb_elasticsearch_hostname == 'easydb-elasticsearch') | ternary(['127.0.0.1', easydb_elasticsearch_port_ext, easydb_elasticsearch_port_int] | join(':'), ['0.0.0.0', easydb_elasticsearch_port_ext, easydb_elasticsearch_port_int] | join(':')) }}"
+      - "{{ (easydb_elasticsearch_hostname == 'easydb-elasticsearch') | ternary(['127.0.0.1', easydb_elasticsearch_cluster_port_ext, easydb_elasticsearch_cluster_port_int] | join(':'), ['0.0.0.0', easydb_elasticsearch_cluster_port_ext, easydb_elasticsearch_cluster_port_int] | join(':')) }}"
     configs:
       src: elasticsearch
       dest: elasticsearch
@@ -120,7 +120,7 @@ easydb_containers:
     volumes:
       - "{{ easydb_volume_config }}:/config"
     ports:
-      - "{{ (easydb_webfrontend_hostname == 'easydb-webfrontend') | ternary(['127.0.0.1', easydb_webfrontend_port_ext, easydb_webfrontend_port_int] | join(':'), [easydb_webfrontend_hostname, easydb_webfrontend_port_ext, easydb_webfrontend_port_int] | join(':')) }}"
+      - "{{ (easydb_webfrontend_hostname == 'easydb-webfrontend') | ternary(['127.0.0.1', easydb_webfrontend_port_ext, easydb_webfrontend_port_int] | join(':'), ['0.0.0.0', easydb_webfrontend_port_ext, easydb_webfrontend_port_int] | join(':')) }}"
     configs:
       src: server
       dest: easydb-server
