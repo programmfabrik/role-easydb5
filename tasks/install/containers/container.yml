@@ -9,7 +9,7 @@
 - name: deploying configuration
   template:
     src: srv/easydb/config/{{ easydb_containers[easydb_container_name]['configs']['src'] }}.yml.j2
-    dest: /srv/easydb/config/{{ easydb_containers[easydb_container_name]['configs']['dest'] }}.yml
+    dest: "{{ easydb_basedir}}/config/{{ easydb_containers[easydb_container_name]['configs']['dest'] }}.yml"
     owner: root
     group: root
     mode: 0644
