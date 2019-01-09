@@ -17,7 +17,6 @@ config:
   "node.data": "{% if 'easydb5-elasticsearch-slaves' in group_names %}true{% else %}false{% endif %}"
   "http.port": "{{ easydb_elasticsearch_cluster_port | default(easydb_elasticsearch_port_int) }}"
   "network.publish_host": "{{ easydb_elasticsearch_network_publish_host | default("") }}"
-  "discovery.zen.ping.multicast.enabled": false
   "discovery.zen.ping.unicast.hosts": {{ easydb_elasticsearch_cluster_nodes | default([]) | to_json }}
   "gateway.recover_after_data_nodes": {{ easydb_elasticsearch_cluster_recover_after_data_nodes | default(2) }}
   "gateway.expected_data_nodes": {{ easydb_elasticsearch_cluster_expected_data_nodes | default(2) }}
