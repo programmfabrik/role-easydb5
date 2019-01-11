@@ -148,6 +148,7 @@ easydb_hotfolder_enabled: false
 easydb_hotfolder_hostname: ''
 easydb_hotfolder_unc_port: SSL
 easydb_hotfolder_http_or_https: https
+easydb_eas_instance_name: easydb5
 
 # elasticsearch
 easydb_max_map_count: 262144
