@@ -18,8 +18,8 @@ easydb_pgsql_port_int: 5432
 easydb_pgsql_port_ext: 15432
 # FYLR
 easydb_fylr_hostname: 'easydb-fylr'
-easydb_fylr_port_int: 80
-easydb_fylr_port_ext: 84
+easydb_fylr_port_int: 4000
+easydb_fylr_port_ext: 4000
 # EAS
 easydb_eas_hostname: 'easydb-eas'
 easydb_eas_port_int: 80
