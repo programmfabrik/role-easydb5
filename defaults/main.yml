@@ -2,7 +2,7 @@
 #        e.g. "easydb_es_memory_size" or "easydb_srv_external_user_schema"
 
 skip_customer: false
-easydb_config_cleanup_version: ''
+easydb_has_old_master_config: yes
 
 # docker
 easydb_proxy_url: ''
