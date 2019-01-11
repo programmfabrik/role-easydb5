@@ -8,3 +8,8 @@ objectstore:
 {% if easydb_fylr_accounts is defined %}
 accounts: {{ easydb_fylr_accounts | to_yaml }}
 {% endif %}
+
+smtp:
+  server: {{ easydb_mail_relay_for_ssmtp }}
+  hostname: {{ easydb_hostname_for_ssmtp }}
+  from-address: {{ easydb_envelope_from }}
