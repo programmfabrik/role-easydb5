@@ -18,6 +18,9 @@ extension:
 eas:
   url: http://{{ easydb_eas_hostname }}:{{ (easydb_eas_hostname == 'easydb-eas') | ternary(easydb_eas_port_int, easydb_eas_port_ext) }}/eas
   instance: {{ easydb_eas_instance_name }}
+{% if easydb_eas_external_url is defined %}
+  external_url: {{ easydb_eas_external_url }}
+{% endif %}
 
 external_url: {{ easydb_url }}
 enable_post_settings: {{ easydb_enable_post_settings }}
