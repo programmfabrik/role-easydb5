@@ -66,8 +66,8 @@ stop)
     fi
 
     if /usr/bin/docker ps -a | grep -q easydb-server; then
-        /usr/bin/docker stop  easydb-server
-        /usr/bin/docker rm -v easydb-server
+        /usr/bin/docker stop  easydb-server-{{ easydb_solution }}
+        /usr/bin/docker rm -v easydb-server-{{ easydb_solution }}
     fi
 
     if /usr/bin/docker ps -a | grep -q easydb-eas; then
