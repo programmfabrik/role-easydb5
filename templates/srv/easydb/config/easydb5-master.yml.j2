@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
 
 easydb-server:
-  docker-hostname: {{ easydb_server_hostname }}-{{ easydb_solution }}
+  docker-hostname: {{ easydb_server_hostname }}
   pgsql:
     host: {{ easydb_pgsql_hostname }}
     port: {{ (easydb_pgsql_hostname == 'easydb-pgsql') | ternary(easydb_pgsql_port_int, easydb_pgsql_port_ext) }}
