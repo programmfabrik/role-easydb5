@@ -1,6 +1,6 @@
 node-name: {{ easydb_elasticsearch_node_name | default(inventory_hostname_short) }}
 cluster-name: {{ easydb_elasticsearch_cluster_name | default('easydb5') }}
-memory-size: 2g
+memory-size: {{ easydb_es_memory_size }}
 
 # configuration to be copied to elasticsearch.yml
 {% if easydb_elasticsearch_cluster_enabled %}
