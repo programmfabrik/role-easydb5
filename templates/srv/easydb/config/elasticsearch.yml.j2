@@ -23,6 +23,7 @@ config:
   "discovery.zen.minimum_master_nodes": {{ easydb_elasticsearch_cluster_minimum_master_nodes | default(2) }}
   "indices.fielddata.cache.size": {{ easydb_elasticsearch_cluster_fielddata_cache_size | default("10%") }}
   "indices.queries.cache.size": {{ easydb_elasticsearch_cluster_queries_cache_size | default("10%") }}
+  "index.number_of_shards": {{ easydb_elasticsearch_shards_num | default(10) }}
 {% else %}
 config:
 {% if easydb_elasticsearch_path_data is defined %}
