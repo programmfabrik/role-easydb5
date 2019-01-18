@@ -10,6 +10,13 @@ easydb_docker_user: ''
 easydb_docker_pass: ''
 easydb_docker_registry: docker.easydb.de
 easydb_container_network: easydb5
+# docker container names
+easydb_server_container_name: easydb-server
+easydb_pgsql_container_name: easydb-pgsql
+easydb_eas_container_name: easydb-eas
+easydb_fylr_container_name: easydb-fylr
+easydb_elasticsearch_container_name: easydb-elasticsearch
+easydb_webfrontend_container_name: easydb-webfrontend
 
 ### ENDPOINTS ###
 # PGSQL
@@ -69,6 +76,7 @@ easydb_containers_deploy_these:
 easydb_containers:
   pgsql:
     image: "{{ easydb_docker_registry }}/pf/postgresql"
+    container_name: "{{ easydb_pgsql_container_name }}"
     volumes:
       - "{{ easydb_volume_config }}:/config"
       - "{{ easydb_pgsql_volume_backup }}:/backup"
@@ -82,6 +90,7 @@ easydb_containers:
       dest: pgsql
   server:
     image: "{{ easydb_docker_registry }}/pf/server-{{ easydb_solution }}"
+    container_name: "{{ easydb_server_container_name }}"
     volumes:
       - "{{ easydb_volume_config }}:/config"
       - "{{ easydb_server_volume_var }}:/easydb-5/var"
@@ -94,6 +103,7 @@ easydb_containers:
       dest: easydb-server
   eas:
     image: "{{ easydb_docker_registry }}/pf/eas"
+    container_name: "{{ easydb_eas_container_name }}"
     volumes:
       - "{{ easydb_volume_config }}:/config"
       - "{{ easydb_eas_volume_assets }}:/var/opt/easydb/lib/eas/assets"
@@ -106,6 +116,7 @@ easydb_containers:
       dest: eas
   fylr:
     image: "{{ easydb_docker_registry }}/pf/fylr"
+    container_name: "{{ easydb_fylr_container_name }}"
     volumes:
       - "{{ easydb_volume_config }}:/config"
     ports:
@@ -115,6 +126,7 @@ easydb_containers:
       dest: fylr
   elasticsearch:
     image: "{{ easydb_docker_registry }}/pf/elasticsearch"
+    container_name: "{{ easydb_elasticsearch_container_name }}"
     volumes:
       - "{{ easydb_volume_config }}:/config"
       - "{{ easydb_elasticsearch_volume_var }}:/var/lib/elasticsearch"
@@ -126,6 +138,7 @@ easydb_containers:
       dest: elasticsearch
   webfrontend:
     image: "{{ easydb_docker_registry }}/pf/webfrontend"
+    container_name: "{{ easydb_webfrontend_container_name }}"
     volumes:
       - "{{ easydb_volume_config }}:/config"
     ports:
