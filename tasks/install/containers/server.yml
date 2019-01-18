@@ -22,7 +22,7 @@
     owner: root
     group: root
     mode: 0644
-  register: has_new_config_changed
+  register: has_template_changed
 
 - name: deploying LDAP configuration
   when: easydb_ldap_config
@@ -52,7 +52,7 @@
     mode: 0644
 
 - name: stopping container (if running)
-  when: has_config_changed.changed or has_new_config_changed.changed
+  when: has_config_changed.changed or has_new_config_changed.changed or has_template_changed
   shell: docker stop easydb-{{ easydb_container_name }}
   failed_when: no
 
