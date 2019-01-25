@@ -31,7 +31,6 @@ config:
 {% if easydb_elasticsearch_path_logs is defined %}
   "path.logs": {{ easydb_elasticsearch_path_logs }}
 {% endif %}
-  "discovery.zen.ping.multicast.enabled": false
 {% endif %}
 
 smtp:

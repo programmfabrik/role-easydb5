@@ -1,15 +1,15 @@
 - name: deploying run-scripts
   template:
     src: srv/easydb/run-script.j2
-    dest: "{{ easydb_basedir }}/run-{{ easydb_container_name }}.sh"
+    dest: "{{ easydb_basedir }}/run-{{ easydb_container }}.sh"
     owner: root
     group: root
     mode: 0750
 
 - name: deploying configuration
   template:
-    src: srv/easydb/config/{{ easydb_containers[easydb_container_name]['configs']['src'] }}.yml.j2
-    dest: "{{ easydb_basedir }}/config/{{ easydb_containers[easydb_container_name]['configs']['dest'] }}.yml"
+    src: srv/easydb/config/{{ easydb_containers[easydb_container]['configs']['src'] }}.yml.j2
+    dest: "{{ easydb_basedir }}/config/{{ easydb_containers[easydb_container]['configs']['dest'] }}.yml"
     owner: root
     group: root
     mode: 0644
@@ -53,16 +53,16 @@
 
 - name: stopping container (if running)
   when: has_config_changed.changed or has_new_config_changed.changed or has_template_changed
-  shell: docker stop easydb-{{ easydb_container_name }}
+  shell: docker stop easydb-{{ easydb_container }}
   failed_when: no
 
 - name: spinning up container
   docker_container:
-    name: "easydb-{{ easydb_container_name }}-{{ easydb_solution }}"
-    image: "{{ easydb_containers[easydb_container_name].image }}"
+    name: "{{ easydb_containers[easydb_container].container_name }}"
+    image: "{{ easydb_containers[easydb_container].image }}"
     networks:
-      - name: "{{ easydb_containers[easydb_container_name].network | default(easydb_container_network) }}"
-    restart_policy: "{{ easydb_containers[easydb_container_name].restart_policy | default('always') }}"
-    ports: "{{ easydb_containers[easydb_container_name].ports | default([]) }}"
-    volumes: "{{ easydb_containers[easydb_container_name].volumes | default([]) }}"
-    capabilities: "{{ easydb_containers[easydb_container_name].capabilities | default([]) }}"
+      - name: "{{ easydb_containers[easydb_container].network | default(easydb_container_network) }}"
+    restart_policy: "{{ easydb_containers[easydb_container].restart_policy | default('always') }}"
+    ports: "{{ easydb_containers[easydb_container].ports | default([]) }}"
+    volumes: "{{ easydb_containers[easydb_container].volumes | default([]) }}"
+    capabilities: "{{ easydb_containers[easydb_container].capabilities | default([]) }}"

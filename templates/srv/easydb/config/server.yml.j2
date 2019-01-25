@@ -40,7 +40,7 @@ eas:
 
 elasticsearch:
   url: http://{{ easydb_elasticsearch_hostname }}:{{ (easydb_elasticsearch_hostname == 'easydb-elasticsearch') | ternary(easydb_elasticsearch_port_int, easydb_elasticsearch_port_ext) }}
-  default_template: /config/elastic_index_template.json.j2
+  default_template: /config/elastic_index_template.json
 
 plugins:
   enabled+:
