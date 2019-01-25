@@ -137,7 +137,7 @@ easydb_containers:
 # easydb server
 easydb_solution: base
 easydb_external_user_schema: true
-easydb_server_database: easydb
+easydb_server_database: easydb5
 easydb_enable_post_settings: true
 easydb_enable_restart: true
 easydb_enable_purgedata: false
