@@ -18,6 +18,10 @@ easydb-server:
         purgeall: {{ easydb_enable_purgeall }}
     mailer:
       enabled: {{ easydb_enable_mailer }}
+  smtp:
+    server: {{ easydb_mail_relay_for_ssmtp }}
+    hostname: {{ easydb_hostname_for_ssmtp }}
+    from-address: {{ easydb_envelope_from }}
   default_client:
      datamodel:
        uid: "{{ easydb_datamodel_uid }}"
@@ -56,8 +60,14 @@ easydb-server:
 elasticsearch:
   memory-size: {{ easydb_es_memory_size }}
 
-common:
+eas:
   smtp:
+    server: {{ easydb_mail_relay_for_ssmtp }}
+    hostname: {{ easydb_hostname_for_ssmtp }}
+    from-address: {{ easydb_envelope_from }}
+
+commmon:
+  email:
     server: {{ easydb_mail_relay_for_ssmtp }}
     hostname: {{ easydb_hostname_for_ssmtp }}
     from-address: {{ easydb_envelope_from }}
