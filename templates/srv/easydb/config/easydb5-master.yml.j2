@@ -3,6 +3,7 @@
 easydb-server:
   docker-hostname: {{ easydb_server_hostname }}
   pgsql:
+    database: {{ easydb_server_database }}
     host: {{ easydb_pgsql_hostname }}
     port: {{ (easydb_pgsql_hostname == 'easydb-pgsql') | ternary(easydb_pgsql_port_int, easydb_pgsql_port_ext) }}
   extension:
