@@ -12,4 +12,7 @@ docker run -d -ti \
 {% for port in easydb_containers[easydb_container].ports | default([]) %}
     -p {{ port }} \
 {% endfor %}
+{% for host in etc_hosts[inventory_hostname] | default([]) %}
+    --add-host {{ host }} \
+{% endfor %}
     {{ easydb_containers[easydb_container].image | default([]) }}
