@@ -30,3 +30,5 @@
     ports: "{{ easydb_containers[easydb_container].ports | default([]) }}"
     volumes: "{{ easydb_containers[easydb_container].volumes | default([]) }}"
     capabilities: "{{ easydb_containers[easydb_container].capabilities | default([]) }}"
+    security_opts:
+      - "seccomp=unconfined"
