@@ -10,6 +10,7 @@ easydb_docker_user: ''
 easydb_docker_pass: ''
 easydb_docker_registry: docker.easydb.de
 easydb_container_network: easydb5
+easydb_etc_hosts: {}
 # docker container names
 easydb_server_container_name: easydb-server
 easydb_pgsql_container_name: easydb-pgsql
