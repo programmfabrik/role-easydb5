@@ -3,6 +3,7 @@
 {{ ansible_managed | comment }}
 
 docker run -d -ti \
+    --security-opt seccomp=unconfined \
     --name {{ easydb_containers[easydb_container].container_name }} \
     --restart=always \
     --net {{ easydb_container_network }} \
