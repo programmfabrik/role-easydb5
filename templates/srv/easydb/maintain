@@ -40,164 +40,223 @@ UPDATELOG={{ easydb_cron_update_log }}
 case "$1" in
 start)
     set -e
+{% if 'elasticsearch' in easydb_containers_on_host[inventory_hostname] %}
     $BASEDIR/run-elasticsearch.sh
+{% endif %}
+{% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
     $BASEDIR/run-pgsql.sh
-    if [ -x $BASEDIR/run-fylr.sh ] && /usr/bin/docker images | grep -q fylr; then
-        $BASEDIR/run-fylr.sh
-    fi
+{% endif %}
+{% if 'fylr' in easydb_containers_on_host[inventory_hostname] %}
+    $BASEDIR/run-fylr.sh
+{% endif %}
+{% if 'eas' in easydb_containers_on_host[inventory_hostname] %}
     $BASEDIR/run-eas.sh
+{% endif %}
+{% if 'server' in easydb_containers_on_host[inventory_hostname] %}
     $BASEDIR/run-server.sh
+{% endif %}
+{% if 'webfrontend' in easydb_containers_on_host[inventory_hostname] %}
     $BASEDIR/run-webfrontend.sh
-;;
+{% endif %}
+    ;;
 stop)
-    /usr/bin/docker stop  easydb-webfrontend
-    /usr/bin/docker rm -v easydb-webfrontend
+    if /usr/bin/docker ps -a | grep -q easydb-webfrontend; then
+        /usr/bin/docker stop  easydb-webfrontend
+        /usr/bin/docker rm -v easydb-webfrontend
+    fi
 
-    /usr/bin/docker stop  easydb-server
-    /usr/bin/docker rm -v easydb-server
+    if /usr/bin/docker ps -a | grep -q easydb-server-{{ easydb_solution }}; then
+        /usr/bin/docker stop  easydb-server-{{ easydb_solution }}
+        /usr/bin/docker rm -v easydb-server-{{ easydb_solution }}
+    fi
 
-    /usr/bin/docker stop  easydb-eas
-    /usr/bin/docker rm -v easydb-eas
+    if /usr/bin/docker ps -a | grep -q easydb-server; then
+        /usr/bin/docker stop  easydb-server
+        /usr/bin/docker rm -v easydb-server
+    fi
 
-    /usr/bin/docker stop  easydb-elasticsearch
-    /usr/bin/docker rm -v easydb-elasticsearch
+    if /usr/bin/docker ps -a | grep -q easydb-eas; then
+        /usr/bin/docker stop  easydb-eas
+        /usr/bin/docker rm -v easydb-eas
+    fi
 
-    if /usr/bin/docker ps -a | grep -q fylr; then
+    if /usr/bin/docker ps -a | grep -q easydb-elasticsearch; then
+        /usr/bin/docker stop  easydb-elasticsearch
+        /usr/bin/docker rm -v easydb-elasticsearch
+    fi
+
+    if /usr/bin/docker ps -a | grep -q easydb-fylr; then
         /usr/bin/docker stop  easydb-fylr >/dev/null 2>&1
         /usr/bin/docker rm -v easydb-fylr >/dev/null 2>&1
     fi
 
-    /usr/bin/docker stop  easydb-pgsql
-    /usr/bin/docker rm -v easydb-pgsql
+    if /usr/bin/docker ps -a | grep -q easydb-pgsql; then
+        /usr/bin/docker stop  easydb-pgsql
+        /usr/bin/docker rm -v easydb-pgsql
+    fi
 ;;
 restart)
     $0 stop 2>&1 | sed '/Network easydb.* not found/d'
-
     $0 start
 ;;
 status)
-        docker ps
+    docker ps
 ;;
 update)
-        if   $0 backup
-        then $0 tag
-             $0 cleanup
-             $0 pull
-        else
-            echo "ERROR: backup failed - not updating!">&2
-        fi
-;;
+{% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
+    if   $0 backup
+    then $0 tag
+{% else %}
+         $0 tag
+{% endif %}
+         $0 cleanup
+         $0 pull
+{% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
+    else
+        echo "ERROR: backup failed - not updating!">&2
+    fi
+{% endif %}
+    ;;
 update-auto)
-        echo             >> $UPDATELOG
-        date             >> $UPDATELOG
-        if   $0 backup   >> $UPDATELOG
-        then $0 tag      >> $UPDATELOG
-             $0 cleanup  >> $UPDATELOG
-             $0 pull     >> $UPDATELOG
-             date        >> $UPDATELOG
-             $0 restart  2>&1 >>$UPDATELOG |tee -a $UPDATELOG |grep -v '^Creating'
-                                                              #^^^^^^^^^^^^^^^^^^
-                                                              # prevent lines starting with "Creating"
-                                                              # from reaching cron mails, because
-                                                              # they're neither warnings nor errors
-                                           #^^^^^^^^^^^^^^^^^ put stderr into LOG
-                             #^^^^^^^^^^^^ put stdout into LOG(does NOT affect stderr)
-                        #^^^^ put stderr where stdout currently points to. (make it reach cron mails)
-        else
-            echo "ERROR: backup failed - not updating!">> $UPDATELOG
-            echo "ERROR: backup failed - not updating!">&2
-        fi
-;;
+    echo             >> $UPDATELOG
+    date             >> $UPDATELOG
+{% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
+    if   $0 backup   >> $UPDATELOG
+    then $0 tag      >> $UPDATELOG
+{% else %}
+         $0 tag      >> $UPDATELOG
+{% endif %}
+         $0 cleanup  >> $UPDATELOG
+         $0 pull     >> $UPDATELOG
+         date        >> $UPDATELOG
+         $0 restart  2>&1 >>$UPDATELOG |tee -a $UPDATELOG |grep -v '^Creating'
+                                                          #^^^^^^^^^^^^^^^^^^
+                                                          # prevent lines starting with "Creating"
+                                                          # from reaching cron mails, because
+                                                          # they're neither warnings nor errors
+                                       #^^^^^^^^^^^^^^^^^ put stderr into LOG
+                         #^^^^^^^^^^^^ put stdout into LOG(does NOT affect stderr)
+                    #^^^^ put stderr where stdout currently points to. (make it reach cron mails)
+{% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
+    else
+        echo "ERROR: backup failed - not updating!">> $UPDATELOG
+        echo "ERROR: backup failed - not updating!">&2
+    fi
+{% endif %}
+    ;;
+{% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
 backup)
-        # do sql backup of all sql dbs $DBS (one per instance and one for eas)
-        # Note: there are only $KEEPDBS kept - repeating this quickly removes all old backups (on this host) !
-        cd $BASEDIR/pgsql/backup          || exit 2
-        /usr/bin/docker ps|grep -q 'easydb-pgsql$' || exit 3
-        for DB in $DBS; do
-                $0 sqldump $DB            || exit 4
-        done
-        exit 0
-;;
+    # do sql backup of all sql dbs $DBS (one per instance and one for eas)
+    # Note: there are only $KEEPDBS kept - repeating this quickly removes all old backups (on this host) !
+    cd $BASEDIR/pgsql/backup          || exit 2
+    /usr/bin/docker ps|grep -q 'easydb-pgsql$' || exit 3
+    for DB in $DBS; do
+            $0 sqldump $DB            || exit 4
+    done
+    exit 0
+    ;;
 sqldump)
-        # do sql backup of one given sql db name (inside docker container "easydb-pgsql")
-        DB="$2"
-        TIME=`date +%Y-%m-%d_%Hh%Mm%Ss`
-        FILE=$DB."$TIME".pgdump
-        /usr/bin/docker exec easydb-pgsql pg_dump -U postgres -v -Fc -f /backup/$FILE $DB > $FILE.log 2>&1
-        EXCODE=$?
-        if [ $EXCODE -gt 0 ] ; then
-                rm $FILE &>/dev/null
-                mv $FILE.log  $FILE.log.FAIL &>/dev/null
-                echo "pg_dump $DB exited with $EXCODE. Logfile is $BASEDIR/pgsql/backup/$FILE.log.FAIL"
-                echo "pg_dump $DB exited with $EXCODE. Logfile is $BASEDIR/pgsql/backup/$FILE.log.FAIL" >&2
-                exit 4
-        else
-                # rotate so that only the last $KEEPDBS valid dumps remain. Also for logs.
-                ls -1 --color=no $DB.*s.pgdump    |sort -r|tail -n +$((KEEPDBS+1))|while read i; do rm $i; done
-                ls -1 --color=no $DB.*s.pgdump.log|sort -r|tail -n +$((KEEPDBS+1))|while read i; do rm $i; done
-        fi
-        exit 0
-;;
+    # do sql backup of one given sql db name (inside docker container "easydb-pgsql")
+    DB="$2"
+    TIME=`date +%Y-%m-%d_%Hh%Mm%Ss`
+    FILE=$DB."$TIME".pgdump
+    /usr/bin/docker exec easydb-pgsql pg_dump -U postgres -v -Fc -f /backup/$FILE $DB > $FILE.log 2>&1
+    EXCODE=$?
+    if [ $EXCODE -gt 0 ] ; then
+        rm $FILE &>/dev/null
+        mv $FILE.log  $FILE.log.FAIL &>/dev/null
+        echo "pg_dump $DB exited with $EXCODE. Logfile is $BASEDIR/pgsql/backup/$FILE.log.FAIL"
+        echo "pg_dump $DB exited with $EXCODE. Logfile is $BASEDIR/pgsql/backup/$FILE.log.FAIL" >&2
+        exit 4
+    else
+        # rotate so that only the last $KEEPDBS valid dumps remain. Also for logs.
+        ls -1 --color=no $DB.*s.pgdump    |sort -r|tail -n +$((KEEPDBS+1))|while read i; do rm $i; done
+        ls -1 --color=no $DB.*s.pgdump.log|sort -r|tail -n +$((KEEPDBS+1))|while read i; do rm $i; done
+    fi
+    exit 0
+    ;;
+{% endif %}
 tag)
-        # tag the current docker version as "previous" - good before an update if you want to go back.
-        # Danger: this will overwrite the "previous"ly preserved docker version!
-        /usr/bin/docker tag {{ easydb_docker_registry }}/pf/server-$SOLUTION:latest {{ easydb_docker_registry }}/pf/server-$SOLUTION:previous
-        /usr/bin/docker tag {{ easydb_docker_registry }}/pf/webfrontend:latest      {{ easydb_docker_registry }}/pf/webfrontend:previous
-        /usr/bin/docker tag {{ easydb_docker_registry }}/pf/eas:latest              {{ easydb_docker_registry }}/pf/eas:previous
-        /usr/bin/docker tag {{ easydb_docker_registry }}/pf/elasticsearch:latest    {{ easydb_docker_registry }}/pf/elasticsearch:previous
-	    if /usr/bin/docker images | grep -q fylr; then
-		    /usr/bin/docker tag {{ easydb_docker_registry }}/pf/fylr:latest            {{ easydb_docker_registry }}/pf/fylr:previous
-	    fi
-        /usr/bin/docker tag {{ easydb_docker_registry }}/pf/postgresql:latest       {{ easydb_docker_registry }}/pf/postgresql:previous
-;;
+    # tag the current docker version as "previous" - good before an update if you want to go back.
+    # Danger: this will overwrite the "previous"ly preserved docker version!
+{% if 'server' in easydb_containers_on_host[inventory_hostname] %}
+    /usr/bin/docker tag {{ easydb_docker_registry }}/pf/server-$SOLUTION:latest {{ easydb_docker_registry }}/pf/server-$SOLUTION:previous
+{% endif %}
+{% if 'webfrontend' in easydb_containers_on_host[inventory_hostname] %}
+    /usr/bin/docker tag {{ easydb_docker_registry }}/pf/webfrontend:latest      {{ easydb_docker_registry }}/pf/webfrontend:previous
+{% endif %}
+{% if 'eas' in easydb_containers_on_host[inventory_hostname] %}
+    /usr/bin/docker tag {{ easydb_docker_registry }}/pf/eas:latest              {{ easydb_docker_registry }}/pf/eas:previous
+{% endif %}
+{% if 'elasticsearch' in easydb_containers_on_host[inventory_hostname] %}
+    /usr/bin/docker tag {{ easydb_docker_registry }}/pf/elasticsearch:latest    {{ easydb_docker_registry }}/pf/elasticsearch:previous
+{% endif %}
+{% if 'fylr' in easydb_containers_on_host[inventory_hostname] %}
+    /usr/bin/docker tag {{ easydb_docker_registry }}/pf/fylr:latest         {{ easydb_docker_registry }}/pf/fylr:previous
+{% endif %}
+{% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
+    /usr/bin/docker tag {{ easydb_docker_registry }}/pf/postgresql:latest   {{ easydb_docker_registry }}/pf/postgresql:previous
+{% endif %}
+    ;;
 pull)
-        /usr/bin/docker pull {{ easydb_docker_registry }}/pf/server-$SOLUTION
-        /usr/bin/docker pull {{ easydb_docker_registry }}/pf/webfrontend
-        /usr/bin/docker pull {{ easydb_docker_registry }}/pf/elasticsearch
-        /usr/bin/docker pull {{ easydb_docker_registry }}/pf/eas
-	    if /usr/bin/docker images | grep -q fylr; then
-            /usr/bin/docker pull {{ easydb_docker_registry }}/pf/fylr
-        fi
-        /usr/bin/docker pull {{ easydb_docker_registry }}/pf/postgresql
-;;
+{% if 'server' in easydb_containers_on_host[inventory_hostname] %}
+    /usr/bin/docker pull {{ easydb_docker_registry }}/pf/server-$SOLUTION
+{% endif %}
+{% if 'webfrontend' in easydb_containers_on_host[inventory_hostname] %}
+    /usr/bin/docker pull {{ easydb_docker_registry }}/pf/webfrontend
+{% endif %}
+{% if 'elasticsearch' in easydb_containers_on_host[inventory_hostname] %}
+    /usr/bin/docker pull {{ easydb_docker_registry }}/pf/elasticsearch
+{% endif %}
+{% if 'eas' in easydb_containers_on_host[inventory_hostname] %}
+    /usr/bin/docker pull {{ easydb_docker_registry }}/pf/eas
+{% endif %}
+{% if 'fylr' in easydb_containers_on_host[inventory_hostname] %}
+    /usr/bin/docker pull {{ easydb_docker_registry }}/pf/fylr
+{% endif %}
+{% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
+    /usr/bin/docker pull {{ easydb_docker_registry }}/pf/postgresql
+{% endif %}
+    ;;
 cleanup)
-       #  free disk space
-       #
-       #  In our experience, used containers are not damaged by these commands
-       #  and used images are not damaged even if they have no running container.
-       #  Some error messages may be generated, however ("could not remove").
+    #  free disk space
+    #
+    #  In our experience, used containers are not damaged by these commands
+    #  and used images are not damaged even if they have no running container.
+    #  Some error messages may be generated, however ("could not remove").
 
-       echo "removing left over temporary files..."
-       LIST=$(/usr/bin/docker ps -qa --no-trunc --filter "status=exited")
-       if [ "$LIST" ] ; then
-               /usr/bin/docker rm -v $LIST #>/dev/null
-               echo "... done."
-       else
-               echo "... none found."
-       fi
+    echo "removing left over temporary files..."
+    LIST=$(/usr/bin/docker ps -qa --no-trunc --filter "status=exited")
+    if [ "$LIST" ] ; then
+        /usr/bin/docker rm -v $LIST #>/dev/null
+        echo "... done."
+    else
+        echo "... none found."
+    fi
 
-       echo "removing unused images..."
-       LIST=$(/usr/bin/docker images --filter "dangling=true" -q --no-trunc)
-       if [ "$LIST" ] ; then
-               /usr/bin/docker rmi $LIST #>/dev/null
-               echo "... done."
-       else
-               echo "... none found."
-       fi
+    echo "removing unused images..."
+    LIST=$(/usr/bin/docker images --filter "dangling=true" -q --no-trunc)
+    if [ "$LIST" ] ; then
+        /usr/bin/docker rmi $LIST #>/dev/null
+        echo "... done."
+    else
+        echo "... none found."
+    fi
 
-       # next step:
-       # docker images | grep '<none>' | awk '{print }' | xargs -r docker rmi -f
+    # next step:
+    # docker images | grep '<none>' | awk '{print }' | xargs -r docker rmi -f
 
-       echo "removing dangling volumes..."
-       LIST=$(/usr/bin/docker volume ls -qf dangling=true)
-       if [ "$LIST" ] ; then
-               /usr/bin/docker volume rm $LIST #>/dev/null
-               echo "... done."
-       else
-               echo "... none found."
-       fi
-       echo All done cleaning up.
-;;
+    echo "removing dangling volumes..."
+    LIST=$(/usr/bin/docker volume ls -qf dangling=true)
+    if [ "$LIST" ] ; then
+        /usr/bin/docker volume rm $LIST #>/dev/null
+        echo "... done."
+    else
+        echo "... none found."
+    fi
+    echo All done cleaning up.
+    ;;
 *)
-        echo "ERROR: argument '$1' not implemented."
+    echo "ERROR: argument '$1' not implemented."
+    ;;
 esac

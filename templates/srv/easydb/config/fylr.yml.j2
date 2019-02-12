@@ -1,0 +1,19 @@
+hostname:
+  fylr: {{ easydb_fylr_hostname }}:{{ (easydb_fylr_hostname == 'easydb-fylr') |ternary(easydb_fylr_port_int, easydb_fylr_port_ext) }}
+
+external_url: {{ easydb_url }}
+objectstore:
+  uids: []
+
+{% if easydb_fylr_accounts is defined %}
+accounts: {{ easydb_fylr_accounts | to_yaml }}
+{% endif %}
+
+{% if easydb_fylr_root_password is defined %}
+root_password: {{ easydb_fylr_root_password }}
+{% endif %}
+
+smtp:
+  server: {{ easydb_mail_relay_for_ssmtp }}
+  hostname: {{ easydb_hostname_for_ssmtp }}
+  from-address: {{ easydb_envelope_from }}

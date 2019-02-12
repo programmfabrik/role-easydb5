@@ -28,22 +28,22 @@
   fail:
     msg: Please fill the variable easydb_hotfolder_hostname!
 
-- name: Check whether mail_relay_for_ssmtp is missing
-  when: mail_relay_for_ssmtp == ''
+- name: Check whether easydb_mail_relay_for_ssmtp is missing
+  when: easydb_mail_relay_for_ssmtp == ''
   fail:
-    msg: Please define the variable mail_relay_for_ssmtp!
+    msg: Please define the variable easydb_mail_relay_for_ssmtp!
 
-- name: Check whether hostname_for_ssmtp is missing
-  when: hostname_for_ssmtp == ''
+- name: Check whether easydb_hostname_for_ssmtp is missing
+  when: easydb_hostname_for_ssmtp == ''
   fail:
-    msg: Please define the variable hostname_for_ssmtp!
+    msg: Please define the variable easydb_hostname_for_ssmtp!
 
-- name: Check whether envelope_from is missing
-  when: envelope_from == ''
+- name: Check whether easydb_envelope_from is missing
+  when: easydb_envelope_from == ''
   fail:
-    msg: Please define the variable envelope_from!
+    msg: Please define the variable easydb_envelope_from!
 
-- name: Check whether objectstore misses datamodel_uid
-  when: objectstore_url != '' and datamodel_uid == ''
+- name: Check whether objectstore misses datamodel uid
+  when: easydb_objectstore_url != '' and easydb_datamodel_uid == ''
   fail:
-    msg: Either set objectstore_url to empty string or set datamodel_uid!
+    msg: Either set easydb_objectstore_url to empty string or set easydb_datamodel_uid!

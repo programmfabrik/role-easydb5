@@ -1,19 +1,19 @@
 #!/bin/bash
 
-# {{ ansible_managed }}
+{{ ansible_managed | comment }}
 
 docker run -d -ti \
-    --name easydb-{{ easydb_container_item.key }} \
+    --security-opt seccomp=unconfined \
+    --name {{ easydb_containers[easydb_container].container_name }} \
     --restart=always \
     --net {{ easydb_container_network }} \
-{% if 'volumes' in easydb_container_item.value %}
-{% for volume in easydb_container_item.value.volumes %}
+{% for volume in easydb_containers[easydb_container].volumes | default([]) %}
     --volume {{ volume }} \
 {% endfor %}
-{% endif %}
-{% if 'ports' in easydb_container_item.value %}
-{% for port in easydb_container_item.value.ports %}
+{% for port in easydb_containers[easydb_container].ports | default([]) %}
     -p {{ port }} \
 {% endfor %}
-{% endif %}
-    {{ easydb_container_item.value.image }}
+{% for host in easydb_etc_hosts[inventory_hostname] | default([]) %}
+    --add-host "{{ host }}":{{ easydb_etc_hosts[inventory_hostname][host] }} \
+{% endfor %}
+    {{ easydb_containers[easydb_container].image | default([]) }}

@@ -1,28 +1,35 @@
 # {{ ansible_managed }}
+
 easydb-server:
-  docker-hostname: easydb-server
+  docker-hostname: {{ easydb_server_hostname }}
   pgsql:
-    database: easydb
+    database: {{ easydb_server_database }}
+    host: {{ easydb_pgsql_hostname }}
+    port: {{ (easydb_pgsql_hostname == 'easydb-pgsql') | ternary(easydb_pgsql_port_int, easydb_pgsql_port_ext) }}
   extension:
-    external-user-schema: {{ external_user_schema }}
+    external-user-schema: {{ easydb_external_user_schema }}
   server:
     external_url: {{ easydb_url }}
-    enable_post_settings: {{ enable_post_settings }}
+    enable_post_settings: {{ easydb_enable_post_settings }}
     api:
       settings:
-        restart: {{ enable_restart }}
-        purgedata: {{ enable_purgedata }}
-        purgeall: {{ enable_purgeall }}
+        restart: {{ easydb_enable_restart }}
+        purgedata: {{ easydb_enable_purgedata }}
+        purgeall: {{ easydb_enable_purgeall }}
     mailer:
-      enabled: {{ enable_mailer }}
+      enabled: {{ easydb_enable_mailer }}
+  smtp:
+    server: {{ easydb_mail_relay_for_ssmtp }}
+    hostname: {{ easydb_hostname_for_ssmtp }}
+    from-address: {{ easydb_envelope_from }}
   default_client:
      datamodel:
-       uid: "{{ datamodel_uid }}"
-       server: "{{ objectstore_url }}"
-       instance: {{ objectstore_instance_id }}
+       uid: "{{ easydb_datamodel_uid }}"
+       server: "{{ easydb_objectstore_url }}"
+       instance: {{ easydb_objectstore_instance_id }}
   plugins:
     enabled+:
-{% for plugin in enable_plugins %}
+{% for plugin in easydb_plugins_enabled %}
       - {{ plugin }}
 {% endfor %}
 {% if easydb_hotfolder_enabled %}
@@ -38,15 +45,29 @@ easydb-server:
         separator: /
 {% endif %}
 
+{% if easydb_ldap_config %}
+  {{ lookup('file', easydb_ldap_config) }}
+{% endif %}
+
+{% if easydb_kerberos_config %}
+  {{ lookup('file', easydb_kerberos_config) }}
+{% endif %}
+
+{% if easydb_shibboleth_config %}
+  {{ lookup('file', easydb_shibboleth_config) }}
+{% endif %}
 
 elasticsearch:
   memory-size: {{ easydb_es_memory_size }}
 
+eas:
+  smtp:
+    server: {{ easydb_mail_relay_for_ssmtp }}
+    hostname: {{ easydb_hostname_for_ssmtp }}
+    from-address: {{ easydb_envelope_from }}
+
 common:
   email:
-    # ssmtp.conf:mailhub
-    server: {{ mail_relay_for_ssmtp }}
-    # ssmtp.conf:hostname
-    hostname: {{ hostname_for_ssmtp }}
-    # server.mailer.envelope_address
-    from-address: {{ envelope_from }}
+    server: {{ easydb_mail_relay_for_ssmtp }}
+    hostname: {{ easydb_hostname_for_ssmtp }}
+    from-address: {{ easydb_envelope_from }}

@@ -1,0 +1,17 @@
+canonical-name: {{ easydb_url }}
+log-level: info
+pgsql:
+  host: {{ easydb_pgsql_hostname }}
+  port: {{ (easydb_pgsql_hostname == 'easydb-pgsql') | ternary(easydb_pgsql_port_int, easydb_pgsql_port_ext) }}
+  username: docker
+  password: docker
+  database: eas
+num-workers: {{ easydb_eas_num_workers }}
+num-soffice: {{ easydb_eas_num_soffice }}
+num-services: {{ easydb_eas_num_services }}
+trusted-net: {{ easydb_eas_trusted_net }}
+
+smtp:
+  server: {{ easydb_mail_relay_for_ssmtp }}
+  hostname: {{ easydb_hostname_for_ssmtp }}
+  from-address: {{ easydb_envelope_from }}
