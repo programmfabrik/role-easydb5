@@ -25,11 +25,12 @@ server:
       purgeall: {{ easydb_enable_purgeall }}
   mailer:
     enabled: {{ easydb_enable_mailer }}
-  default_client:
-     datamodel:
-       uid: "{{ easydb_datamodel_uid }}"
-       server: "{{ easydb_objectstore_url }}"
-       instance: {{ easydb_objectstore_instance_id }}
+
+default_client:
+  datamodel:
+    uid: "{{ easydb_datamodel_uid }}"
+    server: "{{ easydb_objectstore_url }}"
+    instance: {{ easydb_objectstore_instance_id }}
 
 eas:
   url: http://{{ easydb_eas_hostname }}:{{ (easydb_eas_hostname == 'easydb-eas') | ternary(easydb_eas_port_int, easydb_eas_port_ext) }}/eas
