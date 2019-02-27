@@ -2,7 +2,7 @@
 
 # m h dom m dow user command
 
-{% if easydb_cron_update_weekday|length %}
+{% if easydb_cron_update_weekday is defined and easydb_cron_update_weekday|length %}
 {{ easydb_cron_update_minute }} {{ easydb_cron_update_hour }} * * {{ easydb_cron_update_weekday }} root {{ easydb_cron_update_script }}
 {% endif %}
 {{ easydb_cron_backup_minute }} {{ easydb_cron_backup_hour }} * * {{ easydb_cron_backup_weekday }} root {{ easydb_cron_backup_script }}
