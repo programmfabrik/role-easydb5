@@ -49,17 +49,26 @@
 - name: removing old central configuration files
   when: not easydb_has_old_master_config
   file:
-    path: /srv/easydb/config/easydb5-master.yml
+    path: "{{ easydb_basedir }}/config/easydb5-master.yml"
     state: absent
   register: has_config_changed
 
-- name: EAS configuration file
+- name: old EAS configuration file
+  when: easydb_has_old_master_config
   template:
     src: srv/easydb/config/easydb_asset_server.conf.j2
     dest: "{{ easydb_basedir }}/config/easydb_asset_server.conf"
     owner: root
     group: root
     mode: 0644
+  register: has_config_changed
+
+- name: removing old EAS configuration file
+  when: not easydb_has_old_master_config
+  file:
+    path: "{{ easydb_basedir }}/config/easydb_asset_server.conf"
+    state: absent
+  register: has_config_changed
 
 - name: logging in to docker registry
   docker_login:
