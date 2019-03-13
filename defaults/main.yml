@@ -61,6 +61,7 @@ easydb_pgsql_volume_log: "{{ easydb_basedir }}/pgsql/log"
 easydb_server_volume_nginx_log: "{{ easydb_basedir }}/easydb-server/nginx-log"
 easydb_server_volume_var: "{{ easydb_basedir }}/easydb-server/var"
 easydb_server_volume_hotfolder: "{{ easydb_basedir }}/easydb-server/hotfolder"
+easydb_flyr_volume_objectstore: "{{ easydb_basedir }}/fylr/objectstore"
 
 # `deploy_these` defines which containers should be deployed in this run.
 # By default all containers are deployed, but perhaps you only want to start
@@ -120,6 +121,7 @@ easydb_containers:
     container_name: "{{ easydb_fylr_container_name }}"
     volumes:
       - "{{ easydb_volume_config }}:/config"
+      - "{{ easydb_flyr_volume_objectstore }}:/objectstore"
     ports:
       - "{{ (easydb_fylr_hostname == 'easydb-fylr') | ternary(['127.0.0.1', easydb_fylr_port_ext, easydb_fylr_port_int] | join(':'), ['0.0.0.0', easydb_fylr_port_ext, easydb_fylr_port_int] | join(':')) }}"
     configs:
