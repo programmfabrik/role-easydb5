@@ -1,11 +1,10 @@
 # {{ ansible_managed }}
 
-{{ easydb_basedir }}/easydb-server/var/imexporter.log {{ easydb_server_volume_nginx_log }}/error.log {{ easydb_server_volume_nginx_log }}/access.log {{ easydb_pgsql_volume_log }}/postgresql-*-main.log {{ easydb_eas_volume_log }}/eas-janitor.log {{ easydb_eas_volume_log }}/eas-exception.log {{ easydb_eas_volume_log }}/eas-job.log {{ easydb_eas_volume_log }}/eas-worker.log {{ easydb_eas_volume_log }}/apache.error.log {{ easydb_eas_volume_log }}/apache.access.log {{ easydb_cron_update_log }} {
-    copytruncate
+{{ easydb_basedir }}/easydb-server/var/imexporter.log {
+    weekly
     missingok
-    size {{ easydb_logrotate_logsize }}
-    dateext
-    maxage {{ easydb_logrotate_maxage }}
-    rotate {{ easydb_logrotate_rotate }}
-    su root www-data
+    rotate 4
+    notifempty
+    copytruncate
+    su root root
 }

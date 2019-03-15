@@ -200,11 +200,6 @@ easydb_cron_backup_hour: 23
 easydb_cron_backup_weekday: 1,2,3,4,6,7
 easydb_cron_backup_script: "{{ easydb_basedir }}/maintain backup"
 
-# logrotate
-easydb_logrotate_logsize: "20M"
-easydb_logrotate_maxage: 62
-easydb_logrotate_rotate: 62
-
 # EAS
 easydb_eas_num_workers: 1
 easydb_eas_num_soffice: 2
