@@ -27,6 +27,9 @@
       mode: u=rwx,g=rwx,o=rwx
     - path: "{{ easydb_server_volume_var }}"
     - path: "{{ easydb_server_volume_hotfolder }}"
+    - path: "{{ easydb_flyr_volume_objectstore }}"
+      owner: 1000
+      group: 1000
 
 - name: installing maintain script
   template:
