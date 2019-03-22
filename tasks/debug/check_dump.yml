@@ -1,0 +1,16 @@
+- command: ls -1 {{ easydb_pgsql_volume_backup }}
+  register: dumps
+- debug:
+    msg: "{{ dumps.stdout_lines|join('\n') }}"
+
+- debug:
+    var: easydb_dump_dbs
+
+- command: grep '^DBS=' {{ easydb_basedir }}/maintain
+  name: grep '^DBS=' {{ easydb_basedir }}/maintain
+  register: DBS
+- name: result of grep
+  debug:
+    var: DBS.stdout_lines
+
+- meta: end_play
