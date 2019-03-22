@@ -1,4 +1,5 @@
 # to only run these checks: ansible-playbook -i inv*/$ID/hosts.ini plays/$ID/easydb5.pgsql.yml --extra-vars=debug_dump_only=true
+# note: role docker will still be executed
 - name: only check db dump
   when: 'debug_dump_only|default(false)'
   include_tasks: debug/check_dump.yml

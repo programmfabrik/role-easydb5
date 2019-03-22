@@ -3,7 +3,15 @@
 - debug:
     msg: "{{ dumps.stdout_lines|join('\n') }}"
 
-- debug:
+- command: docker exec easydb-pgsql psql -U postgres -l
+  name: get list of dbs from postgres with psql -l
+  register: dblist
+- name: result of psql -l
+  debug:
+    msg: "{{ dblist.stdout_lines|join('\n') }}"
+
+- name: ansible configuration
+  debug:
     var: easydb_dump_dbs
 
 - command: grep '^DBS=' {{ easydb_basedir }}/maintain
