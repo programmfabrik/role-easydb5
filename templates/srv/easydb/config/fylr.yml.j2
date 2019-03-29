@@ -9,6 +9,11 @@ objectstore:
 accounts: {{ easydb_fylr_accounts | to_yaml }}
 {% endif %}
 
+link_shortener:
+{% if easydb_fylr_default_expire_days is defined %}
+  default_expire_days: {{ easydb_fylr_default_expire_days }}
+{% endif %}
+
 {% if easydb_fylr_root_password is defined %}
 root_password: {{ easydb_fylr_root_password }}
 {% endif %}
