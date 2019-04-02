@@ -1,0 +1,33 @@
+- command: ls -1 {{ easydb_pgsql_volume_backup }}
+  register: dumps
+- debug:
+    msg: "{{ dumps.stdout_lines|join('\n') }}"
+
+- command: docker exec easydb-pgsql psql -U postgres -l
+  name: get list of dbs from postgres with psql -l
+  register: dblist
+  failed_when: no
+- name: result of psql -l
+  debug:
+    msg: "{{ dblist.stdout_lines|join('\n') }}"
+
+- name: ansible configuration
+  debug:
+    var: easydb_dump_dbs
+
+- command: grep '^DBS=' {{ easydb_basedir }}/maintain
+  name: grep '^DBS=' {{ easydb_basedir }}/maintain
+  register: DBS
+- name: result of grep
+  debug:
+    var: DBS.stdout_lines
+
+- shell: "wget -q 127.0.0.1:{{ easydb_webfrontend_port_ext }}/api/v1/settings -O - |grep db-name"
+  name: query /api/v1/settings for db-name
+  register: api
+  failed_when: no
+- name: result of api query
+  debug:
+    var: api.stdout_lines
+
+- meta: end_play
