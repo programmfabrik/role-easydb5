@@ -1,12 +1,17 @@
-- name: configuring easydb cron-jobs
+- name: configuring easydb update as cron job
   template:
-    src: etc/cron.d/easydb5
-    dest: /etc/cron.d/easydb5
+    src: etc/cron.d/easydb5-update
+    dest: /etc/cron.d/easydb5-update
     owner: root
     group: root
     mode: 0644
 
-- name: configuring logrotation for main easydb5 server log file
+- name: removing old central cron file
+  file:
+    path: /etc/cron.d/easydb5
+    state: absent
+
+- name: configuring logrotation
   template:
     src: etc/logrotate.d/easydb
     dest: /etc/logrotate.d/easydb

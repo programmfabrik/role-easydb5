@@ -4,5 +4,6 @@
 
 {% if easydb_cron_update_weekday is not none and easydb_cron_update_weekday|string()|length %}
 {{ easydb_cron_update_minute }} {{ easydb_cron_update_hour }} * * {{ easydb_cron_update_weekday }} root {{ easydb_cron_update_script }}
+{% else %}
+# {{ easydb_cron_update_minute }} {{ easydb_cron_update_hour }} * * * root {{ easydb_cron_update_script }}
 {% endif %}
-{{ easydb_cron_backup_minute }} {{ easydb_cron_backup_hour }} * * {{ easydb_cron_backup_weekday }} root {{ easydb_cron_backup_script }}
