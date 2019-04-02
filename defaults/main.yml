@@ -218,3 +218,7 @@ easydb_eas_database: eas
 easydb_ldap_config: ''
 easydb_kerberos_config: ''
 easydb_shibboleth_config: ''
+
+# HTML Incudes
+easydb_index_html_head_include: ../path/to/head_include.html
+easydb_index_html_body_include: ../path/to/body_include.html
