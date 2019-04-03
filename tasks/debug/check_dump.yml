@@ -22,7 +22,7 @@
   debug:
     var: DBS.stdout_lines
 
-- shell: "wget -q 127.0.0.1:{{ easydb_webfrontend_port_ext }}/api/v1/settings -O - |grep db-name"
+- shell: "wget -q --no-proxy 127.0.0.1:{{ easydb_webfrontend_port_ext }}/api/v1/settings -O - |grep db-name"
   name: query /api/v1/settings for db-name
   register: api
   failed_when: no
