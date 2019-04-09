@@ -56,6 +56,13 @@
     state: absent
   register: has_config_changed
 
+- name: removing old config/easydb_asset_server.conf
+  when: not easydb_has_old_master_config
+  file:
+    path: "{{ easydb_basedir }}/config/easydb_asset_server.conf"
+    state: absent
+  register: has_config_changed
+
 - name: old EAS configuration file
   when: easydb_has_old_master_config
   template:
