@@ -10,6 +10,9 @@ num-workers: {{ easydb_eas_num_workers }}
 num-soffice: {{ easydb_eas_num_soffice }}
 num-services: {{ easydb_eas_num_services }}
 trusted-net: {{ easydb_eas_trusted_net }}
+{% if easydb_eas_disable_apache_mmap %}
+apache-mmap: "off"
+{% endif %}
 
 smtp:
   server: {{ easydb_mail_relay_for_ssmtp }}

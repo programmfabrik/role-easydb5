@@ -32,6 +32,7 @@ easydb_fylr_port_ext: 4000
 easydb_eas_hostname: "{{ easydb_eas_container_name }}"
 easydb_eas_port_int: 80
 easydb_eas_port_ext: 83
+easydb_eas_disable_apache_mmap: false
 # SERVER
 easydb_server_hostname: "{{ easydb_server_container_name }}"
 easydb_server_port_int: 80
