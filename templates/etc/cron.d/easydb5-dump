@@ -1,0 +1,5 @@
+# {{ ansible_managed }}
+
+# m h dom m dow user command
+
+{{ easydb_cron_backup_minute }} {{ easydb_cron_backup_hour }} * * {{ easydb_cron_backup_weekday }} root {{ easydb_cron_backup_script }}
