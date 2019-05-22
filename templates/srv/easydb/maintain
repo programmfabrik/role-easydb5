@@ -41,22 +41,46 @@ case "$1" in
 start)
     set -e
 {% if 'elasticsearch' in easydb_containers_on_host[inventory_hostname] %}
-    $BASEDIR/run-elasticsearch.sh
+    if [ -f $BASEDIR/run-elasticsearch.sh ]; then
+        $BASEDIR/run-elasticsearch.sh
+    else
+        echo "run-elasticsearch.sh does not exists"
+    fi
 {% endif %}
 {% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
-    $BASEDIR/run-pgsql.sh
+    if [ -f $BASEDIR/run-pgsql.sh ]; then
+	$BASEDIR/run-pgsql.sh
+    else
+	echo "run-pgsql.sh does not exists"
+    fi
 {% endif %}
 {% if 'fylr' in easydb_containers_on_host[inventory_hostname] %}
-    $BASEDIR/run-fylr.sh
+    if [ -f $BASEDIR/run-fylr.sh ]; then
+        $BASEDIR/run-fylr.sh
+    else
+        echo "run-fylr.sh does not exists"
+    fi
 {% endif %}
 {% if 'eas' in easydb_containers_on_host[inventory_hostname] %}
-    $BASEDIR/run-eas.sh
+    if [ -f $BASEDIR/run-eas.sh ]; then
+        $BASEDIR/run-eas.sh
+    else
+        echo "run-eas.sh does not exists"
+    fi
 {% endif %}
 {% if 'server' in easydb_containers_on_host[inventory_hostname] %}
-    $BASEDIR/run-server.sh
+    if [ -f $BASEDIR/run-server.sh ]; then
+        $BASEDIR/run-server.sh
+    else
+        echo "run-server.sh does not exists"
+    fi
 {% endif %}
 {% if 'webfrontend' in easydb_containers_on_host[inventory_hostname] %}
-    $BASEDIR/run-webfrontend.sh
+    if [ -f $BASEDIR/run-webfrontend.sh ]; then
+        $BASEDIR/run-webfrontend.sh
+    else
+        echo "run-webfrontend.sh does not exists"
+    fi
 {% endif %}
     ;;
 stop)
