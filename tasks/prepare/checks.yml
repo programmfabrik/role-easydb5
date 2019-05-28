@@ -53,12 +53,7 @@
   fail:
     msg: "[easydb5_fylr_servers:children] is missing (e.g. in inventory/hosts.ini)"
 
-- name: Check that fylr is either fully configured or not at all 1
+- name: Check that fylr is either fully configured or not at all
   when: not (groups.easydb5_fylr_servers.0 is defined) and 'fylr' in easydb_containers_on_host[inventory_hostname]
   fail:
     msg: "easydb5_fylr_servers is empty BUT fylr is in easydb_containers_on_host"
-
-- name: Check that fylr is either fully configured or not at all 2
-  when: groups.easydb5_fylr_servers.0 is defined and 'fylr' not in easydb_containers_on_host[inventory_hostname]
-  fail:
-    msg: "easydb5_fylr_servers has entries BUT fylr is missing in easydb_containers_on_host"
