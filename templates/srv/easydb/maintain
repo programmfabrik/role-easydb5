@@ -46,9 +46,6 @@ start)
 {% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
     $BASEDIR/run-pgsql.sh
 {% endif %}
-{% if 'fylr' in easydb_containers_on_host[inventory_hostname] %}
-    $BASEDIR/run-fylr.sh
-{% endif %}
 {% if 'eas' in easydb_containers_on_host[inventory_hostname] %}
     $BASEDIR/run-eas.sh
 {% endif %}
@@ -57,6 +54,9 @@ start)
 {% endif %}
 {% if 'webfrontend' in easydb_containers_on_host[inventory_hostname] %}
     $BASEDIR/run-webfrontend.sh
+{% endif %}
+{% if 'fylr' in easydb_containers_on_host[inventory_hostname] %}
+    $BASEDIR/run-fylr.sh
 {% endif %}
     ;;
 stop)
@@ -191,11 +191,11 @@ tag)
 {% if 'elasticsearch' in easydb_containers_on_host[inventory_hostname] %}
     /usr/bin/docker tag {{ easydb_docker_registry }}/pf/elasticsearch:latest    {{ easydb_docker_registry }}/pf/elasticsearch:previous
 {% endif %}
-{% if 'fylr' in easydb_containers_on_host[inventory_hostname] %}
-    /usr/bin/docker tag {{ easydb_docker_registry }}/pf/fylr:latest         {{ easydb_docker_registry }}/pf/fylr:previous
-{% endif %}
 {% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
     /usr/bin/docker tag {{ easydb_docker_registry }}/pf/postgresql:latest   {{ easydb_docker_registry }}/pf/postgresql:previous
+{% endif %}
+{% if 'fylr' in easydb_containers_on_host[inventory_hostname] %}
+    /usr/bin/docker tag {{ easydb_docker_registry }}/pf/fylr:latest         {{ easydb_docker_registry }}/pf/fylr:previous
 {% endif %}
     ;;
 pull)
@@ -211,11 +211,11 @@ pull)
 {% if 'eas' in easydb_containers_on_host[inventory_hostname] %}
     /usr/bin/docker pull {{ easydb_docker_registry }}/pf/eas
 {% endif %}
-{% if 'fylr' in easydb_containers_on_host[inventory_hostname] %}
-    /usr/bin/docker pull {{ easydb_docker_registry }}/pf/fylr
-{% endif %}
 {% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
     /usr/bin/docker pull {{ easydb_docker_registry }}/pf/postgresql
+{% endif %}
+{% if 'fylr' in easydb_containers_on_host[inventory_hostname] %}
+    /usr/bin/docker pull {{ easydb_docker_registry }}/pf/fylr
 {% endif %}
     ;;
 cleanup)
