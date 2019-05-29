@@ -13,8 +13,8 @@ config:
 {% endif %}
 
   "node.name": "{{ inventory_hostname }}"
-  "node.master": "{% if 'easydb5-elasticsearch-masters' in group_names %}true{% else %}false{% endif %}"
-  "node.data": "{% if 'easydb5-elasticsearch-data' in group_names %}true{% else %}false{% endif %}"
+  "node.master": "{% if 'easydb5_elasticsearch_masters' in group_names %}true{% else %}false{% endif %}"
+  "node.data": "{% if 'easydb5_elasticsearch_data' in group_names %}true{% else %}false{% endif %}"
   "http.port": "{{ easydb_elasticsearch_cluster_port | default(easydb_elasticsearch_port_int) }}"
   "network.publish_host": "{{ easydb_elasticsearch_network_publish_host | default("") }}"
   "discovery.zen.ping.unicast.hosts": {{ easydb_elasticsearch_cluster_nodes | default([]) | to_json }}
