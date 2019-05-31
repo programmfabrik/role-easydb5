@@ -1,4 +1,4 @@
-- name: blunix.role-docker
-  src: https://github.com/blunix/role-docker.git
+- name: programmfabrik.role-docker
+  src: https://github.com/programmfabrik/role-docker.git
   scm: git
   version: 1.1.0
