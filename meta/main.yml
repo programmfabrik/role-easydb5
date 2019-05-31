@@ -20,5 +20,5 @@ galaxy_info:
 dependencies:
 - name: programmfabrik.role-docker
   src: https://github.com/programmfabrik/role-docker
-  version: 1.1.0
+  version: 1.2.0
   scm: git
