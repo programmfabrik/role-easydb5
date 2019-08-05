@@ -27,6 +27,9 @@ server:
     enabled: {{ easydb_enable_mailer }}
 
 default_client:
+{% if easydb_eas_watermark_enabled is defined %}
+  watermark_configured: {{ easydb_eas_watermark_enabled }}
+{% endif %}
   datamodel:
     uid: "{{ easydb_datamodel_uid }}"
     server: "{{ easydb_objectstore_url }}"

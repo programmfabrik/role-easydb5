@@ -1,3 +1,7 @@
+- name: "Developing options: "
+  debug:
+    msg: "Playbook directory {{ playbook_dir }}"
+
 - name: deploying run-scripts
   template:
     src: srv/easydb/run-script.j2
