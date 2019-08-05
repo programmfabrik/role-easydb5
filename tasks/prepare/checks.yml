@@ -57,3 +57,19 @@
   when: not (groups.easydb5_fylr_servers.0 is defined) and 'fylr' in easydb_containers_on_host[inventory_hostname]
   fail:
     msg: "easydb5_fylr_servers is empty BUT fylr is in easydb_containers_on_host"
+
+- name: Check that eas_produce.json file exists, if easydb_eas_custom_version_enabled or easydb_eas_watermark_enabled is true
+  stat:
+    path: {{ playbook_dir }}/eas.d/eas_produce.json
+  register: p
+  when: easydb_eas_custom_version_enabled or easydb_eas_watermark_enabled and p.stat.exists
+  fail:
+    msg: "easydb_eas_custom_version_enabled or easydb_eas_watermark_enabled is true, but eas_produce.json is missing at {{ playbook_dir }}/eas.d/"
+
+- name: Check that eas_rights_management.yml file exists, if easydb_eas_custom_version_enabled or easydb_eas_watermark_enabled is true
+  stat:
+    path: {{ playbook_dir }}/eas.d/eas_rights_management.yml
+  register: p
+  when: easydb_eas_custom_version_enabled or easydb_eas_watermark_enabled and p.stat.exists
+  fail:
+    msg: "easydb_eas_custom_version_enabled or easydb_eas_watermark_enabled is true, but eas_rights_management.yml is missing at {{ playbook_dir }}/eas.d/"
