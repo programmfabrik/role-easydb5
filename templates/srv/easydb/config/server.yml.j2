@@ -15,6 +15,14 @@ pgsql:
 extension:
   external-user-schema: {{ easydb_external_user_schema }}
 
+{% if easydb_eas_watermark_enabled is defined or easydb_eas_custom_version_enabled is defined %}
+include_before:
+  - /config/eas_rights_management.yml
+
+eas:
+  produce_settings: /config/eas_produce.json
+{% endif %}
+
 server:
   external_url: {{ easydb_url }}
   enable_post_settings: {{ easydb_enable_post_settings }}
@@ -27,6 +35,9 @@ server:
     enabled: {{ easydb_enable_mailer }}
 
 default_client:
+{% if easydb_eas_watermark_enabled is defined %}
+  watermark_configured: {{ easydb_eas_watermark_enabled }}
+{% endif %}
   datamodel:
     uid: "{{ easydb_datamodel_uid }}"
     server: "{{ easydb_objectstore_url }}"

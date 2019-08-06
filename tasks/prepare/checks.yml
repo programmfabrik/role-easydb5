@@ -57,3 +57,29 @@
   when: not (groups.easydb5_fylr_servers.0 is defined) and 'fylr' in easydb_containers_on_host[inventory_hostname]
   fail:
     msg: "easydb5_fylr_servers is empty BUT fylr is in easydb_containers_on_host"
+
+#eas version checks
+- name: "Check file eas_produce.json"
+  local_action: stat path={{playbook_dir}}/eas.d/eas_produce.json
+  register: chk_eas_produce
+
+- name: "Check file eas_rights_management.yml"
+  local_action: stat path={{playbook_dir}}/eas.d/eas_rights_management.yml
+  register: chk_eas_rightsmanagement
+
+- name: File and variable check for eas_produce.json
+  when: (easydb_eas_custom_version_enabled == True or easydb_eas_watermark_enabled == True) and chk_eas_produce.stat.exists == False
+  fail: 
+    msg: "chk_eas_produce: {{chk_eas_produce}}\n
+      easydb_eas_custom_version_enabled: {{easydb_eas_custom_version_enabled}}\n
+      easydb_eas_watermark_enabled: {{easydb_eas_watermark_enabled}}\n
+      {{playbook_dir}}/eas.d/eas_produce.json does not exist"
+
+- name: File and variable check for eas_rights_management.yml
+  when: (easydb_eas_custom_version_enabled == True or easydb_eas_watermark_enabled == True) and chk_eas_rightsmanagement.stat.exists == False
+  fail:
+    msg: "chk_eas_rightsmanagement: {{chk_eas_rightsmanagement}}\n
+      easydb_eas_custom_version_enabled: {{easydb_eas_custom_version_enabled}}\n
+      easydb_eas_watermark_enabled: {{easydb_eas_watermark_enabled}}\n
+      {{playbook_dir}}/eas.d/eas_rights_management.yml does not exist"
+#end of eas version checks

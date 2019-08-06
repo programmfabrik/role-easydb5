@@ -214,6 +214,8 @@ easydb_eas_num_soffice: 2
 easydb_eas_num_services: 5
 easydb_eas_trusted_net: "172.16.0.0/12"   # Source IP from connects from EasyDB server must be included.
 easydb_eas_database: eas
+easydb_eas_custom_version_enabled: false #When true, copy eas_rightsmanagement.yml and eas_produce.json to the target system
+easydb_eas_watermark_enabled: false #When enabled, set the config option for watermark to true and copy the eas_rightsmanagement.yml and eas_produce.json to the target system
 
 # SSO
 easydb_ldap_config: ''
