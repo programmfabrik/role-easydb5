@@ -19,7 +19,7 @@
     mode: 0644
   register: has_new_config_changed
 
-  - name: "Copying eas_produce.json"
+- name: "Copying eas_produce.json"
   copy:
     src: "{{playbook_dir}}/eas.d/eas_produce.json"
     dest: "{{ easydb_basedir}}/config/eas_produce.json"
