@@ -15,12 +15,9 @@ pgsql:
 extension:
   external-user-schema: {{ easydb_external_user_schema }}
 
-{% if easydb_eas_watermark_enabled is defined or easydb_eas_custom_version_enabled is defined %}
+{% if easydb_eas_watermark_enabled is sameas true or easydb_eas_custom_version_enabled is sameas true %}
 include_before:
   - /config/eas_rights_management.yml
-
-eas:
-  produce_settings: /config/eas_produce.json
 {% endif %}
 
 server:
@@ -35,7 +32,7 @@ server:
     enabled: {{ easydb_enable_mailer }}
 
 default_client:
-{% if easydb_eas_watermark_enabled is defined %}
+{% if easydb_eas_watermark_enabled is sameas true %}
   watermark_configured: {{ easydb_eas_watermark_enabled }}
 {% endif %}
   datamodel:
@@ -49,6 +46,10 @@ eas:
 {% if easydb_eas_external_url is defined %}
   external_url: {{ easydb_eas_external_url }}
 {% endif %}
+{% if easydb_eas_watermark_enabled is sameas true or easydb_eas_custom_version_enabled is sameas true %}
+  produce_settings: /config/eas_produce.json
+{% endif %}
+
 
 elasticsearch:
   url: http://{{ easydb_elasticsearch_hostname }}:{{ (easydb_elasticsearch_hostname == 'easydb-elasticsearch') | ternary(easydb_elasticsearch_port_int, easydb_elasticsearch_port_ext) }}
