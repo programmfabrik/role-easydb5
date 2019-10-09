@@ -60,10 +60,12 @@
 
 #eas version checks
 - name: "Check file eas_produce.json"
+  become: false
   local_action: stat path={{playbook_dir}}/eas.d/eas_produce.json
   register: chk_eas_produce
 
 - name: "Check file eas_rights_management.yml"
+  become: false
   local_action: stat path={{playbook_dir}}/eas.d/eas_rights_management.yml
   register: chk_eas_rightsmanagement
 
