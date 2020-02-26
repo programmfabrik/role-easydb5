@@ -192,7 +192,7 @@ tag)
     /usr/bin/docker tag {{ easydb_docker_registry }}/pf/elasticsearch:latest    {{ easydb_docker_registry }}/pf/elasticsearch:previous
 {% endif %}
 {% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
-    /usr/bin/docker tag {{ easydb_docker_registry }}/pf/postgresql:latest   {{ easydb_docker_registry }}/pf/postgresql:previous
+    /usr/bin/docker tag {{ easydb_docker_registry }}{{ easydb_docker_postgres_package }}:latest   {{ easydb_docker_registry }}{{ easydb_docker_postgres_package }}:previous
 {% endif %}
 {% if 'fylr' in easydb_containers_on_host[inventory_hostname] %}
     /usr/bin/docker tag {{ easydb_docker_registry }}/pf/fylr:latest         {{ easydb_docker_registry }}/pf/fylr:previous
@@ -212,7 +212,7 @@ pull)
     /usr/bin/docker pull {{ easydb_docker_registry }}/pf/eas
 {% endif %}
 {% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
-    /usr/bin/docker pull {{ easydb_docker_registry }}/pf/postgresql
+    /usr/bin/docker pull {{ easydb_docker_registry }}{{ easydb_docker_postgres_package }}
 {% endif %}
 {% if 'fylr' in easydb_containers_on_host[inventory_hostname] %}
     /usr/bin/docker pull {{ easydb_docker_registry }}/pf/fylr

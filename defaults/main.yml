@@ -76,9 +76,10 @@ easydb_containers_deploy_these:
   - webfrontend
 
 # container configuration
+easydb_docker_postgres_package: '/pf/postgresql-11'
 easydb_containers:
   pgsql:
-    image: "{{ easydb_docker_registry }}/pf/postgresql"
+    image: "{{ easydb_docker_registry }}{{ easydb_docker_postgres_package }}"
     container_name: "{{ easydb_pgsql_container_name }}"
     volumes:
       - "{{ easydb_volume_config }}:/config"
