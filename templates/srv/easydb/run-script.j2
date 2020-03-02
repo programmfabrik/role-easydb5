@@ -3,7 +3,9 @@
 {{ ansible_managed | comment }}
 
 docker run -d -ti \
+{% if easydb_containers[easydb_container].container_name == 'easydb-server' %}
     --security-opt seccomp=unconfined \
+{% endif %}
     --name {{ easydb_containers[easydb_container].container_name }} \
     --restart=always \
     --net {{ easydb_container_network }} \
