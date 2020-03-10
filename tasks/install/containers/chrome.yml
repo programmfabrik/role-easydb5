@@ -34,6 +34,4 @@
     ports: "{{ easydb_containers[easydb_container].ports | default([]) }}"
     volumes: "{{ easydb_containers[easydb_container].volumes | default([]) }}"
     capabilities: "{{ easydb_containers[easydb_container].capabilities | default([]) }}"
-    security_opts:
-      - "seccomp=unconfined"
     etc_hosts: "{{ easydb_etc_hosts[inventory_hostname] | default({}) }}"
