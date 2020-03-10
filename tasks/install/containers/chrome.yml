@@ -35,3 +35,4 @@
     volumes: "{{ easydb_containers[easydb_container].volumes | default([]) }}"
     capabilities: "{{ easydb_containers[easydb_container].capabilities | default([]) }}"
     etc_hosts: "{{ easydb_etc_hosts[inventory_hostname] | default({}) }}"
+    shm_size: 1G
