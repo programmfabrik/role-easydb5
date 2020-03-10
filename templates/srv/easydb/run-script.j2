@@ -5,6 +5,9 @@
 docker run -d -ti \
     --security-opt seccomp=unconfined \
     --name {{ easydb_containers[easydb_container].container_name }} \
+{% if easydb_containers[easydb_container].container_name == 'chrome' %}
+    --shm-size=1g \
+{% endif %}
     --restart=always \
     --net {{ easydb_container_network }} \
 {% for volume in easydb_containers[easydb_container].volumes | default([]) %}
