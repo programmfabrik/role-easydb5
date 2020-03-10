@@ -157,8 +157,8 @@ easydb_containers:
   chrome:
     image: "{{ easydb_docker_registry }}/pf/chrome"
     container_name: "{{ easydb_chrome_container_name }}"
-    volumes:
-    ports:
+    volumes: []
+    ports: []
     configs:
       src: chrome
       dest: chrome
