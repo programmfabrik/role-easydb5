@@ -197,11 +197,11 @@ easydb_cron_update_log: /var/log/easydb-update.log
 # easydb_script_compose: '`which docker-compose 2>/dev/null`'
 easydb_cron_update_minute: 23
 easydb_cron_update_hour: 23
-easydb_cron_update_weekday: 5
+easydb_cron_update_weekday: 1,2,4,5,6,7
 easydb_cron_update_script: "{{ easydb_basedir }}/maintain update-auto"
 easydb_cron_backup_minute: 23
 easydb_cron_backup_hour: 23
-easydb_cron_backup_weekday: 1,2,3,4,6,7
+easydb_cron_backup_weekday: 3
 easydb_cron_backup_script: "{{ easydb_basedir }}/maintain backup"
 
 # logrotate
