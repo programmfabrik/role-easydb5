@@ -1,0 +1,19 @@
+- include_tasks: checks.yml
+
+- name: configuring APT proxy
+  when: easydb_proxy_url
+  include_tasks: proxy.yml
+
+- name: installing Python docker bindings
+  apt:
+    pkg: python3-docker
+    state: present
+    update_cache: no
+    install_recommends: no
+
+- name: adjusting sysctl max-map-count
+  sysctl:
+    name: vm.max_map_count
+    value: "{{ easydb_max_map_count }}"
+    reload: yes
+

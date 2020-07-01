@@ -6,7 +6,7 @@
 
 - name: include distro prep'er
   with_first_found:
-    - prepare/{{ ansible_distribution }}.{{ ansible_lsb.codename }}.yml
+    - prepare/{{ ansible_distribution }}.{{ ansible_distribution_version }}.yml
     - prepare/{{ ansible_distribution }}.yml
     - prepare/default.yml
   loop_control:
@@ -15,7 +15,7 @@
 
 - name: include distro installer
   with_first_found:
-    - install/{{ ansible_distribution }}.{{ ansible_lsb.codename }}.yml
+    - install/{{ ansible_distribution }}.{{ ansible_distribution_version }}.yml
     - install/{{ ansible_distribution }}.yml
     - install/default.yml
   loop_control:
@@ -24,7 +24,7 @@
 
 - name: include distro configurator
   with_first_found:
-    - configure/{{ ansible_distribution }}.{{ ansible_lsb.codename }}.yml
+    - configure/{{ ansible_distribution }}.{{ ansible_distribution_version }}.yml
     - configure/{{ ansible_distribution }}.yml
     - configure/default.yml
   loop_control:
