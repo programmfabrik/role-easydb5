@@ -105,6 +105,8 @@ easydb_containers:
     configs:
       src: server
       dest: easydb-server
+    capabilities:
+      - SYS_PTRACE
   eas:
     image: "{{ easydb_docker_registry }}/pf/eas"
     container_name: "{{ easydb_eas_container_name }}"

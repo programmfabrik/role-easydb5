@@ -5,6 +5,7 @@
 docker run -d -ti \
 {% if 'easydb-server' in easydb_containers[easydb_container].container_name %}
     --security-opt seccomp=unconfined \
+    --cap-add SYS_PTRACE \
 {% endif %}
     --name {{ easydb_containers[easydb_container].container_name }} \
     --restart=always \
