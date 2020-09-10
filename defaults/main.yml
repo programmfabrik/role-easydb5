@@ -157,6 +157,11 @@ easydb_containers:
     configs:
       src: server
       dest: easydb-server
+  chrome:
+    image: "{{ easydb_docker_registry }}/pf/chrome"
+    container_name: "{{ easydb_chrome_container_name }}"
+#    ports:
+#      - "{{ (easydb_fylr_hostname == 'easydb-fylr') | ternary(['127.0.0.1', easydb_fylr_port_ext, easydb_fylr_port_int] | join(':'), ['0.0.0.0', easydb_fylr_port_ext, easydb_fylr_port_int] | join(':')) }}"
 
 # easydb server
 easydb_solution: base
