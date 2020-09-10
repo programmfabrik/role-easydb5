@@ -48,6 +48,8 @@ easydb_elasticsearch_port_int: 9200
 easydb_elasticsearch_port_ext: 9200
 easydb_elasticsearch_cluster_port_int: 9300
 easydb_elasticsearch_cluster_port_ext: 9300
+# CHROME
+easydb_chrome_hostname: "{{ easydb_chrome_container_name }}"
 
 # paths
 easydb_basedir: /srv/easydb
@@ -76,7 +78,6 @@ easydb_containers_deploy_these:
   - elasticsearch
   - webfrontend
   - chrome
-  - testzeile
 
 # container configuration
 easydb_docker_postgres_package: '/pf/postgresql-11'
