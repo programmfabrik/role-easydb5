@@ -76,6 +76,7 @@ easydb_containers_deploy_these:
   - elasticsearch
   - webfrontend
   - chrome
+  - testzeile
 
 # container configuration
 easydb_docker_postgres_package: '/pf/postgresql-11'
