@@ -18,6 +18,7 @@ easydb_eas_container_name: easydb-eas
 easydb_fylr_container_name: easydb-fylr
 easydb_elasticsearch_container_name: easydb-elasticsearch
 easydb_webfrontend_container_name: easydb-webfrontend
+easydb_chrome_container_name: easydb-chrome
 
 ### ENDPOINTS ###
 # PGSQL
@@ -74,6 +75,7 @@ easydb_containers_deploy_these:
   - easydb
   - elasticsearch
   - webfrontend
+  - chrome
 
 # container configuration
 easydb_docker_postgres_package: '/pf/postgresql-11'
