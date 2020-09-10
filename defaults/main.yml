@@ -162,8 +162,9 @@ easydb_containers:
     container_name: "{{ easydb_chrome_container_name }}"
     volumes: []
     ports: []
-      src: chrome
-      dest: chrome
+    configs:
+      src: server
+      dest: easydb-server
 
 # easydb server
 easydb_solution: base
