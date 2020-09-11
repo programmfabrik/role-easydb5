@@ -1,7 +1,3 @@
-- name: "Developing options: "
-  debug:
-    msg: "Playbook directory {{ playbook_dir }}"
-
 - name: deploying run-scripts
   template:
     src: srv/easydb/run-script.j2
@@ -9,6 +5,7 @@
     owner: root
     group: root
     mode: 0750
+  when: easydb_enable_pdf_creator_module == true
 
 - name: deploying configuration
   template:
@@ -18,24 +15,6 @@
     group: root
     mode: 0644
   register: has_new_config_changed
-
-- name: "Copying eas_produce.json"
-  copy:
-    src: "{{playbook_dir}}/eas.d/eas_produce.json"
-    dest: "{{ easydb_basedir}}/config/eas_produce.json"
-    owner: root
-    group: root
-    mode: 0644
-  when: easydb_eas_custom_version_enabled == True or easydb_eas_watermark_enabled == True
-  
-- name: "Copying eas_rights_management.json"
-  copy:
-    src: "{{playbook_dir}}/eas.d/eas_rights_management.yml"
-    dest: "{{ easydb_basedir}}/config/eas_rights_management.yml"
-    owner: root
-    group: root
-    mode: 0644
-  when: easydb_eas_custom_version_enabled == True or easydb_eas_watermark_enabled == True
 
 - name: stopping container (if running)
   when: has_config_changed.changed or has_new_config_changed.changed
@@ -53,3 +32,4 @@
     volumes: "{{ easydb_containers[easydb_container].volumes | default([]) }}"
     capabilities: "{{ easydb_containers[easydb_container].capabilities | default([]) }}"
     etc_hosts: "{{ easydb_etc_hosts[inventory_hostname] | default({}) }}"
+  when: easydb_enable_pdf_creator_module == true
