@@ -58,11 +58,19 @@ start)
 {% if 'fylr' in easydb_containers_on_host[inventory_hostname] %}
     $BASEDIR/run-fylr.sh
 {% endif %}
+{% if 'chrome' in easydb_containers_on_host[inventory_hostname] %}
+    $BASEDIR/run-chrome.sh
+{% endif %}
     ;;
 stop)
     if /usr/bin/docker ps -a | grep -q easydb-webfrontend; then
         /usr/bin/docker stop  easydb-webfrontend
         /usr/bin/docker rm -v easydb-webfrontend
+    fi
+
+    if /usr/bin/docker ps -a | grep -q easydb-chrome; then
+        /usr/bin/docker stop  easydb-chrome
+        /usr/bin/docker rm -v easydb-chrome
     fi
 
     if /usr/bin/docker ps -a | grep -q easydb-server-{{ easydb_solution }}; then
@@ -197,6 +205,9 @@ tag)
 {% if 'fylr' in easydb_containers_on_host[inventory_hostname] %}
     /usr/bin/docker tag {{ easydb_docker_registry }}/pf/fylr:latest         {{ easydb_docker_registry }}/pf/fylr:previous
 {% endif %}
+{% if 'chrome' in easydb_containers_on_host[inventory_hostname] %}
+    /usr/bin/docker tag {{ easydb_docker_registry }}/pf/chrome:latest         {{ easydb_docker_registry }}/pf/chrome:previous
+{% endif %}
     ;;
 pull)
 {% if 'server' in easydb_containers_on_host[inventory_hostname] %}
@@ -216,6 +227,9 @@ pull)
 {% endif %}
 {% if 'fylr' in easydb_containers_on_host[inventory_hostname] %}
     /usr/bin/docker pull {{ easydb_docker_registry }}/pf/fylr
+{% endif %}
+{% if 'chrome' in easydb_containers_on_host[inventory_hostname] %}
+    /usr/bin/docker pull {{ easydb_docker_registry }}/pf/chrome
 {% endif %}
     ;;
 cleanup)
