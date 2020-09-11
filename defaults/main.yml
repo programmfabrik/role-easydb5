@@ -204,6 +204,9 @@ easydb_dump_dbs: "{{ easydb_eas_database }} {{ easydb_server_database }}"
 # Of eas DB in $DBS keep this many newest dumps:
 easydb_dump_keep: 7
 
+# chrome
+easydb_enable_pdf_creator_module: false
+
 # cron
 # Where to write log messages to while doing update-auto in the script:
 easydb_cron_update_log: /var/log/easydb-update.log
