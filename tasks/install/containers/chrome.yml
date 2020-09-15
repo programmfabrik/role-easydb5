@@ -33,3 +33,9 @@
     capabilities: "{{ easydb_containers[easydb_container].capabilities | default([]) }}"
     etc_hosts: "{{ easydb_etc_hosts[inventory_hostname] | default({}) }}"
   when: easydb_enable_pdf_creator_module == true
+
+- name: remove container
+  docker_container:
+    name: "{{ easydb_containers[easydb_container].container_name }}"
+    state: absent
+  when: easydb_enable_pdf_creator_module == false
