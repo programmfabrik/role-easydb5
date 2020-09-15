@@ -15,6 +15,7 @@
     group: root
     mode: 0644
   register: has_new_config_changed
+  when: easydb_enable_pdf_creator_module == true
 
 - name: stopping container (if running)
   when: has_config_changed.changed or has_new_config_changed.changed
@@ -34,8 +35,18 @@
     etc_hosts: "{{ easydb_etc_hosts[inventory_hostname] | default({}) }}"
   when: easydb_enable_pdf_creator_module == true
 
-- name: remove container
+- name: remove chrome container
   docker_container:
     name: "{{ easydb_containers[easydb_container].container_name }}"
+    state: absent
+  when: easydb_enable_pdf_creator_module == false
+
+- name: remove chrome image
+  shell: docker image remove docker.easydb.de/pf/chrome
+  when: easydb_enable_pdf_creator_module == false
+
+- name: remove run-script for chrome container
+  file:
+    path: "{{ easydb_basedir }}/run-{{ easydb_container }}.sh"
     state: absent
   when: easydb_enable_pdf_creator_module == false
