@@ -43,7 +43,7 @@
     mode: 0644
 
 - name: stopping container (if running)
-  when: has_config_changed.changed or has_new_config_changed.changed or has_template_changed
+  when: has_config_changed.changed or has_new_config_changed.changed
   shell: docker stop easydb-{{ easydb_container }}
   failed_when: no
 
