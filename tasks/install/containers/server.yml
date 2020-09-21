@@ -15,15 +15,6 @@
     mode: 0644
   register: has_new_config_changed
 
-- name: deploying index template for elasticsearch
-  template:
-    src: srv/easydb/config/elastic_index_template.json.j2
-    dest: "{{ easydb_basedir }}/config/elastic_index_template.json"
-    owner: root
-    group: root
-    mode: 0644
-  register: has_template_changed
-
 - name: deploying LDAP configuration
   when: easydb_ldap_config
   template:
@@ -52,7 +43,7 @@
     mode: 0644
 
 - name: stopping container (if running)
-  when: has_config_changed.changed or has_new_config_changed.changed or has_template_changed
+  when: has_config_changed.changed or has_new_config_changed.changed
   shell: docker stop easydb-{{ easydb_container }}
   failed_when: no
 
