@@ -162,6 +162,7 @@ easydb_enable_post_settings: true
 easydb_enable_restart: true
 easydb_enable_purgedata: false
 easydb_enable_purgeall: false
+easydb_enable_reindex: true
 easydb_plugins_enabled:
   - base.easydb4migration
 easydb_hotfolder_enabled: false
