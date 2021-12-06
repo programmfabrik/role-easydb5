@@ -16,6 +16,9 @@ docker run -d -ti \
 {% for port in easydb_containers[easydb_container].ports | default([]) %}
     -p {{ port }} \
 {% endfor %}
+{% if 'easydb-chrome' in easydb_containers[easydb_container].container_name %}
+    --shm-size=1g \
+{% endif %}
 {% for host in easydb_etc_hosts[inventory_hostname] | default([]) %}
     --add-host "{{ host }}":{{ easydb_etc_hosts[inventory_hostname][host] }} \
 {% endfor %}

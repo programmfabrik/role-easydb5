@@ -18,6 +18,7 @@ easydb_eas_container_name: easydb-eas
 easydb_fylr_container_name: easydb-fylr
 easydb_elasticsearch_container_name: easydb-elasticsearch
 easydb_webfrontend_container_name: easydb-webfrontend
+easydb_chrome_container_name: easydb-chrome
 
 ### ENDPOINTS ###
 # PGSQL
@@ -47,6 +48,8 @@ easydb_elasticsearch_port_int: 9200
 easydb_elasticsearch_port_ext: 9200
 easydb_elasticsearch_cluster_port_int: 9300
 easydb_elasticsearch_cluster_port_ext: 9300
+# CHROME
+easydb_chrome_hostname: "{{ easydb_chrome_container_name }}"
 
 # paths
 easydb_basedir: /srv/easydb
@@ -74,6 +77,7 @@ easydb_containers_deploy_these:
   - easydb
   - elasticsearch
   - webfrontend
+  - chrome
 
 # container configuration
 easydb_docker_postgres_package: '/pf/postgresql-11'
@@ -153,6 +157,14 @@ easydb_containers:
     configs:
       src: server
       dest: easydb-server
+  chrome:
+    image: "{{ easydb_docker_registry }}/pf/chrome"
+    container_name: "{{ easydb_chrome_container_name }}"
+    volumes: []
+    ports: []
+    configs:
+      src: server
+      dest: easydb-server
 
 # easydb server
 easydb_solution: base
@@ -192,6 +204,9 @@ easydb_objectstore_instance_id: prod
 easydb_dump_dbs: "{{ easydb_eas_database }} {{ easydb_server_database }}"
 # Of eas DB in $DBS keep this many newest dumps:
 easydb_dump_keep: 7
+
+# chrome
+easydb_enable_pdf_creator_module: false
 
 # cron
 # Where to write log messages to while doing update-auto in the script:

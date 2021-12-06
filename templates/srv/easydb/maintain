@@ -68,6 +68,11 @@ stop)
         /usr/bin/docker rm -v easydb-webfrontend
     fi
 
+    if /usr/bin/docker ps -a | grep -q easydb-chrome; then
+        /usr/bin/docker stop  easydb-chrome
+        /usr/bin/docker rm -v easydb-chrome
+    fi
+
     if /usr/bin/docker ps -a | grep -q easydb-server-{{ easydb_solution }}; then
         /usr/bin/docker stop  easydb-server-{{ easydb_solution }}
         /usr/bin/docker rm -v easydb-server-{{ easydb_solution }}
