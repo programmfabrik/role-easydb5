@@ -10,6 +10,9 @@ docker run -d -ti \
     --name {{ easydb_containers[easydb_container].container_name }} \
     --restart=always \
     --net {{ easydb_container_network }} \
+{% if 'chrome' in easydb_containers[easydb_container].container_name %}
+    --shm-size=1g \
+{% endif %}
 {% for volume in easydb_containers[easydb_container].volumes | default([]) %}
     --volume {{ volume }} \
 {% endfor %}

@@ -1,3 +1,8 @@
+- name: Check whether pdf-creator is enabled but chrome or fylr container is missing
+  when: '"base.pdf-creator" in easydb_plugins_enabled and ("chrome" not in easydb_containers_on_host[inventory_hostname] or "fylr" not in easydb_containers_on_host[inventory_hostname])'
+  fail:
+    msg: pdf-creator plugin requires fylr and chrome container, both needs to be set in variable easydb_containers_on_host.
+
 - name: Check whether this customer shall be skipped
   when: skip_customer == true
   fail:

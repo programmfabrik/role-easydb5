@@ -16,6 +16,7 @@ easydb_server_container_name: easydb-server
 easydb_pgsql_container_name: easydb-pgsql
 easydb_eas_container_name: easydb-eas
 easydb_fylr_container_name: easydb-fylr
+easydb_chrome_container_name: chrome
 easydb_elasticsearch_container_name: easydb-elasticsearch
 easydb_webfrontend_container_name: easydb-webfrontend
 
@@ -28,6 +29,8 @@ easydb_pgsql_port_ext: 15432
 easydb_fylr_hostname: "{{ easydb_fylr_container_name }}"
 easydb_fylr_port_int: 4000
 easydb_fylr_port_ext: 4000
+# CHROME
+easydb_chrome_hostname: "{{ easydb_chrome_container_name }}"
 # EAS
 easydb_eas_hostname: "{{ easydb_eas_container_name }}"
 easydb_eas_port_int: 80
@@ -131,6 +134,14 @@ easydb_containers:
     configs:
       src: fylr
       dest: fylr
+  chrome:
+    image: "{{ easydb_docker_registry }}/pf/chrome"
+    container_name: "{{ easydb_chrome_container_name }}"
+    volumes: []
+    ports: []
+    configs:
+      src: chrome
+      dest: chrome
   elasticsearch:
     image: "{{ easydb_docker_registry }}/pf/elasticsearch"
     container_name: "{{ easydb_elasticsearch_container_name }}"
