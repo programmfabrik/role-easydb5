@@ -40,8 +40,14 @@ UPDATELOG={{ easydb_cron_update_log }}
 case "$1" in
 start)
     set -e
+{% if 'fylr' in easydb_containers_on_host[inventory_hostname] %}
+    $BASEDIR/run-fylr.sh
+{% endif %}
 {% if 'elasticsearch' in easydb_containers_on_host[inventory_hostname] %}
     $BASEDIR/run-elasticsearch.sh
+{% endif %}
+{% if 'chrome' in easydb_containers_on_host[inventory_hostname] %}
+    $BASEDIR/run-chrome.sh
 {% endif %}
 {% if 'pgsql' in easydb_containers_on_host[inventory_hostname] %}
     $BASEDIR/run-pgsql.sh
@@ -54,12 +60,6 @@ start)
 {% endif %}
 {% if 'webfrontend' in easydb_containers_on_host[inventory_hostname] %}
     $BASEDIR/run-webfrontend.sh
-{% endif %}
-{% if 'fylr' in easydb_containers_on_host[inventory_hostname] %}
-    $BASEDIR/run-fylr.sh
-{% endif %}
-{% if 'chrome' in easydb_containers_on_host[inventory_hostname] %}
-    $BASEDIR/run-chrome.sh
 {% endif %}
     ;;
 stop)
