@@ -1,8 +1,11 @@
-Role Name
+role-easydb5
 =========
+Deploy Programmfabrik's easydb via ansible.
 
+Contact us
+----------
 
-A brief description of the role goes here.
+For Issues and questions please write to support@programmfabrik.de
 
 Requirements
 ------------
