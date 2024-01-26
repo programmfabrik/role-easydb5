@@ -4,9 +4,10 @@
   when: easydb_proxy_url
   include_tasks: proxy.yml
 
+###  on older systems, 'python-docker' need to be installed instead of 'python3-docker' ###
 - name: installing Python docker bindings
   apt:
-    pkg: python-docker
+    pkg: python3-docker
     state: present
     update_cache: no
     install_recommends: no
