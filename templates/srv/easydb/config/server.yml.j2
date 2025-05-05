@@ -83,3 +83,7 @@ smtp:
   server: {{ easydb_mail_relay_for_ssmtp }}
   hostname: {{ easydb_hostname_for_ssmtp }}
   from-address: {{ easydb_envelope_from }}
+
+default_client:
+  index_html_head_include: {{ easydb_index_html_head_include }}
+  index_html_body_include: {{ easydb_index_html_body_include }}
